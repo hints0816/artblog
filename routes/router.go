@@ -2,17 +2,39 @@ package routes
 
 import (
 	"hello/api"
+	"hello/middleware"
+	"net/http"
 
+	"github.com/gin-contrib/multitemplate"
 	"github.com/gin-gonic/gin"
 )
 
+func createMyRender() multitemplate.Renderer {
+	p := multitemplate.NewRenderer()
+	p.AddFromFiles("index", "web/dist/index.html")
+	return p
+}
+
 func InitRouter() {
-	router := gin.Default()
+	gin.SetMode("debug")
 
-	router.GET("/:id", api.GetUserInfo)
+	r := gin.Default()
+	r.HTMLRender = createMyRender()
+	r.Use(middleware.Cors())
 
-	// 默认启动的是 8080端口，也可以自己定义启动端口
-	router.Run()
-	// router.Run(":3000") for a hard coded port
+	r.Static("/static", "./web/dist/static")
+	r.StaticFile("/favicon.ico", "/web/dist/favicon.ico")
 
+	r.GET("/", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "index", gin.H{
+			"title": "Main website",
+		})
+	})
+
+	router := r.Group("api")
+	{
+		router.GET("user/:id", api.GetUserInfo)
+	}
+
+	r.Run()
 }
