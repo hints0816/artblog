@@ -3,7 +3,6 @@ package routes
 import (
 	"hello/api"
 	"hello/middleware"
-	"net/http"
 
 	"github.com/gin-contrib/multitemplate"
 	"github.com/gin-gonic/gin"
@@ -25,15 +24,10 @@ func InitRouter() {
 	r.Static("/static", "./web/dist/static")
 	r.StaticFile("/favicon.ico", "/web/dist/favicon.ico")
 
-	r.GET("/", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "index", gin.H{
-			"title": "Main website",
-		})
-	})
-
 	router := r.Group("api")
 	{
-		router.GET("user/:id", api.GetUserInfo)
+		// 登录控制模块
+		router.POST("loginfront", api.LoginFront)
 	}
 
 	r.Run()

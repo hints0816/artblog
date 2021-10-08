@@ -1,12 +1,56 @@
-<template style="background-color:#1b1b1b">
-  <v-col>
-    <div class="text-center">
-        {{ msg }}1
+<template>
+  <q-page class="flex">
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 col-md-4">
+        <q-card class="my-card" flat bordered>
+          <q-item>
+            <q-item-section avatar>
+              <q-avatar>
+                <img src="https://cdn.quasar.dev/img/boy-avatar.png">
+              </q-avatar>
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>Title</q-item-label>
+              <q-item-label caption>
+                Subhead
+              </q-item-label>
+            </q-item-section>
+            <div class="col-auto">
+                <q-btn color="grey-7" round flat icon="more_vert">
+                  <q-menu cover auto-close>
+                    <q-list>
+                      <q-item clickable>
+                        <q-item-section>Remove Card</q-item-section>
+                      </q-item>
+                      <q-item clickable>
+                        <q-item-section>Send Feedback</q-item-section>
+                      </q-item>
+                      <q-item clickable>
+                        <q-item-section>Share</q-item-section>
+                      </q-item>
+                    </q-list>
+                  </q-menu>
+                </q-btn>
+              </div>
+            </q-item>
+          <img src="https://cdn.quasar.dev/img/mountains.jpg">
+          <q-card-actions align="right">
+            <q-btn flat round color="red" icon="favorite" />
+            <q-btn flat round color="teal" icon="bookmark" />
+            <q-btn flat round color="primary" icon="comment" />
+          </q-card-actions>
+        </q-card>
+      </div>
     </div>
-  </v-col>
+  </q-page>
 </template>
+
+<style>
+</style>
+
 <script>
 export default {
+  name: 'HelloWorld',
   data() {
     return {
       artList: [],
@@ -14,27 +58,27 @@ export default {
         pagesize: 5,
         pagenum: 1
       },
-
-      count: 0,
-      total: 0
+      total: 0,
+      isLoad: false
     }
   },
-  props: {
-    msg: String
+  watch: {
   },
-  created() {},
   mounted() {
-    this.getArtList()
+     this.getArtList()
   },
-  filters: {},
   methods: {
     async getArtList() {
-      console.log(1)
-      const { data: res } = await this.$http.get('user/1')
+      const { data: res } = await this.$http.get(`article/list/${this.cid}`, {
+        params: {
+          pagesize: this.queryParam.pagesize,
+          pagenum: this.queryParam.pagenum
+        }
+      })
       this.artList = res.data
       this.total = res.total
+      this.isLoad = true
     }
   }
 }
 </script>
-<style lang=""></style>
