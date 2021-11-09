@@ -34,6 +34,28 @@ func GetUser(id int) (User, int) {
 	return user, errormsg.SUCCSE
 }
 
+func GetUsers(username string, pageSize int, pageNum int) ([]User, int64) {
+	var users []User
+	var total int64
+
+	if username != "" {
+		db.Select("id,username,role").Where(
+			"username LIKE ?", username+"%",
+		).Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&users)
+		db.Model(&users).Where(
+			"username LIKE ?", username+"%",
+		).Count(&total)
+		return users, total
+	}
+	db.Select("id,username,role").Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&users)
+	db.Model(&users).Count(&total)
+
+	if err != nil {
+		return users, 0
+	}
+	return users, total
+}
+
 // CheckLogin 后台登录验证
 func CheckLogin(username string, password string) (User, int) {
 	var user User

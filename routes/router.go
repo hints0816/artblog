@@ -24,9 +24,16 @@ func InitRouter() {
 	r.Static("/static", "./web/dist/static")
 	r.StaticFile("/favicon.ico", "/web/dist/favicon.ico")
 
+	auth := r.Group("api")
+	auth.Use(middleware.JwtToken())
+	{
+		auth.GET("admin/users", api.GetUsers)
+	}
+
 	router := r.Group("api")
 	{
 		// 登录控制模块
+		router.POST("login", api.Login)
 		router.POST("loginfront", api.LoginFront)
 	}
 
