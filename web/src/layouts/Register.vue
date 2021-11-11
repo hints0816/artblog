@@ -64,7 +64,7 @@
 
 <script>
 import { onMounted } from 'vue'
-import { getCart1 } from 'src/service/action'
+import { getCart } from '../api/test'
 
 export default {
   data() {
@@ -81,7 +81,7 @@ export default {
     })
 
    const init = async () => {
-      const { data } = await getCart1({ pageNumber: 1 })
+      let data  = await getCart()
       console.log(data)
     }
   }
