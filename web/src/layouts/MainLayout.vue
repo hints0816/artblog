@@ -17,20 +17,7 @@
             YouTube
           </q-toolbar-title>
         </q-btn>
-        <div v-if="$q.screen.gt.sm" class="GL__toolbar-link q-ml-xs q-gutter-md text-body2 text-weight-bold row items-center no-wrap">
-          <a href="javascript:void(0)" class="text-black">
-            Pull requests
-          </a>
-          <a href="javascript:void(0)" class="text-black">
-            Issues
-          </a>
-          <a href="javascript:void(0)" class="text-black">
-            Marketplace
-          </a>
-          <a href="javascript:void(0)" class="text-black">
-            Explore
-          </a>
-        </div>
+
         <q-space />
 
         <div class="YL__toolbar-input-container row no-wrap">
@@ -119,7 +106,82 @@
       class="bg-grey-2"
       :width="240"
     >
-      <side-bar/>
+      <q-scroll-area class="fit">
+        <q-list padding>
+          <q-item v-for="link in links1" :key="link.text" v-ripple clickable>
+            <q-item-section avatar>
+              <q-icon color="grey" :name="link.icon" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>{{ link.text }}</q-item-label>
+            </q-item-section>
+          </q-item>
+
+          <q-separator class="q-my-md" />
+
+          <q-item v-for="link in links2" :key="link.text" v-ripple clickable>
+            <q-item-section avatar>
+              <q-icon color="grey" :name="link.icon" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>{{ link.text }}</q-item-label>
+            </q-item-section>
+          </q-item>
+
+          <q-separator class="q-mt-md q-mb-xs" />
+
+          <q-item-label header class="text-weight-bold text-uppercase">
+            More from Youtube
+          </q-item-label>
+
+          <q-item v-for="link in links3" :key="link.text" v-ripple clickable>
+            <q-item-section avatar>
+              <q-icon color="grey" :name="link.icon" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>{{ link.text }}</q-item-label>
+            </q-item-section>
+          </q-item>
+
+          <q-separator class="q-my-md" />
+
+          <q-item v-for="link in links4" :key="link.text" v-ripple clickable>
+            <q-item-section avatar>
+              <q-icon color="grey" :name="link.icon" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>{{ link.text }}</q-item-label>
+            </q-item-section>
+          </q-item>
+
+          <q-separator class="q-mt-md q-mb-lg" />
+
+          <div class="q-px-md text-grey-9">
+            <div class="row items-center q-gutter-x-sm q-gutter-y-xs">
+              <a
+                v-for="button in buttons1"
+                :key="button.text"
+                class="YL__drawer-footer-link"
+                href="javascript:void(0)"
+              >
+                {{ button.text }}
+              </a>
+            </div>
+          </div>
+          <div class="q-py-md q-px-md text-grey-9">
+            <div class="row items-center q-gutter-x-sm q-gutter-y-xs">
+              <a
+                v-for="button in buttons2"
+                :key="button.text"
+                class="YL__drawer-footer-link"
+                href="javascript:void(0)"
+              >
+                {{ button.text }}
+              </a>
+            </div>
+          </div>
+        </q-list>
+      </q-scroll-area>
     </q-drawer>
 
     <q-page-container>
@@ -131,9 +193,7 @@
 <script>
 import { ref } from 'vue'
 import { fabYoutube } from '@quasar/extras/fontawesome-v5'
-import SideBar from './SideBar.vue'
 export default {
-  components: { SideBar },
   name: 'MyLayout',
   setup () {
     const leftDrawerOpen = ref(false)
