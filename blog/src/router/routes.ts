@@ -10,7 +10,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/home/index.vue'),
       },
       {
-        path: 'actlist',
+        path: '/posts/:id',
         component: () => import('pages/actlist/index.vue'),
       }
     ],

@@ -40,7 +40,7 @@
 
 <script lang="ts">
 import { getCurrentInstance } from 'vue'
-
+import { useRouter } from 'vue-router'
 export default {
   name: 'Item',
   props: {
@@ -50,9 +50,11 @@ export default {
     },
   },
   setup () {
+    const router = useRouter() as any
     const {ctx} = getCurrentInstance() as any
     const method = {
-      toPostDetail() {
+      toPostDetail(id: number):void {
+        router.push(`/posts/${id}`);
         console.log(ctx)
       }
     }

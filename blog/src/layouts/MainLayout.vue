@@ -31,12 +31,59 @@
         </q-tabs>
         <q-space></q-space>
         <div class="q-gutter-sm row items-center no-wrap">
-        <q-btn round flat>
-          <q-avatar color="orange" text-color="white">
-            <q-badge color="red" floating>4</q-badge>
-            J
-          </q-avatar>
-        </q-btn>
+        <iframe src="https://ghbtns.com/github-btn.html?user=hints0816&repo=gofile3&type=star&count=true&size=large" frameborder="0" scrolling="0" width="170" height="30" title="GitHub"></iframe>  
+        <q-btn dense flat no-wrap>
+            <q-avatar color="orange" text-color="white">
+              <q-badge color="red" floating>4</q-badge>
+              J
+            </q-avatar>
+            <q-icon name="arrow_drop_down" size="16px" />
+
+            <q-menu auto-close>
+              <q-list dense>
+                <q-item class="GL__menu-link-signed-in">
+                  <q-item-section>
+                    <div>Signed in as <strong>Mary</strong></div>
+                  </q-item-section>
+                </q-item>
+                <q-separator />
+                <q-item clickable class="GL__menu-link-status">
+                  <q-item-section>
+                    <div>
+                      <q-icon name="tag_faces" color="blue-9" size="18px" />
+                      Set your status
+                    </div>
+                  </q-item-section>
+                </q-item>
+                <q-separator />
+                <q-item clickable class="GL__menu-link">
+                  <q-item-section>Your profile</q-item-section>
+                </q-item>
+                <q-item clickable class="GL__menu-link">
+                  <q-item-section>Your repositories</q-item-section>
+                </q-item>
+                <q-item clickable class="GL__menu-link">
+                  <q-item-section>Your projects</q-item-section>
+                </q-item>
+                <q-item clickable class="GL__menu-link">
+                  <q-item-section>Your stars</q-item-section>
+                </q-item>
+                <q-item clickable class="GL__menu-link">
+                  <q-item-section>Your gists</q-item-section>
+                </q-item>
+                <q-separator />
+                <q-item clickable class="GL__menu-link">
+                  <q-item-section>Help</q-item-section>
+                </q-item>
+                <q-item clickable class="GL__menu-link">
+                  <q-item-section>Settings</q-item-section>
+                </q-item>
+                <q-item clickable class="GL__menu-link">
+                  <q-item-section>Sign out</q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
+          </q-btn>
         </div>
       </q-toolbar>
     </q-header>
