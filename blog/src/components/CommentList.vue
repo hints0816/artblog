@@ -1,5 +1,26 @@
 <template>
   <div>
+    <!-- <q-input autogrow v-model="text" label="Label" :dense="dense" />
+    <q-btn push color="primary" label="Push" /> -->
+    <q-input autogrow v-model="text" label="Label" :dense="dense">
+        <template v-slot:before>
+          <q-avatar>
+            <img src="https://cdn.quasar.dev/img/avatar5.jpg">
+          </q-avatar>
+        </template>
+        <template v-slot:after>
+          <q-btn push color="primary" icon="mood">
+              <q-popup-edit max-width="200px" self="top start" cover="false">
+              <a href="javascript:void(0);" style="text-decoration:none" v-for="(item,index) in faceList" :key="index" class="emotionItem">{{item}}</a>
+            </q-popup-edit>
+          </q-btn>
+          <q-btn push color="primary" label="Comment">
+            <!-- <q-popup-proxy :breakpoint="1024">
+                <a href="javascript:void(0);" v-for="(item,index) in faceList" :key="index" class="emotionItem">{{item}}</a>
+            </q-popup-proxy> -->
+          </q-btn>
+        </template>
+      </q-input>
     <q-list
       v-for="(comment,idx) in comments"
       bordered
@@ -28,14 +49,28 @@
       <div v-if="comment.isshow">
         <q-item class="q-pa-md">
             <q-item-section avatar>
-                <q-avatar rounded>
-                    <img alt="avatar" :src="comment.user.avatar_url" />
-                </q-avatar>
+                <q-avatar>
+                    <img src="https://cdn.quasar.dev/img/avatar5.jpg">
+                  </q-avatar>
             </q-item-section>
             <q-item-section>
-                <q-editor v-model="editor" min-height="5rem" />
+                <q-input autogrow v-model="text" label="Label" :dense="dense">
+                <template v-slot:after>
+                  <q-btn push color="primary" icon="mood">
+                      <q-popup-edit max-width="200px" self="top start" cover="false">
+                      <a href="javascript:void(0);" style="text-decoration:none" @click="getEmo(index)" v-for="(item,index) in faceList" :key="index" class="emotionItem">{{item}}</a>
+                    </q-popup-edit>
+                  </q-btn>
+                  <q-btn push color="primary" label="Comment">
+                    <!-- <q-popup-proxy :breakpoint="1024">
+                        <a href="javascript:void(0);" v-for="(item,index) in faceList" :key="index" class="emotionItem">{{item}}</a>
+                    </q-popup-proxy> -->
+                  </q-btn>
+                </template>
+              </q-input>
             </q-item-section>
         </q-item>
+        
       </div>
     </q-list>
     <div class="q-pa-md q-gutter-sm">
@@ -48,11 +83,13 @@
 </template>
 
 <script lang="ts">
+import emoji from '../css/emoji.json'
 import { getCurrentInstance, reactive, toRefs, onMounted } from 'vue'
 export default {
   name: 'Comment',
   data() {
     return {
+        faceList: [],
       comments: [
           {
             'index':'123',
@@ -76,7 +113,6 @@ export default {
     };
   },
   setup () {
-      
     const data = reactive({
         isshow: false,
         isfav: false,
@@ -86,7 +122,7 @@ export default {
     const {ctx} = getCurrentInstance() as any
     const method = {
       commentss(comment):void {
-data.comments[data.isshow1].isshow = false
+            data.comments[data.isshow1].isshow = false
           data.comments[comment].isshow = true
           data.isshow1=comment
       },
@@ -100,10 +136,16 @@ data.comments[data.isshow1].isshow = false
               item.isshow = false
               return item
           })
-      }
+      },
+      getEmo(index): void {
+        console.log(index)
+      },
     }
     onMounted(()=>{
-          method.getTalk()
+         method.getTalk()
+         emoji.forEach(element => {
+             ctx.faceList.push(element.char);
+         });                   
       })
     return {
         ...toRefs(data),
