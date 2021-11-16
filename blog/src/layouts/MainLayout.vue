@@ -12,8 +12,8 @@
         /> -->
 
         <q-toolbar-title shrink class="text-weight-bold">
-          Quasar App
-        </q-toolbar-title>
+            <router-link to="/" style="color: #fff;">blogName</router-link>
+          </q-toolbar-title>
          <q-tabs v-model="tab">
           <q-tab name="videos" label="Videos" />
           <q-tab name="articles" label="Articles" />
@@ -40,7 +40,7 @@
             <q-icon name="arrow_drop_down" size="16px" />
 
             <q-menu auto-close>
-              <q-list dense>
+              <q-list dense=false>
                 <q-item class="GL__menu-link-signed-in">
                   <q-item-section>
                     <div>Signed in as <strong>Mary</strong></div>
@@ -61,15 +61,6 @@
                 </q-item>
                 <q-item clickable class="GL__menu-link">
                   <q-item-section>Your repositories</q-item-section>
-                </q-item>
-                <q-item clickable class="GL__menu-link">
-                  <q-item-section>Your projects</q-item-section>
-                </q-item>
-                <q-item clickable class="GL__menu-link">
-                  <q-item-section>Your stars</q-item-section>
-                </q-item>
-                <q-item clickable class="GL__menu-link">
-                  <q-item-section>Your gists</q-item-section>
                 </q-item>
                 <q-separator />
                 <q-item clickable class="GL__menu-link">
