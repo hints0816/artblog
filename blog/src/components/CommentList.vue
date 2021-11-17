@@ -137,16 +137,24 @@
         <div>Add Comment</div>
       </q-btn> -->
     </div>
+    <v-md-editor v-model="marktext" height="400px"></v-md-editor>
+    <v-md-preview :text="marktext"></v-md-preview>
+    <q-btn size="10px" round flat color="primary" icon="comment"  @click="getEmo2()" />
+    <!-- <v-md-preview-html :html="marktext" preview-class="vuepress-markdown-body"></v-md-preview-html> -->
   </div>
 </template>
 
 <script lang="ts">
 import emoji from '../css/emoji.json'
 import { getCurrentInstance, reactive, toRefs, onMounted } from 'vue'
+import { getCart } from '../api/test/index'
 export default {
   name: 'Comment',
+  components: {
+  },
   data() {
     return {
+      marktext: '',
       faceList: [],
       comments: [
           {
@@ -243,6 +251,13 @@ export default {
       getEmo1(index): void {
         const face = ctx.faceList[index] as string
         data.text1 = data.text1 as string + face
+      },
+      async getEmo2(): Promise<void> {
+        const params = {
+          addressId: ctx.marktext
+        }
+        let data  = await getCart(params)
+        console.log(data)
       },
     }
     onMounted(()=>{
