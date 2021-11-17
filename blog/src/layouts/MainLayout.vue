@@ -59,7 +59,7 @@
                 <q-item clickable class="GL__menu-link">
                   <q-item-section>Your profile</q-item-section>
                 </q-item>
-                <q-item clickable to="/2" class="GL__menu-link">
+                <q-item clickable to="/edit" class="GL__menu-link">
                   <q-item-section>Your repositories</q-item-section>
                 </q-item>
                 <q-separator />

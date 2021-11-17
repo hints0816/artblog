@@ -137,9 +137,7 @@
         <div>Add Comment</div>
       </q-btn> -->
     </div>
-    <v-md-editor v-model="marktext" height="400px"></v-md-editor>
-    <v-md-preview :text="marktext"></v-md-preview>
-    <q-btn size="10px" round flat color="primary" icon="comment"  @click="getEmo2()" />
+    
     <!-- <v-md-preview-html :html="marktext" preview-class="vuepress-markdown-body"></v-md-preview-html> -->
   </div>
 </template>

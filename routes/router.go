@@ -10,7 +10,7 @@ import (
 
 func createMyRender() multitemplate.Renderer {
 	p := multitemplate.NewRenderer()
-	p.AddFromFiles("index", "web/dist/index.html")
+	p.AddFromFiles("front", "./blog/dist/spa/index.html")
 	return p
 }
 
@@ -21,8 +21,15 @@ func InitRouter() {
 	r.HTMLRender = createMyRender()
 	r.Use(middleware.Cors())
 
-	r.Static("/static", "./web/dist/static")
-	r.StaticFile("/favicon.ico", "/web/dist/favicon.ico")
+	r.Static("/css", "./blog/dist/spa/css")
+	r.Static("/fonts", "./blog/dist/spa/fonts")
+	r.Static("/icons", "./blog/dist/spa/icons")
+	r.Static("/js", "./blog/dist/spa/js")
+	r.StaticFile("/favicon.ico", "./blog/dist/spa/favicon.ico")
+
+	r.GET("/", func(c *gin.Context) {
+		c.HTML(200, "front", nil)
+	})
 
 	auth := r.Group("api")
 	auth.Use(middleware.JwtToken())
@@ -35,7 +42,10 @@ func InitRouter() {
 		// 登录控制模块
 		router.POST("login", api.Login)
 		router.POST("loginfront", api.LoginFront)
+		router.POST("article/add", api.AddArticle)
+
+		router.GET("article/info/:id", api.GetArtInfo)
 	}
 
-	r.Run()
+	r.Run(":3000")
 }
