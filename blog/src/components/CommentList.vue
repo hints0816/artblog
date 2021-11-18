@@ -131,6 +131,11 @@
       </div>
       </q-list>
     </q-list>
+    <div class="q-pa-md">
+      <q-video
+        src="123.mp4"
+      />
+    </div>
     <div class="q-pa-md q-gutter-sm">
       <!-- <q-btn outline no-caps color="cyan-9" @click="goAddComment">
         <q-icon left size="2rem" name="add_comment" />
@@ -145,16 +150,21 @@
 <script lang="ts">
 import emoji from '../css/emoji.json'
 import { getCurrentInstance, reactive, toRefs, onMounted } from 'vue'
-import { getCart } from '../api/test/index'
 export default {
   name: 'Comment',
   components: {
   },
-  data() {
-    return {
-      marktext: '',
-      faceList: [],
-      comments: [
+  setup () {
+    let data = reactive({
+        marktext: '',
+        faceList: [],
+        text: '',
+        text1: '',
+        isshow: false,
+        isfav: false,
+        isshowindex: 0,
+        isshowindex1: 0,
+        comments: [
           {
             'index':'123',
             'user':{
@@ -195,20 +205,9 @@ export default {
             'rev':[]
           }
       ]
-    };
-  },
-  
-  setup () {
-    const data = reactive({
-        text: '',
-        text1: '',
-        isshow: false,
-        isfav: false,
-        isshowindex: 0,
-        isshowindex1: 0,
-        comments:[]
     }) as any
     const {ctx} = getCurrentInstance() as any
+    console.log(ctx)
     const method = {
       commentss(fatherindex, childindex):void {
           console.log(fatherindex)
@@ -232,7 +231,7 @@ export default {
 
       },
       getTalk(): void {
-          const res = ctx.comments
+          const res = data.comments
           data.comments = res.map(item=>{
               item.isshow = false
               const res1 = item.rev
@@ -243,25 +242,23 @@ export default {
           })
       },
       getEmo(index): void {
-        const face = ctx.faceList[index] as string
+        const face = data.faceList[index] as string
         data.text = data.text as string + face
       },
       getEmo1(index): void {
-        const face = ctx.faceList[index] as string
+        const face = data.faceList[index] as string
         data.text1 = data.text1 as string + face
       },
       async getEmo2(): Promise<void> {
-        const params = {
-          addressId: ctx.marktext
-        }
-        let data  = await getCart(params)
-        console.log(data)
+        /* const params = {
+          addressId: data.marktext
+        } */
       },
     }
     onMounted(()=>{
          method.getTalk()
          emoji.forEach(element => {
-             ctx.faceList.push(element.char);
+             data.faceList.push(element.char);
          });                   
       })
     return {

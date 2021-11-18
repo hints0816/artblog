@@ -9,7 +9,6 @@
           <q-item-label lines="4" caption class="text-body1 text-gray-light text-justify">
             {{ post.body_html }}
           </q-item-label>
-          
         </q-item-section>
         <q-item-section side top>
             <q-item-label caption>
@@ -28,6 +27,16 @@
             {{ label.name }}
           </q-chip>
         </q-item-section>
+      </q-item>
+      <q-item v-ripple class="q-mt-lg">
+        <q-item-section q-item-section>
+            <q-item-label>
+              <q-skeleton type="text" width="50%" />
+            </q-item-label>
+            <q-item-label caption>
+              <q-skeleton type="text" />
+            </q-item-label>
+          </q-item-section>
       </q-item>
         <!-- <q-card-actions align="left">
             <q-btn flat color="red" icon="favorite" />

@@ -108,9 +108,42 @@
         color="cyan-9"
         direction="up"
       >
+        <q-fab-action icon="comment" color="cyan-9" @click="open('right')" />
         <q-fab-action icon="home" color="cyan-9" @click="$router.push('/12321');" />
         <q-fab-action icon="keyboard_arrow_up" color="cyan-9" @click="backToTop" />
       </q-fab>
+      <q-dialog v-model="dialog" wi persistent :position="position">
+      <q-card>
+        <q-bar>
+          <q-space />
+
+          <q-btn dense flat icon="close" v-close-popup>
+            <q-tooltip>Close</q-tooltip>
+          </q-btn>
+        </q-bar>
+
+        <q-card-section>
+          <div style="width: 400px; max-width: 400px">
+      <q-chat-message
+        name="me"
+        avatar="https://cdn.quasar.dev/img/avatar1.jpg"
+        :text="['hey, how are you?']"
+        stamp="7 minutes ago"
+        sent
+        bg-color="amber-7"
+      />
+      <q-chat-message
+        name="Jane"
+        avatar="https://cdn.quasar.dev/img/avatar5.jpg"
+        :text="['doing fine, how r you?']"
+        stamp="4 minutes ago"
+        text-color="white"
+        bg-color="primary"
+      />
+    </div>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
     </q-page-sticky>
   </q-layout>
 </template>
@@ -163,8 +196,7 @@ const linksList = [
   }
 ];
 
-import { defineComponent, ref, getCurrentInstance } from 'vue'
-
+import { defineComponent, ref, getCurrentInstance, reactive, toRefs } from 'vue'
 export default defineComponent({
   name: 'MainLayout',
 
@@ -173,6 +205,16 @@ export default defineComponent({
   },
 
   setup () {
+    let data = reactive({
+      icon: false,
+      bar: false,
+      bar2: false,
+      toolbar: false,
+      onload: false,
+      dialog: false,
+      persistent: false,
+      position: 'top'
+    })
     const {ctx} = getCurrentInstance() as any
     let leftDrawerOpen = ref(false)
     const method = {
@@ -193,6 +235,10 @@ export default defineComponent({
         };
         timer = setInterval(gotoTop, 15);
       },
+      open(position): void {
+        data.position = position
+        data.dialog = true
+      }
     }
     return {
       essentialLinks: linksList,
@@ -200,6 +246,7 @@ export default defineComponent({
       toggleLeftDrawer () {
         leftDrawerOpen.value = !leftDrawerOpen.value
       },
+      ...toRefs(data),
       ...method
     }
   },
