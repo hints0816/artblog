@@ -28,16 +28,6 @@
           </q-chip>
         </q-item-section>
       </q-item>
-      <q-item v-ripple class="q-mt-lg">
-        <q-item-section q-item-section>
-            <q-item-label>
-              <q-skeleton type="text" width="50%" />
-            </q-item-label>
-            <q-item-label caption>
-              <q-skeleton type="text" />
-            </q-item-label>
-          </q-item-section>
-      </q-item>
         <!-- <q-card-actions align="left">
             <q-btn flat color="red" icon="favorite" />
             <q-btn flat color="teal" icon="comment" />

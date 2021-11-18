@@ -7,41 +7,44 @@
     </q-page>
   </div>
 </template>
-<script>
+<script lang="ts">
 import Item from '../../components/ItemCard.vue';
+import { getCurrentInstance, reactive, onBeforeMount, toRefs } from 'vue'
+import { listArticle } from '../../api/test/index'
 export default {
   name: 'List',
   components: { Item },
-  data() {
+  setup () {
+    let data = reactive({
+      onload: false,
+      postList: {
+        'number':'',
+        'title':'',
+        'updated_at':'',
+        'body_html':''
+      },
+    })
+    const {ctx} = getCurrentInstance() as any
+    const method = {
+      async commentss():Promise<any> {
+        let datas  = await listArticle(1) as any
+        data.onload = true
+        console.log(datas)
+        data.postList.number = datas.data.id
+        data.postList.title = datas.data.title
+        data.postList.updated_at = datas.data.CreatedAt
+        data.postList.body_html = datas.data.content
+        console.log(ctx)
+      }
+    }
+     onBeforeMount(async()=>{
+        await method.commentss()
+    })
     return {
-      postList: [
-        {
-          'number':1,
-          'title':'tilte',
-          'created_at':'2021-09-02',
-          'body_html':'Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.Secondary line text. Lorem ipsum dolor sit amet, consectet',
-          'labels':[
-            {
-              'icon':'bookmark',
-              'name':'bookmark'
-            },
-            {
-              'icon':'event',
-              'textcolor':'white',
-              'color':'primary',
-              'name':'Add to calendar'
-            }
-          ]
-        }
-      ],
-    };
-  },
-  watch: {
-  },
-  methods: {
-  },
-  created() {
-  },
+      ...toRefs(data),
+      ...method
+    }
+  }
 };
 </script>
 

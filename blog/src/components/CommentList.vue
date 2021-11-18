@@ -131,11 +131,6 @@
       </div>
       </q-list>
     </q-list>
-    <div class="q-pa-md">
-      <q-video
-        src="123.mp4"
-      />
-    </div>
     <div class="q-pa-md q-gutter-sm">
       <!-- <q-btn outline no-caps color="cyan-9" @click="goAddComment">
         <q-icon left size="2rem" name="add_comment" />

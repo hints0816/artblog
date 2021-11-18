@@ -9,6 +9,32 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func ListArticle(c *gin.Context) {
+	pageSize, _ := strconv.Atoi(c.Query("pagesize"))
+	pageNum, _ := strconv.Atoi(c.Query("pagenum"))
+	id, _ := strconv.Atoi(c.Param("id"))
+
+	switch {
+	case pageSize >= 100:
+		pageSize = 100
+	case pageSize <= 0:
+		pageSize = 10
+	}
+
+	if pageNum == 0 {
+		pageNum = 1
+	}
+
+	data, code, total := model.ListArticle(id, pageSize, pageNum)
+
+	c.JSON(http.StatusOK, gin.H{
+		"status":  code,
+		"data":    data,
+		"total":   total,
+		"message": errormsg.GetErrMsg(code),
+	})
+}
+
 // AddArticle 添加文章
 func AddArticle(c *gin.Context) {
 	var data model.Article

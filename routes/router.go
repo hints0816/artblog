@@ -39,12 +39,9 @@ func InitRouter() {
 
 	router := r.Group("api")
 	{
-		// 登录控制模块
-		router.POST("login", api.Login)
-		router.POST("loginfront", api.LoginFront)
-		router.POST("article/add", api.AddArticle)
-
-		router.GET("article/info/:id", api.GetArtInfo)
+		router.POST("blog/article", api.AddArticle)
+		router.POST("blog/list", api.ListArticle)
+		router.GET("blog/article/:id", api.GetArtInfo)
 	}
 
 	r.Run(":3000")

@@ -1,6 +1,6 @@
 <template>
   <div class="row justify-center">
-    <q-page v-show="post.id" padding class="col-xs-12 col-sm-10 col-md-8">
+    <q-page padding class="col-xs-12 col-sm-10 col-md-8">
       <div v-if="onload" class="q-mb-lg">
         <h4 class="text-cyan-9">{{ post.title }}</h4>
         <code class="text-italic">
@@ -64,10 +64,11 @@ export default {
       async commentss():Promise<any> {
         let datas  = await getArticle(route.params.id) as any
         data.onload = true
+        console.log(datas)
         data.post.id = datas.data.id
         data.post.title = datas.data.title
-        data.post.updated_at = datas.data.updated_at
-        data.post.body_html = datas.data.body_html
+        data.post.updated_at = datas.data.CreatedAt
+        data.post.body_html = datas.data.content
         console.log(ctx)
       }
     }
