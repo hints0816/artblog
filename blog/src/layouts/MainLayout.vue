@@ -122,25 +122,38 @@
           </q-btn>
         </q-bar>
 
+
         <q-card-section>
-          <div style="width: 400px; max-width: 400px">
-      <q-chat-message
-        name="me"
-        avatar="https://cdn.quasar.dev/img/avatar1.jpg"
-        :text="['hey, how are you?']"
-        stamp="7 minutes ago"
-        sent
-        bg-color="amber-7"
-      />
-      <q-chat-message
-        name="Jane"
-        avatar="https://cdn.quasar.dev/img/avatar5.jpg"
-        :text="['doing fine, how r you?']"
-        stamp="4 minutes ago"
-        text-color="white"
-        bg-color="primary"
-      />
-    </div>
+            <q-scroll-area
+              style="height: 400px; width: 400px;">
+              <q-chat-message
+                v-for="label in talk"
+                :key="label.index"
+                :name="label.name"
+                :avatar="label.avatar"
+                :text="label.text"
+                :stamp="label.stamp"
+                :sent="label.send"
+                :bg-color="label.send!=''?'primary':'amber-7'"
+                :text-color="label.send!=''?'white':''"
+              />
+            </q-scroll-area>
+        </q-card-section>
+        <q-card-section>
+          <q-input filled bottom-slots v-model="text" label="Label" :dense="dense">
+            <template v-slot:append>
+              <q-btn round dense flat icon="mood">
+                <q-popup-edit max-width="158px" style="padding: 4px 8px;" self="top start" cover="false">
+                  <div class="q-gutter-sm" style="margin-top:0px">
+                    <a href="javascript:void(0);" @click="getEmo(index)" style="text-decoration:none" v-for="(item,index) in faceList" :key="index" class="emotionItem">{{item}}</a>
+                  </div>
+                </q-popup-edit>
+              </q-btn>
+            </template>
+            <template v-slot:after>
+              <q-btn @click="send()" round dense flat icon="send" />
+            </template>
+          </q-input>
         </q-card-section>
       </q-card>
     </q-dialog>
@@ -195,8 +208,8 @@ const linksList = [
     link: 'https://awesome.quasar.dev'
   }
 ];
-
-import { defineComponent, ref, getCurrentInstance, reactive, toRefs } from 'vue'
+import emoji from '../css/emoji.json'
+import { defineComponent, ref, getCurrentInstance, reactive, toRefs, onMounted } from 'vue'
 export default defineComponent({
   name: 'MainLayout',
 
@@ -206,6 +219,28 @@ export default defineComponent({
 
   setup () {
     let data = reactive({
+      talk:[
+        {
+          name: 'me',
+          avatar: 'https://cdn.quasar.dev/img/avatar1.jpg',
+          text: [
+            'hi'
+          ],
+          stamp: '7 minutes ago',
+          send: ''
+        },
+         {
+          name: 'Jane',
+          avatar: 'https://cdn.quasar.dev/img/avatar5.jpg',
+          text: [
+            'doing fine, how r you?'
+          ],
+          stamp: '4 minutes ago',
+          send: 'send'
+        }
+      ],
+      faceList: [],
+      text: '',
       icon: false,
       bar: false,
       bar2: false,
@@ -238,8 +273,30 @@ export default defineComponent({
       open(position): void {
         data.position = position
         data.dialog = true
-      }
+      },
+      getEmo(index): void {
+        const face = data.faceList[index] as string
+        data.text = data.text + face
+      },
+      send(): void {
+        const params = {
+          name: 'me',
+          avatar: 'https://cdn.quasar.dev/img/avatar1.jpg',
+          text: [
+             data.text
+          ],
+          stamp: '4 minutes ago',
+          send: ''
+        }
+        data.talk.push(params)
+        data.text = ''
+      },
     }
+    onMounted(()=>{
+         emoji.forEach(element => {
+             data.faceList.push(element.char);
+         });                   
+      })
     return {
       essentialLinks: linksList,
       leftDrawerOpen,

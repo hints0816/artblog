@@ -17,12 +17,20 @@ export default {
   setup () {
     let data = reactive({
       onload: false,
-      postList: {
-        'number':'',
-        'title':'',
-        'updated_at':'',
-        'body_html':''
-      },
+      postList: [
+        {
+          number: 1,
+          title: '1',
+          updated_at: '1',
+          body_html: '1'
+        },
+        {
+          number: 2,
+          title: '2',
+          updated_at: '13',
+          body_html: '13'
+        }
+      ],
     })
     const {ctx} = getCurrentInstance() as any
     const method = {
@@ -30,10 +38,10 @@ export default {
         let datas  = await listArticle(1) as any
         data.onload = true
         console.log(datas)
-        data.postList.number = datas.data.id
+       /*  data.postList.number = datas.data.id
         data.postList.title = datas.data.title
         data.postList.updated_at = datas.data.CreatedAt
-        data.postList.body_html = datas.data.content
+        data.postList.body_html = datas.data.content */
         console.log(ctx)
       }
     }

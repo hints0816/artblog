@@ -7,9 +7,9 @@ export const listArticle = async (params: any) => {
 };
 
 export const getArticle = async (id: number) => {
-    return await api.get(`/api/blog/article/${id}`);
+    return await api.get(`/api/blog/acticle/${id}`);
 };
 
 export const addArticle = async (acticleParams: ActicleInfo) => {
-    return await api.post('/api/blog/article', acticleParams);
+    return await api.post('/api/blog/acticle', acticleParams);
 };
