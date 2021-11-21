@@ -3,6 +3,7 @@
     <q-header elevated>
       <q-toolbar>
         <q-btn
+          v-if="!$q.screen.gt.sm"
           breakpoint="500"
           flat
           dense
@@ -15,7 +16,7 @@
         <q-toolbar-title shrink class="text-weight-bold">
             <router-link to="/" style="color: #fff;">blogName</router-link>
           </q-toolbar-title>
-         <q-tabs v-model="tab">
+         <q-tabs v-if="$q.screen.gt.sm" v-model="tab">
           <q-tab name="videos" label="Videos" />
           <q-tab name="articles" label="Articles" />
           <q-btn-dropdown auto-close stretch flat label="More...">
@@ -85,23 +86,87 @@
     </q-header>
 
     <q-drawer
+      v-if="!$q.screen.gt.sm"
       v-model="leftDrawerOpen"
-      show-if-above
+      :breakpoint="500"
       bordered
     >
-      <q-list>
-        <q-item-label
-          header
-        >
-          Essential Links
-        </q-item-label>
+      <q-scroll-area class="fit">
+        <q-list padding>
+          <q-item v-for="link in links1" :key="link.text" v-ripple clickable>
+            <q-item-section avatar>
+              <q-icon color="grey" :name="link.icon" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>{{ link.text }}</q-item-label>
+            </q-item-section>
+          </q-item>
 
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
-      </q-list>
+          <q-separator class="q-my-md" />
+
+          <q-item v-for="link in links2" :key="link.text" v-ripple clickable>
+            <q-item-section avatar>
+              <q-icon color="grey" :name="link.icon" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>{{ link.text }}</q-item-label>
+            </q-item-section>
+          </q-item>
+
+          <q-separator class="q-mt-md q-mb-xs" />
+
+          <q-item-label header class="text-weight-bold text-uppercase">
+            More from Youtube
+          </q-item-label>
+
+          <q-item v-for="link in links3" :key="link.text" v-ripple clickable>
+            <q-item-section avatar>
+              <q-icon color="grey" :name="link.icon" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>{{ link.text }}</q-item-label>
+            </q-item-section>
+          </q-item>
+
+          <q-separator class="q-my-md" />
+
+          <q-item v-for="link in links4" :key="link.text" v-ripple clickable>
+            <q-item-section avatar>
+              <q-icon color="grey" :name="link.icon" />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>{{ link.text }}</q-item-label>
+            </q-item-section>
+          </q-item>
+
+          <q-separator class="q-mt-md q-mb-lg" />
+
+          <div class="q-px-md text-grey-9">
+            <div class="row items-center q-gutter-x-sm q-gutter-y-xs">
+              <a
+                v-for="button in buttons1"
+                :key="button.text"
+                class="YL__drawer-footer-link"
+                href="javascript:void(0)"
+              >
+                {{ button.text }}
+              </a>
+            </div>
+          </div>
+          <div class="q-py-md q-px-md text-grey-9">
+            <div class="row items-center q-gutter-x-sm q-gutter-y-xs">
+              <a
+                v-for="button in buttons2"
+                :key="button.text"
+                class="YL__drawer-footer-link"
+                href="javascript:void(0)"
+              >
+                {{ button.text }}
+              </a>
+            </div>
+          </div>
+        </q-list>
+      </q-scroll-area>
     </q-drawer>
 
     <q-page-container> 
@@ -168,51 +233,6 @@
 
 <script lang="ts">
 // import EssentialLink from 'components/EssentialLink.vue'
-
-const linksList = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-];
 import emoji from '../css/emoji.json'
 import { onBeforeMount, defineComponent, ref, getCurrentInstance, reactive, toRefs, onMounted } from 'vue'
 import { getProfileMe } from '../api/test/index'
@@ -220,11 +240,33 @@ export default defineComponent({
   name: 'MainLayout',
 
   components: {
-    // EssentialLink
   },
 
   setup () {
     let data = reactive({
+      links1: [
+        { icon: 'home', text: 'Home' },
+        { icon: 'whatshot', text: 'Trending' },
+        { icon: 'subscriptions', text: 'Subscriptions' }
+      ],
+      links2: [
+        { icon: 'folder', text: 'Library' },
+        { icon: 'restore', text: 'History' },
+        { icon: 'watch_later', text: 'Watch later' },
+        { icon: 'thumb_up_alt', text: 'Liked videos' }
+      ],
+      links3: [
+        { icon: 'local_movies', text: 'YouTube Premium' },
+        { icon: 'local_movies', text: 'Movies & Shows' },
+        { icon: 'videogame_asset', text: 'Gaming' },
+        { icon: 'live_tv', text: 'Live' }
+      ],
+      links4: [
+        { icon: 'settings', text: 'Settings' },
+        { icon: 'flag', text: 'Report history' },
+        { icon: 'help', text: 'Help' },
+        { icon: 'feedback', text: 'Send feedback' }
+      ],
       avatar: '',
       talk:[
         {
@@ -314,7 +356,6 @@ export default defineComponent({
          });                   
       })
     return {
-      essentialLinks: linksList,
       leftDrawerOpen,
       toggleLeftDrawer () {
         leftDrawerOpen.value = !leftDrawerOpen.value
