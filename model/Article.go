@@ -34,12 +34,12 @@ func GetArtInfo(id int) (Article, int) {
 }
 
 func ListArticle(id int, pageSize int, pageNum int) ([]Article, int, int64) {
-	var cateArtList []Article
+	var artList []Article
 	var total int64
 
-	db.Model(&cateArtList)
+	db.Find(&artList)
 	if err != nil {
 		return nil, errormsg.ERROR_CATE_NOT_EXIST, 0
 	}
-	return cateArtList, errormsg.SUCCSE, total
+	return artList, errormsg.SUCCSE, total
 }

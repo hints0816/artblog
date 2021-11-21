@@ -35,13 +35,16 @@ func InitRouter() {
 	auth.Use(middleware.JwtToken())
 	{
 		auth.GET("admin/users", api.GetUsers)
+		auth.GET("blog/getme", api.GetMe)
 	}
 
 	router := r.Group("api")
 	{
 		router.POST("blog/article", api.AddArticle)
-		router.POST("blog/list", api.ListArticle)
+		router.GET("blog/articlelist", api.ListArticle)
+
 		router.GET("blog/article/:id", api.GetArtInfo)
+		router.POST("login/users", api.Login)
 	}
 
 	r.Run(":3000")

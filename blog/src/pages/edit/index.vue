@@ -12,7 +12,7 @@
   </div>
 </template>
 <script lang="ts">
-import { ActicleInfo } from '../../api/test/acticle.model';
+import { ArticleInfo } from '../../api/test/article.model';
 import { addArticle } from '../../api/test/index'
 import { getCurrentInstance, reactive, toRefs } from 'vue'
 export default {
@@ -26,7 +26,7 @@ export default {
     console.log(ctx)
     const method = {
       async save(): Promise<void> {
-        let params: ActicleInfo = {
+        let params: ArticleInfo = {
           title: data.title_text,
           content: data.content_text, 
         }

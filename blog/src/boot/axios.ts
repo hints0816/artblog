@@ -1,5 +1,6 @@
 import { boot } from 'quasar/wrappers';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import { LocalStorage } from 'quasar'; 
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
@@ -17,8 +18,11 @@ const api = axios.create({
   baseURL: 'http://localhost:3000',
   withCredentials: true,
 });
-// 请求拦截
+// 请求拦截import { config } from 'process';
+
 api.interceptors.request.use((cinfig: AxiosRequestConfig) => {
+  const token :string = LocalStorage.getItem('token');
+  cinfig.headers.Authorization = 'Bearer '+  token;
   return cinfig;
 });
 //响应拦截

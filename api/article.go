@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"strconv"
 
+	"fmt"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -39,6 +41,9 @@ func ListArticle(c *gin.Context) {
 func AddArticle(c *gin.Context) {
 	var data model.Article
 	_ = c.ShouldBindJSON(&data)
+	fmt.Print(data.Content)
+	data.Desc = data.Content[0:19]
+
 	code = model.CreateArt(&data)
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,

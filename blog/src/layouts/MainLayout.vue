@@ -2,14 +2,15 @@
   <q-layout>
     <q-header elevated>
       <q-toolbar>
-        <!-- <q-btn
+        <q-btn
+          breakpoint="500"
           flat
           dense
           round
           icon="menu"
           aria-label="Menu"
           @click="toggleLeftDrawer"
-        /> -->
+        />
 
         <q-toolbar-title shrink class="text-weight-bold">
             <router-link to="/" style="color: #fff;">blogName</router-link>
@@ -32,10 +33,10 @@
         <q-space></q-space>
         <div class="q-gutter-sm row items-center no-wrap">
         <iframe src="https://ghbtns.com/github-btn.html?user=hints0816&repo=gofile3&type=star&count=true&size=large" frameborder="0" scrolling="0" width="170" height="30" title="GitHub"></iframe>  
-        <q-btn dense flat no-wrap>
+        <q-btn v-if="avatar" dense flat no-wrap>
             <q-avatar color="orange" text-color="white">
               <q-badge color="red" floating>4</q-badge>
-              J
+              <img :src="avatar">
             </q-avatar>
             <q-icon name="arrow_drop_down" size="16px" />
 
@@ -74,12 +75,16 @@
                 </q-item>
               </q-list>
             </q-menu>
-          </q-btn>
+        </q-btn>
+        <div v-else>
+          <router-link class="text-weight-bold" to="/" style="color: #fff;">blogName</router-link>
+          <q-btn outline label="sign up" />
+        </div>
         </div>
       </q-toolbar>
     </q-header>
 
-    <!-- <q-drawer
+    <q-drawer
       v-model="leftDrawerOpen"
       show-if-above
       bordered
@@ -97,7 +102,7 @@
           v-bind="link"
         />
       </q-list>
-    </q-drawer> -->
+    </q-drawer>
 
     <q-page-container> 
       <router-view />
@@ -209,7 +214,8 @@ const linksList = [
   }
 ];
 import emoji from '../css/emoji.json'
-import { defineComponent, ref, getCurrentInstance, reactive, toRefs, onMounted } from 'vue'
+import { onBeforeMount, defineComponent, ref, getCurrentInstance, reactive, toRefs, onMounted } from 'vue'
+import { getProfileMe } from '../api/test/index'
 export default defineComponent({
   name: 'MainLayout',
 
@@ -219,6 +225,7 @@ export default defineComponent({
 
   setup () {
     let data = reactive({
+      avatar: '',
       talk:[
         {
           name: 'me',
@@ -278,6 +285,12 @@ export default defineComponent({
         const face = data.faceList[index] as string
         data.text = data.text + face
       },
+      async getProfileMe():Promise<any> {
+        let res  = await getProfileMe() as any
+        if(res.status == 200){
+          data.avatar = res.data.avatar
+        }
+      },
       send(): void {
         const params = {
           name: 'me',
@@ -292,8 +305,11 @@ export default defineComponent({
         data.text = ''
       },
     }
+    onBeforeMount(async()=>{
+      await method.getProfileMe()
+    })
     onMounted(()=>{
-         emoji.forEach(element => {
+           emoji.forEach(element => {
              data.faceList.push(element.char);
          });                   
       })
@@ -332,3 +348,9 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss" scoped>
+a{
+    text-decoration:none
+}
+</style>

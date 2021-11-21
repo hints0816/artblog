@@ -49,6 +49,26 @@ func GetUsers(c *gin.Context) {
 	)
 }
 
+// GetUsers 查询用户列表
+func GetMe(c *gin.Context) {
+	username1, _ := c.Get("username")
+	username2, _ := username1.(*middleware.MyClaims)
+	username3 := username2.Username
+
+	fmt.Print(username3)
+
+	data, total := model.GetProfile(username3)
+	code = errormsg.SUCCSE
+	c.JSON(
+		http.StatusOK, gin.H{
+			"status":  code,
+			"data":    data,
+			"total":   total,
+			"message": errormsg.GetErrMsg(code),
+		},
+	)
+}
+
 // Login 后台登陆
 func Login(c *gin.Context) {
 	var formData model.User
@@ -69,7 +89,6 @@ func Login(c *gin.Context) {
 			"token":   token,
 		})
 	}
-
 }
 
 // LoginFront 前台登录

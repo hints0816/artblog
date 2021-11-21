@@ -1,0 +1,18 @@
+GET http://localhost:3000/api/blog/articlelist HTTP/1.1
+
+###
+POST http://localhost:3000/api/login/users HTTP/1.1
+Content-Type: application/json
+
+{
+    "username":"admin",
+    "password":"123456"
+}
+
+###
+GET http://localhost:3000/api/admin/users HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiZXhwIjoxNjM3NDc4MTAyLCJpc3MiOiJHaW5CbG9nIiwibmJmIjoxNjM3NDcwODAyfQ.gRbrQU77M9Nr9-9hqzUt00Ck4qKSqkYGEZRqh3i9B18
+
+###
+GET http://localhost:3000/api/blog/getme HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiZXhwIjoxNjM3NDc4MTAyLCJpc3MiOiJHaW5CbG9nIiwibmJmIjoxNjM3NDcwODAyfQ.gRbrQU77M9Nr9-9hqzUt00Ck4qKSqkYGEZRqh3i9B18
