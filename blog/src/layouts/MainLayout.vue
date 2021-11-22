@@ -1,7 +1,7 @@
 <template>
   <q-layout>
     <q-header elevated>
-      <q-toolbar>
+      <q-toolbar :style="{'background-color': hex}">
         <q-btn
           v-if="!$q.screen.gt.sm"
           breakpoint="500"
@@ -34,6 +34,11 @@
         <q-space></q-space>
         <div class="q-gutter-sm row items-center no-wrap">
         <iframe src="https://ghbtns.com/github-btn.html?user=hints0816&repo=gofile3&type=star&count=true&size=large" frameborder="0" scrolling="0" width="170" height="30" title="GitHub"></iframe>  
+        <q-btn-dropdown v-if="$q.screen.gt.sm" auto-close stretch flat icon="color_lens">
+          <q-list>
+            <q-color v-model="hex" no-header class="my-picker" />
+          </q-list>
+        </q-btn-dropdown>
         <q-btn v-if="avatar" dense flat no-wrap>
             <q-avatar color="orange" text-color="white">
               <q-badge color="red" floating>4</q-badge>
@@ -78,8 +83,8 @@
             </q-menu>
         </q-btn>
         <div v-else>
-          <router-link class="text-weight-bold" to="/" style="color: #fff;">blogName</router-link>
-          <q-btn outline label="sign up" />
+          <router-link v-if="$q.screen.gt.sm" class="text-weight-bold q-mr-lg" to="/login" style="color: #fff;">SIGN IN</router-link>
+          <q-btn color="white" text-color="black" push label="sign up" />
         </div>
         </div>
       </q-toolbar>
@@ -91,7 +96,16 @@
       :breakpoint="500"
       bordered
     >
-      <q-scroll-area class="fit">
+      <q-img class="absolute-top" src="https://cdn.quasar.dev/img/material.png" style="height: 150px">
+        <div class="absolute-bottom bg-transparent">
+          <q-avatar size="56px" class="q-mb-sm">
+            <img src="https://cdn.quasar.dev/img/boy-avatar.png">
+          </q-avatar>
+          <div class="text-weight-bold">Razvan Stoenescu</div>
+          <div>@rstoenescu</div>
+        </div>
+      </q-img>
+      <q-scroll-area class="fit"  style="height: calc(100% - 150px); margin-top: 150px;">
         <q-list padding>
           <q-item v-for="link in links1" :key="link.text" v-ripple clickable>
             <q-item-section avatar>
@@ -244,6 +258,7 @@ export default defineComponent({
 
   setup () {
     let data = reactive({
+      hex: '',
       links1: [
         { icon: 'home', text: 'Home' },
         { icon: 'whatshot', text: 'Trending' },
