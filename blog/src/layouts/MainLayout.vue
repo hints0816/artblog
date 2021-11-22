@@ -14,77 +14,65 @@
         />
 
         <q-toolbar-title shrink class="text-weight-bold">
-            <router-link to="/" style="color: #fff;">blogName</router-link>
-          </q-toolbar-title>
-         <q-tabs v-if="$q.screen.gt.sm" v-model="tab">
-          <q-tab name="videos" label="Videos" />
-          <q-tab name="articles" label="Articles" />
-          <q-btn-dropdown auto-close stretch flat label="More...">
-          <q-list>
-            <q-item clickable @click="tab = 'movies'">
-              <q-item-section>Movies</q-item-section>
-            </q-item>
-
-            <q-item clickable @click="tab = 'photos'">
-              <q-item-section>Photos</q-item-section>
-            </q-item>
-          </q-list>
-        </q-btn-dropdown>
+          <router-link to="/" style="color: #fff;">blogName</router-link>
+        </q-toolbar-title>
+        <q-tabs v-if="$q.screen.gt.sm" v-model="tab">
+          <div v-for="link in links1" :key="link.text">
+            <q-tab v-if="link.child == undefined" :name="link.text" :label="link.text"/>
+            <q-btn-dropdown v-if="link.child != undefined" auto-close stretch flat :label="link.text">
+              <q-list v-if="link.child != undefined">
+                <q-item v-for="childmenu in link.child" :key="childmenu.text" clickable @click="tab = 'movies'">
+                  <q-item-section>{{ childmenu.text }}</q-item-section>
+                </q-item>
+              </q-list>
+            </q-btn-dropdown>
+          </div>
         </q-tabs>
         <q-space></q-space>
         <div class="q-gutter-sm row items-center no-wrap">
         <iframe src="https://ghbtns.com/github-btn.html?user=hints0816&repo=gofile3&type=star&count=true&size=large" frameborder="0" scrolling="0" width="170" height="30" title="GitHub"></iframe>  
-        <q-btn-dropdown v-if="$q.screen.gt.sm" auto-close stretch flat icon="color_lens">
+        <q-btn-dropdown v-if="$q.screen.gt.sm" stretch flat icon="color_lens">
           <q-list>
             <q-color v-model="hex" no-header class="my-picker" />
           </q-list>
         </q-btn-dropdown>
-        <q-btn v-if="avatar" dense flat no-wrap>
-            <q-avatar color="orange" text-color="white">
-              <q-badge color="red" floating>4</q-badge>
-              <img :src="avatar">
-            </q-avatar>
-            <q-icon name="arrow_drop_down" size="16px" />
-
-            <q-menu auto-close>
-              <q-list dense=false>
-                <q-item class="GL__menu-link-signed-in">
-                  <q-item-section>
-                    <div>Signed in as <strong>Mary</strong></div>
-                  </q-item-section>
-                </q-item>
-                <q-separator />
-                <q-item clickable class="GL__menu-link-status">
-                  <q-item-section>
-                    <div>
-                      <q-icon name="tag_faces" color="blue-9" size="18px" />
-                      Set your status
-                    </div>
-                  </q-item-section>
-                </q-item>
-                <q-separator />
-                <q-item clickable class="GL__menu-link">
-                  <q-item-section>Your profile</q-item-section>
-                </q-item>
-                <q-item clickable to="/edit" class="GL__menu-link">
-                  <q-item-section>Your repositories</q-item-section>
-                </q-item>
-                <q-separator />
-                <q-item clickable class="GL__menu-link">
-                  <q-item-section>Help</q-item-section>
-                </q-item>
-                <q-item clickable class="GL__menu-link">
-                  <q-item-section>Settings</q-item-section>
-                </q-item>
-                <q-item clickable class="GL__menu-link">
-                  <q-item-section>Sign out</q-item-section>
-                </q-item>
-              </q-list>
-            </q-menu>
-        </q-btn>
-        <div v-else>
-          <router-link v-if="$q.screen.gt.sm" class="text-weight-bold q-mr-lg" to="/login" style="color: #fff;">SIGN IN</router-link>
-          <q-btn color="white" text-color="black" push label="sign up" />
+        <div v-if="$q.screen.gt.sm">
+          <q-btn v-if="profile.name" dense flat no-wrap>
+              <q-avatar color="orange" text-color="white">
+                <q-badge color="red" floating>4</q-badge>
+                <img :src="profile.avatar">
+              </q-avatar>
+              <q-icon name="arrow_drop_down" size="16px" />
+              <q-menu auto-close>
+                <q-list style="min-width: 100px">
+                  <q-item class="GL__menu-link-signed-in">
+                    <q-item-section>
+                      <div>
+                        Sign in as <strong> {{ profile.name }}</strong>
+                      </div>     
+                    </q-item-section>
+                  </q-item>
+                  <q-separator />
+                  <q-item clickable to="/profile" class="GL__menu-link">
+                    <q-item-section>Your profile</q-item-section>
+                  </q-item>
+                  <q-item clickable to="/edit" class="GL__menu-link">
+                    <q-item-section>Your repositories</q-item-section>
+                  </q-item>
+                  <q-separator />
+                  <q-item clickable class="GL__menu-link">
+                    <q-item-section>Settings</q-item-section>
+                  </q-item>
+                  <q-item clickable @click="loginOut" class="GL__menu-link">
+                    <q-item-section>Sign out</q-item-section>
+                  </q-item>
+                </q-list>
+              </q-menu>
+          </q-btn>
+          <div v-else>
+            <router-link v-if="$q.screen.gt.sm" class="text-weight-bold q-mr-lg" to="/login" style="color: #fff;">SIGN IN</router-link>
+            <q-btn color="white" text-color="black" push label="sign up" />
+          </div>
         </div>
         </div>
       </q-toolbar>
@@ -96,16 +84,7 @@
       :breakpoint="500"
       bordered
     >
-      <q-img class="absolute-top" src="https://cdn.quasar.dev/img/material.png" style="height: 150px">
-        <div class="absolute-bottom bg-transparent">
-          <q-avatar size="56px" class="q-mb-sm">
-            <img src="https://cdn.quasar.dev/img/boy-avatar.png">
-          </q-avatar>
-          <div class="text-weight-bold">Razvan Stoenescu</div>
-          <div>@rstoenescu</div>
-        </div>
-      </q-img>
-      <q-scroll-area class="fit"  style="height: calc(100% - 150px); margin-top: 150px;">
+      <q-scroll-area style="height: calc(100% - 150px); margin-top: 150px;">
         <q-list padding>
           <q-item v-for="link in links1" :key="link.text" v-ripple clickable>
             <q-item-section avatar>
@@ -115,72 +94,17 @@
               <q-item-label>{{ link.text }}</q-item-label>
             </q-item-section>
           </q-item>
-
-          <q-separator class="q-my-md" />
-
-          <q-item v-for="link in links2" :key="link.text" v-ripple clickable>
-            <q-item-section avatar>
-              <q-icon color="grey" :name="link.icon" />
-            </q-item-section>
-            <q-item-section>
-              <q-item-label>{{ link.text }}</q-item-label>
-            </q-item-section>
-          </q-item>
-
-          <q-separator class="q-mt-md q-mb-xs" />
-
-          <q-item-label header class="text-weight-bold text-uppercase">
-            More from Youtube
-          </q-item-label>
-
-          <q-item v-for="link in links3" :key="link.text" v-ripple clickable>
-            <q-item-section avatar>
-              <q-icon color="grey" :name="link.icon" />
-            </q-item-section>
-            <q-item-section>
-              <q-item-label>{{ link.text }}</q-item-label>
-            </q-item-section>
-          </q-item>
-
-          <q-separator class="q-my-md" />
-
-          <q-item v-for="link in links4" :key="link.text" v-ripple clickable>
-            <q-item-section avatar>
-              <q-icon color="grey" :name="link.icon" />
-            </q-item-section>
-            <q-item-section>
-              <q-item-label>{{ link.text }}</q-item-label>
-            </q-item-section>
-          </q-item>
-
-          <q-separator class="q-mt-md q-mb-lg" />
-
-          <div class="q-px-md text-grey-9">
-            <div class="row items-center q-gutter-x-sm q-gutter-y-xs">
-              <a
-                v-for="button in buttons1"
-                :key="button.text"
-                class="YL__drawer-footer-link"
-                href="javascript:void(0)"
-              >
-                {{ button.text }}
-              </a>
-            </div>
-          </div>
-          <div class="q-py-md q-px-md text-grey-9">
-            <div class="row items-center q-gutter-x-sm q-gutter-y-xs">
-              <a
-                v-for="button in buttons2"
-                :key="button.text"
-                class="YL__drawer-footer-link"
-                href="javascript:void(0)"
-              >
-                {{ button.text }}
-              </a>
-            </div>
-          </div>
         </q-list>
       </q-scroll-area>
+      <q-img class="absolute-top" src="https://cdn.quasar.dev/img/material.png" style="height: 150px">
+        <div class="absolute-bottom bg-transparent">
+          <q-avatar size="56px" class="q-mb-sm">
+            <img :src="profile.avatar">
+          </q-avatar>
+          <div class="text-weight-bold">{{ profile.name }}</div>
+          <div>{{ profile.email }}</div>
+        </div>
+      </q-img>
     </q-drawer>
 
     <q-page-container> 
@@ -250,6 +174,8 @@
 import emoji from '../css/emoji.json'
 import { onBeforeMount, defineComponent, ref, getCurrentInstance, reactive, toRefs, onMounted } from 'vue'
 import { getProfileMe } from '../api/test/index'
+import { LocalStorage } from 'quasar'
+
 export default defineComponent({
   name: 'MainLayout',
 
@@ -259,30 +185,23 @@ export default defineComponent({
   setup () {
     let data = reactive({
       hex: '',
+      tab: 'Home',
+      profile: {
+        name: '',
+        avatar: '',
+        email: ''
+      },
       links1: [
         { icon: 'home', text: 'Home' },
         { icon: 'whatshot', text: 'Trending' },
-        { icon: 'subscriptions', text: 'Subscriptions' }
+        { icon: 'subscriptions', 
+          text: 'Subscriptions',
+          child: [
+            { icon: 'subscriptions', text: 'Subscriptions' },
+            { icon: 'whatshot', text: 'Trending' }
+          ]
+        }
       ],
-      links2: [
-        { icon: 'folder', text: 'Library' },
-        { icon: 'restore', text: 'History' },
-        { icon: 'watch_later', text: 'Watch later' },
-        { icon: 'thumb_up_alt', text: 'Liked videos' }
-      ],
-      links3: [
-        { icon: 'local_movies', text: 'YouTube Premium' },
-        { icon: 'local_movies', text: 'Movies & Shows' },
-        { icon: 'videogame_asset', text: 'Gaming' },
-        { icon: 'live_tv', text: 'Live' }
-      ],
-      links4: [
-        { icon: 'settings', text: 'Settings' },
-        { icon: 'flag', text: 'Report history' },
-        { icon: 'help', text: 'Help' },
-        { icon: 'feedback', text: 'Send feedback' }
-      ],
-      avatar: '',
       talk:[
         {
           name: 'me',
@@ -345,8 +264,14 @@ export default defineComponent({
       async getProfileMe():Promise<any> {
         let res  = await getProfileMe() as any
         if(res.status == 200){
-          data.avatar = res.data.avatar
+          data.profile.avatar = res.data.avatar
+          data.profile.name = res.data.name
+          data.profile.email = res.data.email
         }
+      },
+      loginOut(): void {
+        LocalStorage.remove('token')
+        window.location.href = '/'
       },
       send(): void {
         const params = {
@@ -366,6 +291,7 @@ export default defineComponent({
       await method.getProfileMe()
     })
     onMounted(()=>{
+        console.log(data.links1[1].child)
            emoji.forEach(element => {
              data.faceList.push(element.char);
          });                   
@@ -378,30 +304,7 @@ export default defineComponent({
       ...toRefs(data),
       ...method
     }
-  },
-  methods: {
-    getUserInfo():void {
-      // axiosInstance.get(`https://api.github.com/users/${this.$store.getters.username}`)
-      //   .then((res) => {
-      //     this.$set(this, 'user', res.data);
-      //   });
-    },
-    backToTop():void {
-      // let timer;
-      // const gotoTop = () => {
-      //   let currentPosition = document.documentElement.scrollTop || document.body.scrollTop;
-      //   currentPosition -= 100;
-      //   if (currentPosition > 0) {
-      //     window.scrollTo(0, currentPosition);
-      //   } else {
-      //     window.scrollTo(0, 0);
-      //     clearInterval(timer);
-      //     timer = null;
-      //   }
-      // };
-      // timer = setInterval(gotoTop, 1);
-    }
-  },
+  }
 })
 </script>
 

@@ -91,7 +91,8 @@ module.exports = configure(function (ctx) {
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-framework
     framework: {
       config: {
-        notify: { }
+        notify: { },
+        loading: {}
       },
 
       // iconSet: 'material-icons', // Quasar icon set
@@ -108,7 +109,8 @@ module.exports = configure(function (ctx) {
       plugins: [
         'Notify',
         'LocalStorage',
-        'SessionStorage'
+        'SessionStorage',
+        'Loading'
       ]
     },
 

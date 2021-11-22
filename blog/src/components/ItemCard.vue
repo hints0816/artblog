@@ -40,6 +40,7 @@
 <script lang="ts">
 import { getCurrentInstance } from 'vue'
 import { useRouter } from 'vue-router'
+
 export default {
   name: 'Item',
   props: {

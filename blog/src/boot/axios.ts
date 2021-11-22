@@ -1,6 +1,7 @@
 import { boot } from 'quasar/wrappers';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { LocalStorage } from 'quasar'; 
+import { LocalStorage, Loading, QSpinnerGrid } from 'quasar'; 
+
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
@@ -21,6 +22,10 @@ const api = axios.create({
 // 请求拦截import { config } from 'process';
 
 api.interceptors.request.use((cinfig: AxiosRequestConfig) => {
+  Loading.show({
+    spinner: QSpinnerGrid,
+    spinnerSize: 100,
+  })
   const token :string = LocalStorage.getItem('token');
   cinfig.headers.Authorization = 'Bearer '+  token;
   return cinfig;
@@ -29,6 +34,7 @@ api.interceptors.request.use((cinfig: AxiosRequestConfig) => {
 api.interceptors.response.use(
   (response): any => {
     // console.log(response);
+    Loading.hide()
     if (response.status === 200) {
       return response.data;
     } else {
@@ -36,6 +42,7 @@ api.interceptors.response.use(
     }
   },
   (err) => {
+    Loading.hide()
     return Promise.reject(err);
   }
 );

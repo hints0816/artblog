@@ -39,7 +39,7 @@
 <script lang="ts">
 import { Notify } from 'quasar'
 import { getCurrentInstance, reactive, toRefs } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { login } from '../../api/test/index'
 import { LocalStorage } from 'quasar'
 export default {
@@ -48,6 +48,7 @@ export default {
   },
   setup () {
     const route = useRoute() as any
+    const router = useRouter() as any
     console.log(route)
     let data = reactive({
       onload: false,
@@ -72,6 +73,7 @@ export default {
         LocalStorage.set('token', res.token)
         console.log(LocalStorage.getItem('token'))
         data.onload = true
+        router.push('/');
         console.log(ctx)
       }
     }

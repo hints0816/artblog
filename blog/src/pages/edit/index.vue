@@ -12,6 +12,7 @@
   </div>
 </template>
 <script lang="ts">
+import { Notify } from 'quasar'
 import { ArticleInfo } from '../../api/test/article.model';
 import { addArticle } from '../../api/test/index'
 import { getCurrentInstance, reactive, toRefs } from 'vue'
@@ -26,6 +27,16 @@ export default {
     console.log(ctx)
     const method = {
       async save(): Promise<void> {
+        if(data.title_text === '') {
+          Notify.create({
+            message: '请填写title',
+            color: 'negative',
+            icon: 'report_problem',
+            position: 'top',
+            timeout: 2000
+          })
+          return 
+        }
         let params: ArticleInfo = {
           title: data.title_text,
           content: data.content_text, 
