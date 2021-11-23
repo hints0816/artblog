@@ -17,9 +17,9 @@
           <router-link to="/" style="color: #fff;">blogName</router-link>
         </q-toolbar-title>
         <q-tabs v-if="$q.screen.gt.sm" v-model="tab">
-          <div v-for="link in links1" :key="link.text">
+          <div style="height:100%;" v-for="link in links1" :key="link.text">
             <q-tab v-if="link.child == undefined" :name="link.text" :label="link.text"/>
-            <q-btn-dropdown v-if="link.child != undefined" auto-close stretch flat :label="link.text">
+            <q-btn-dropdown style="height:100%;" v-if="link.child != undefined" auto-close stretch flat :label="link.text">
               <q-list v-if="link.child != undefined">
                 <q-item v-for="childmenu in link.child" :key="childmenu.text" clickable @click="tab = 'movies'">
                   <q-item-section>{{ childmenu.text }}</q-item-section>
@@ -106,7 +106,7 @@
           <div class="text-weight-bold">{{ profile.name }}</div>
           <div>{{ profile.email }}</div>
         </div>
-        <div class="absolute-bottom text-subtitle1 text-center">
+        <div v-else class="absolute-bottom text-subtitle1 text-center">
           <router-link class="text-weight-bold q-mr-lg" to="/login" style="color: #fff;">SIGN IN</router-link>
           <q-btn cover color="white" to="/signup" text-color="black" push label="sign up" />
         </div>

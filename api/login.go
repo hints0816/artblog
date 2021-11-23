@@ -5,10 +5,10 @@ import (
 	"hello/middleware"
 	"hello/model"
 	"hello/utils/errormsg"
+	"hello/utils/validator"
 	"net/http"
-	"time"
-
 	"strconv"
+	"time"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
@@ -69,6 +69,41 @@ func GetMe(c *gin.Context) {
 	)
 }
 
+// AddUser 添加用户
+func AddUser(c *gin.Context) {
+	var data model.User
+	var msg string
+	var validCode int
+	_ = c.ShouldBindJSON(&data)
+
+	msg, validCode = validator.Validate(&data)
+	if validCode != errormsg.SUCCSE {
+		c.JSON(
+			http.StatusOK, gin.H{
+				"status":  validCode,
+				"message": msg,
+			},
+		)
+		c.Abort()
+		return
+	}
+
+	code = model.CheckUser(data.Username)
+	if code == errormsg.SUCCSE {
+		model.CreateUser(&data)
+	}
+	if code == errormsg.ERROR_USERNAME_USED {
+		code = errormsg.ERROR_USERNAME_USED
+	}
+
+	c.JSON(
+		http.StatusOK, gin.H{
+			"status":  code,
+			"message": errormsg.GetErrMsg(code),
+		},
+	)
+}
+
 // Login 后台登陆
 func Login(c *gin.Context) {
 	var formData model.User
@@ -89,22 +124,6 @@ func Login(c *gin.Context) {
 			"token":   token,
 		})
 	}
-}
-
-// LoginFront 前台登录
-func LoginFront(c *gin.Context) {
-	var formData model.User
-	_ = c.ShouldBindJSON(&formData)
-	var code int
-
-	formData, code = model.CheckLoginFront(formData.Username, formData.Password)
-
-	c.JSON(http.StatusOK, gin.H{
-		"status":  code,
-		"data":    formData.Username,
-		"id":      formData.ID,
-		"message": errormsg.GetErrMsg(code),
-	})
 }
 
 // token生成函数

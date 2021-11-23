@@ -25,9 +25,11 @@
                   <q-btn class="q-mt-md full-width" @click="login()" label="sign in" type="submit" color="primary"/>
               </q-card-section>
             </q-card>
-            <q-card class="q-mt-md" style="width:380px">
+            <q-card class="q-mt-md" style="width:380px" align="center">
               <q-card-section>
-                <a href="javascript:void(0);">Create an account</a>
+                <span class="text-blue-grey-10">New to GitHub? </span>
+                <router-link class="text-blue-10 text-weight-bold"
+                 to="/signup" style="color: #fff;">Create an account.</router-link>
               </q-card-section>
             </q-card>
         </q-page>
@@ -84,3 +86,11 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+a{
+  text-decoration: none
+}
+a:hover{
+  text-decoration: underline
+}
+</style>

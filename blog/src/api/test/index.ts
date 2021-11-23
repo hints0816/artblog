@@ -5,6 +5,10 @@ export const login = async (params: any) => {
     return await api.post('/api/login/users', params);
 };
 
+export const adduser = async (params: any) => {
+    return await api.post('/api/user/add', params);
+};
+
 export const getProfileMe = async () => {
     return await api.get('/api/blog/getme');
 };

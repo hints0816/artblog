@@ -42,6 +42,7 @@ func InitRouter() {
 	{
 		router.POST("blog/article", api.AddArticle)
 		router.GET("blog/articlelist", api.ListArticle)
+		router.POST("user/add", api.AddUser)
 
 		router.GET("blog/article/:id", api.GetArtInfo)
 		router.POST("login/users", api.Login)
