@@ -1,6 +1,6 @@
 <template>
   <q-layout>
-    <q-header elevated>
+    <q-header>
       <q-toolbar :style="{'background-color': hex}">
         <q-btn
           v-if="!$q.screen.gt.sm"
@@ -71,7 +71,7 @@
           </q-btn>
           <div v-else>
             <router-link v-if="$q.screen.gt.sm" class="text-weight-bold q-mr-lg" to="/login" style="color: #fff;">SIGN IN</router-link>
-            <q-btn color="white" text-color="black" push label="sign up" />
+            <q-btn color="white" to="/signup" text-color="black" push label="sign up" />
           </div>
         </div>
         </div>
@@ -96,13 +96,19 @@
           </q-item>
         </q-list>
       </q-scroll-area>
-      <q-img class="absolute-top" src="https://cdn.quasar.dev/img/material.png" style="height: 150px">
-        <div class="absolute-bottom bg-transparent">
+      <q-img class="absolute-top" 
+        contain
+        src="https://cdn.quasar.dev/img/material.png" style="height: 150px">
+        <div v-if="profile.name" class="absolute-bottom bg-transparent">
           <q-avatar size="56px" class="q-mb-sm">
             <img :src="profile.avatar">
           </q-avatar>
           <div class="text-weight-bold">{{ profile.name }}</div>
           <div>{{ profile.email }}</div>
+        </div>
+        <div class="absolute-bottom text-subtitle1 text-center">
+          <router-link class="text-weight-bold q-mr-lg" to="/login" style="color: #fff;">SIGN IN</router-link>
+          <q-btn cover color="white" to="/signup" text-color="black" push label="sign up" />
         </div>
       </q-img>
     </q-drawer>

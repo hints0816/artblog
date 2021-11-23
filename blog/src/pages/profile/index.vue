@@ -34,12 +34,17 @@
         </q-list>
     </div>
     <div class="col-sm-9" style="max-width: 800px">
-        <q-btn round>
-          <q-avatar round size="122px">
-            <img src="https://cdn.quasar.dev/img/avatar5.jpg">
-          </q-avatar>
-          <q-badge color="red" floating>4</q-badge>
-        </q-btn>
+      <div style="width:200px">
+        <q-file
+          v-model="filesPng"
+          outlined
+        >
+            <q-avatar round size="200px">
+              <img src="https://cdn.quasar.dev/img/avatar5.jpg">
+            </q-avatar>
+            <q-badge color="red" floating>4</q-badge>
+        </q-file>
+      </div>
         <q-form
         @submit="onSubmit"
         @reset="onReset"
@@ -108,4 +113,7 @@ export default {
 .my-menu-link
   color: white
   background: #F2C037
+.q-field--outlined .q-field__control
+  border-radius: 100px
+  padding: 0px
 </style>
