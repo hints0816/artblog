@@ -32,6 +32,7 @@ module.exports = configure(function (ctx) {
       'i18n',
       'axios',
       'markdown',
+      'cropper'
     ],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css

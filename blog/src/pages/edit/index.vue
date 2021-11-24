@@ -3,96 +3,68 @@
     <q-page padding class="col-xs-12 col-sm-10">
       <q-input autogrow v-model="title_text" label="title" :dense="dense">
         <template v-slot:after>
-          <q-btn push color="primary" @click="save()" label="Save"/>
-          <q-btn push color="primary" @click="alert = true" label="Comment"/>
+          <q-btn push color="primary" @click="save()" label="Save" />
+          <q-btn push color="primary" @click="alert = true" label="Comment" />
         </template>
       </q-input>
       <v-md-editor v-model="content_text" height="90%"></v-md-editor>
       <v-md-preview :text="marktext"></v-md-preview>
-      <q-dialog v-model="alert">
+      <q-dialog persistent v-model="alert">
         <q-card>
           <q-toolbar>
             <q-avatar>
-              <img src="https://cdn.quasar.dev/logo-v2/svg/logo.svg">
+              <img src="https://cdn.quasar.dev/logo-v2/svg/logo.svg" />
             </q-avatar>
-
-            <q-toolbar-title><span class="text-weight-bold">Quasar</span> Framework</q-toolbar-title>
-
+            <q-toolbar-title
+              ><span class="text-weight-bold">Quasar</span>
+              Framework</q-toolbar-title
+            >
             <q-btn flat round dense icon="close" v-close-popup />
           </q-toolbar>
-          <q-card-section class="q-pt-none">
-            1
-            <vueCropper
-           style="width:100px;height:100px"
-          class="crop-box"
-          ref="cropper"
-          :img="options.img"
-          :autoCrop="options.autoCrop"
-          :fixedBox="options.fixedBox"
-          :canMoveBox="options.canMoveBox"
-          :autoCropWidth="options.autoCropWidth"
-          :autoCropHeight="options.autoCropHeight"
-          :centerBox="options.centerBox"
-          :fixed="options.fixed"
-          :fixedNumber="options.fixedNumber"
-          :canMove="options.canMove"
-          :canScale="options.canScale"
-        ></vueCropper>
-            <div class="q-gutter-sm">
-              <q-radio dense v-model="shape" val="line" label="Line" />
-              <q-radio dense v-model="shape" val="rectangle" label="Rectangle" />
-              <q-radio dense v-model="shape" val="ellipse" label="Ellipse" />
-              <q-radio dense v-model="shape" val="polygon" label="Polygon" />
-            </div>
-            <div class="q-gutter-xs row" style="max-width: 300px" :class="{ 'truncate-chip-labels': truncate }">
-                <q-chip
-                  removable
-                  v-model="vanilla"
-                  color="primary"
-                  text-color="white"
-                  icon="cake"
-                  :label="vanillaLabel"
-                  :title="vanillaLabel"
-                />
-                <q-chip
-                  removable
-                  v-model="chocolate"
-                  color="teal"
-                  text-color="white"
-                  icon="cake"
-                  :label="chocolateLabel"
-                >
-                  <q-tooltip>{{ chocolateLabel }}</q-tooltip>
-                </q-chip>
-                <q-chip
-                  removable
-                  v-model="strawberry"
-                  color="orange"
-                  text-color="white"
-                  icon="cake"
-                >
-                  <div class="ellipsis">
-                    {{ strawberryLabel }}
-                    <q-tooltip>{{ strawberryLabel }}</q-tooltip>
-                  </div>
-                </q-chip>
-                <q-chip
-                  removable
-                  v-model="cookies"
-                  color="red"
-                  text-color="white"
-                >
-                  <q-avatar>
-                    <img src="https://cdn.quasar.dev/img/boy-avatar.png">
-                  </q-avatar>
-                  <div class="ellipsis">
-                    {{ cookiesLabel }}
-                    <q-tooltip>{{ cookiesLabel }}</q-tooltip>
-                  </div>
-                </q-chip>
-              </div>
 
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum repellendus sit voluptate voluptas eveniet porro. Rerum blanditiis perferendis totam, ea at omnis vel numquam exercitationem aut, natus minima, porro labore.
+          <q-card-section class="q-pt-none">
+            <div class="q-gutter-sm">
+              <q-radio dense v-model="shape" val="picture" label="picture" />
+              <q-radio
+                dense
+                v-model="shape"
+                val="nopicture"
+                label="nopicture"
+              />
+            </div>
+            <div class="q-py-md">
+              <q-btn style="padding: 0px">
+                <img
+                  style="max-width: 400px; height: 200px"
+                  src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fwww.pianshen.com%2Fimages%2F886%2F002965543cfb901f26f46cd7865740d6.png&refer=http%3A%2F%2Fwww.pianshen.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1640349629&t=3fed3b7c5857985581dee4f416a909b3"
+                />
+              </q-btn>
+            </div>
+            <div
+              class="q-gutter-xs row"
+              style="max-width: 300px"
+              :class="{ 'truncate-chip-labels': truncate }"
+            >
+              <q-chip
+                v-for="(item, index) in chip"
+                :key="index"
+                removable
+                :v-model="item.status"
+                color="primary"
+                text-color="white"
+                icon="cake"
+                :label="item.name"
+              />
+              <q-chip
+                clickable
+                @click="cropperAvatarDialog = true"
+                color="teal"
+                text-color="white"
+                icon="bookmark"
+              >
+                Add Label
+              </q-chip>
+            </div>
           </q-card-section>
 
           <q-card-actions align="right">
@@ -100,82 +72,92 @@
           </q-card-actions>
         </q-card>
       </q-dialog>
+      <q-dialog v-model="cropperAvatarDialog" persistent>
+        <q-card style="width: 300px">
+          <q-toolbar>
+            <q-space />
+            <q-btn flat round dense icon="close" v-close-popup />
+          </q-toolbar>
+          <q-card-section>
+            <q-input v-model="text" label="Standard" />
+          </q-card-section>
+          <q-separator inset />
+          <q-card-section>
+            
+          </q-card-section>
+        </q-card>
+      </q-dialog>
     </q-page>
   </div>
 </template>
+
 <script lang="ts">
-import { Notify } from 'quasar'
+import { Notify } from 'quasar';
 import { ArticleInfo } from '../../api/test/article.model';
-import { addArticle } from '../../api/test/index'
-import { getCurrentInstance, reactive, toRefs } from 'vue'
-import 'vue-cropper/dist/index.css'
-import { VueCropper }  from 'vue-cropper'
+import { addArticle } from '../../api/test/index';
+import { getCurrentInstance, reactive, toRefs } from 'vue';
 export default {
   name: 'Post',
-  components: [
-    VueCropper
-  ],
-  setup () {
+  setup() {
     let data = reactive({
-       options: {
-        img: '', // 原图文件
-        autoCrop: true, // 默认生成截图框
-        fixedBox: false, // 固定截图框大小
-        canMoveBox: true, // 截图框可以拖动
-        autoCropWidth: 200, // 截图框宽度
-        autoCropHeight: 200, // 截图框高度
-        fixed: true, // 截图框宽高固定比例
-        fixedNumber: [1, 1], // 截图框的宽高比例
-        centerBox: true, // 截图框被限制在图片里面
-        canMove: false, // 上传图片不允许拖动
-        canScale: false // 上传图片不允许滚轮缩放
-      },
-
-      vanilla: true,
-      chocolate: true,
-      strawberry: true,
-      cookies: true,
+      text: '',
+      shape: 'nopicture',
+      chip: [
+        {
+          name: 'vanilla',
+          status: true,
+        },
+        {
+          name: 'chocolate',
+          status: true,
+        },
+        {
+          name: 'strawberry',
+          status: true,
+        },
+      ],
       alert: false,
+      cropperAvatarDialog: false,
       title_text: '',
       content_text: '',
-    })
-    const {ctx} = getCurrentInstance() as any
-    console.log(ctx)
+    });
+    const { ctx } = getCurrentInstance() as any;
+    console.log(ctx);
     const method = {
       async save(): Promise<void> {
-        if(data.title_text === '') {
+        if (data.title_text === '') {
           Notify.create({
             message: '请填写title',
             color: 'negative',
             icon: 'report_problem',
             position: 'top',
-            timeout: 2000
-          })
-          return 
+            timeout: 2000,
+          });
+          return;
         }
-        if(data.content_text === '') {
+        if (data.content_text === '') {
           Notify.create({
             message: '请填写content',
             color: 'negative',
             icon: 'report_problem',
             position: 'top',
-            timeout: 2000
-          })
-          return 
+            timeout: 2000,
+          });
+          return;
         }
         let params: ArticleInfo = {
           title: data.title_text,
-          content: data.content_text, 
-        }
-        let datas  = await addArticle(params) as any
-        console.log(datas)
-      }
-    }
+          content: data.content_text,
+        };
+        let datas = (await addArticle(params)) as any;
+        console.log(datas);
+      },
+    };
     return {
       ...toRefs(data),
-      ...method
-    }
-  }
+      ...method,
+    };
+  },
 };
 </script>
 

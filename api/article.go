@@ -20,7 +20,7 @@ func ListArticle(c *gin.Context) {
 	case pageSize >= 100:
 		pageSize = 100
 	case pageSize <= 0:
-		pageSize = 10
+		pageSize = 15
 	}
 
 	if pageNum == 0 {

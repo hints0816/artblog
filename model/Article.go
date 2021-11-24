@@ -37,7 +37,7 @@ func ListArticle(id int, pageSize int, pageNum int) ([]Article, int, int64) {
 	var artList []Article
 	var total int64
 
-	db.Find(&artList)
+	db.Limit(pageSize).Offset((pageNum - 1) * pageSize).Order("Created_At DESC").Find(&artList)
 	if err != nil {
 		return nil, errormsg.ERROR_CATE_NOT_EXIST, 0
 	}
