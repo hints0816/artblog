@@ -3,9 +3,25 @@
     <q-page padding class="col-xs-12 col-sm-10 col-md-8">
       <div v-if="onload" class="q-mb-lg">
         <h4 class="text-cyan-9">{{ post.title }}</h4>
-        <code class="text-italic">
-          Updated by {{ $store.getters.username }} {{ post.updated_at }}
-        </code>
+        <q-item>
+          <q-item-section avatar>
+            <q-btn round>
+              <q-avatar>
+                <img src="https://cdn.quasar.dev/img/avatar2.jpg">
+              </q-avatar>
+            </q-btn>
+          </q-item-section>
+          <q-item-section>
+            <q-item-label caption>Caption</q-item-label>
+            <q-item-label>
+              <code class="text-italic">
+                Updated by {{ $store.getters.username }} {{ post.updated_at }}
+              </code>
+            </q-item-label>
+          </q-item-section>
+        </q-item>
+        
+        
       </div>
       <div v-else class="q-mb-lg">
         <q-skeleton width="50%" />
@@ -45,6 +61,7 @@ import { getCurrentInstance, reactive, onBeforeMount, toRefs } from 'vue'
 import Comment from '../../components/CommentList.vue';
 import { getArticle } from '../../api/test/index'
 import { useRoute } from 'vue-router'
+import { date } from 'quasar'
 export default {
   name: 'Post',
   components: { Comment },
@@ -67,7 +84,9 @@ export default {
         console.log(datas)
         data.post.id = datas.data.id
         data.post.title = datas.data.title
-        data.post.updated_at = datas.data.CreatedAt
+        let timeStamp = new Date(datas.data.CreatedAt)
+        let formattedString = date.formatDate(timeStamp, 'YYYY-MM-DD HH:mm:ss')
+        data.post.updated_at = formattedString
         data.post.body_html = datas.data.content
         console.log(ctx)
       }

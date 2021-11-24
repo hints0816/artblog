@@ -11,6 +11,7 @@
 import Item from '../../components/ItemCard.vue';
 import { getCurrentInstance, reactive, onBeforeMount, toRefs } from 'vue'
 import { listArticle } from '../../api/test/index'
+import { date } from 'quasar'
 export default {
   name: 'List',
   components: { Item },
@@ -25,7 +26,13 @@ export default {
       async commentss():Promise<any> {
         let datas  = await listArticle(1) as any
         data.onload = true
+        datas.data.forEach(element => {
+          let timeStamp = new Date(element.UpdatedAt)
+          let formattedString = date.formatDate(timeStamp, 'YYYY-MM-DD HH:mm:ss')
+          element.UpdatedAt = formattedString
+        });  
         data.postList = datas.data
+         
         console.log(datas.data)
         console.log(data.postList)
         console.log(ctx)

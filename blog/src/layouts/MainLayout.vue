@@ -30,13 +30,13 @@
         </q-tabs>
         <q-space></q-space>
         <div class="q-gutter-sm row items-center no-wrap">
-        <iframe src="https://ghbtns.com/github-btn.html?user=hints0816&repo=gofile3&type=star&count=true&size=large" frameborder="0" scrolling="0" width="170" height="30" title="GitHub"></iframe>  
-        <q-btn-dropdown v-if="$q.screen.gt.sm" stretch flat icon="color_lens">
-          <q-list>
-            <q-color v-model="hex" no-header class="my-picker" />
-          </q-list>
-        </q-btn-dropdown>
-        <div v-if="$q.screen.gt.sm">
+          <iframe src="https://ghbtns.com/github-btn.html?user=hints0816&repo=gofile3&type=star&count=true&size=large" frameborder="0" scrolling="0" width="170" height="30" title="GitHub"></iframe>  
+          <q-btn-dropdown v-if="$q.screen.gt.sm" stretch flat icon="color_lens">
+            <q-list>
+              <q-color v-model="hex" no-header class="my-picker" />
+            </q-list>
+          </q-btn-dropdown>
+          <div v-if="$q.screen.gt.sm">
           <q-btn v-if="profile.name" dense flat no-wrap>
               <q-avatar color="orange" text-color="white">
                 <q-badge color="red" floating>4</q-badge>
@@ -73,7 +73,7 @@
             <router-link v-if="$q.screen.gt.sm" class="text-weight-bold q-mr-lg" to="/login" style="color: #fff;">SIGN IN</router-link>
             <q-btn color="white" to="/signup" text-color="black" push label="sign up" />
           </div>
-        </div>
+          </div>
         </div>
       </q-toolbar>
     </q-header>
@@ -100,9 +100,11 @@
         contain
         src="https://cdn.quasar.dev/img/material.png" style="height: 150px">
         <div v-if="profile.name" class="absolute-bottom bg-transparent">
-          <q-avatar size="56px" class="q-mb-sm">
-            <img :src="profile.avatar">
-          </q-avatar>
+          <q-btn round to="/profile">
+            <q-avatar>
+              <img :src="profile.avatar">
+            </q-avatar>
+          </q-btn>
           <div class="text-weight-bold">{{ profile.name }}</div>
           <div>{{ profile.email }}</div>
         </div>

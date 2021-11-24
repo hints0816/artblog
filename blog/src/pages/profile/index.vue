@@ -1,11 +1,28 @@
 <template>
   <div class="row justify-center">
-    <q-page padding class="row col-xs-12 col-sm-12" style="max-width:1200px;">
+    <q-page padding class="q-mt-lg col-xs-12 col-sm-12" style="max-width:1200px;">
+    <q-item>
+      <q-item-section avatar>
+        <q-btn round>
+          <q-avatar>
+            <img src="https://cdn.quasar.dev/img/avatar2.jpg">
+          </q-avatar>
+        </q-btn>
+      </q-item-section>
+      <q-item-section>
+        <q-item-label caption>Caption</q-item-label>
+        <q-item-label>
+          <code class="text-italic">
+          </code>
+        </q-item-label>
+      </q-item-section>
+    </q-item>
+    <div class="row q-col-gutter-x-lg">
     <div class="col-xs-12 col-sm-3" style="height:100%">
         <q-list bordered class="rounded-borders" style="border-radius:10px;" separator>
         <q-item clickable v-ripple 
-            :active="'inbox' === 'inbox'"
-            active-class="my-menu-link">
+            :active="true"
+            active-class="text-orange">
             <q-item-section>Icon as avatar</q-item-section>
             <q-item-section avatar>
             <q-icon color="primary" name="bluetooth" />
@@ -33,25 +50,22 @@
         </q-item>
         </q-list>
     </div>
-    <div class="col-sm-9" style="max-width: 800px">
-      <div style="width:200px">
-        <q-file
-          v-model="filesPng"
-          outlined
-        >
-            <q-avatar round size="200px">
-              <img src="https://cdn.quasar.dev/img/avatar5.jpg">
-            </q-avatar>
-            <q-badge color="red" floating>4</q-badge>
-        </q-file>
-      </div>
+    <div class="col-sm-9 q-col-gutter-x-lg" style="height:100%">
+      <q-card flat>
+        <q-card-section>
+          Public profile
+        </q-card-section>
+        <q-separator inset />
+        <q-card-section class="row q-col-gutter-x-lg">
+          <div class="col-xs-12 col-sm-9" style="max-width: 800px">
         <q-form
         @submit="onSubmit"
         @reset="onReset"
-        class="q-gutter-md"
+        class="q-gutter-md q-mt-lg"
         >
         <q-input
-            filled
+            outlined
+            dense
             v-model="name"
             label="Your name *"
             hint="Name and surname"
@@ -59,7 +73,8 @@
             :rules="[ val => val && val.length > 0 || 'Please type something']"
         />
         <q-input
-            filled
+            outlined
+            dense
             type="number"
             v-model="age"
             label="Your age *"
@@ -75,6 +90,24 @@
             <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
         </div>
         </q-form>
+    </div>
+    <div class="col-xs-12 col-sm-3" style="max-width: 200px">
+      <div class="useravatar" style="width:200px">
+        <q-file
+          v-model="filesPng"
+          outlined
+        >
+            <q-avatar round size="200px">
+              <img src="https://cdn.quasar.dev/img/avatar5.jpg">
+            </q-avatar>
+            <q-badge color="red" floating>4</q-badge>
+        </q-file>
+      </div>
+    </div>
+        </q-card-section>
+      </q-card>
+    
+    </div>
     </div>
     </q-page>
   </div>
@@ -113,7 +146,7 @@ export default {
 .my-menu-link
   color: white
   background: #F2C037
-.q-field--outlined .q-field__control
+.useravatar .q-field--outlined .q-field__control
   border-radius: 100px
   padding: 0px
 </style>
