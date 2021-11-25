@@ -1,52 +1,49 @@
 <template>
   <div>
-    <q-infinite-scroll @load="onLoad" :offset="250">
-      <div v-for="post in postList" :key="post.index">
-        <q-item clickable v-ripple class="q-mt-lg">
-          <q-item-section @click="toPostDetail(post.ID)">
-            <q-item-label>
-              <div class="text-h6 text-cyan-9">{{ post.title }}</div>
-            </q-item-label>
-            <q-item-label lines="4" caption class="text-body1 text-gray-light text-justify">
-              {{ post.desc }}
-            </q-item-label>
-          </q-item-section>
-          <q-item-section side top>
-              <q-item-label caption>
-                  {{ post.UpdatedAt }}
-              </q-item-label>
-            <q-chip
-              v-for="label in post.labels"
-              clickable
-              class="label"
-              :color="label.color" 
-              :text-color="label.textcolor" 
-              :icon="label.icon"
-              :key="label.index"
-              @click="chipClickHandler(label.name)"
-            >
-              {{ label.name }}
-            </q-chip>
-          </q-item-section>
-        </q-item>
-          <!-- <q-card-actions align="left">
+    <div v-for="post in postList" :key="post.index">
+      <q-item clickable v-ripple class="q-mt-lg">
+        <q-item-section @click="toPostDetail(post.ID)">
+          <q-item-label>
+            <div class="text-h6 text-cyan-9">{{ post.title }}</div>
+          </q-item-label>
+          <q-item-label
+            lines="4"
+            caption
+            class="text-body1 text-gray-light text-justify"
+          >
+            {{ post.desc }}
+          </q-item-label>
+        </q-item-section>
+        <q-item-section side top>
+          <q-item-label caption>
+            {{ post.UpdatedAt }}
+          </q-item-label>
+          <q-chip
+            v-for="label in post.Cateart"
+            clickable
+            class="label"
+            :color="label.Category.color"
+            :text-color="label.Category.textcolor"
+            :icon="label.Category.icon"
+            :key="label.index"
+            @click="chipClickHandler(label.Category.name)"
+          >
+            {{ label.Category.name }}
+          </q-chip>
+        </q-item-section>
+      </q-item>
+      <!-- <q-card-actions align="left">
               <q-btn flat color="red" icon="favorite" />
               <q-btn flat color="teal" icon="comment" />
           </q-card-actions> -->
-        <q-separator spaced inset />
-      </div>
-      <template v-slot:loading>
-        <div class="row justify-center q-my-md">
-          <q-spinner-dots color="primary" size="40px" />
-        </div>
-      </template>
-    </q-infinite-scroll>
+      <q-separator spaced inset />
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { getCurrentInstance } from 'vue'
-import { useRouter } from 'vue-router'
+import { getCurrentInstance } from 'vue';
+import { useRouter } from 'vue-router';
 
 export default {
   name: 'Item',
@@ -56,33 +53,28 @@ export default {
       required: true,
     },
   },
-  setup () {
-    const router = useRouter() as any
-    const {ctx} = getCurrentInstance() as any
+  setup() {
+    const router = useRouter() as any;
+    const { ctx } = getCurrentInstance() as any;
     const method = {
-      toPostDetail(id: number):void {
+      toPostDetail(id: number): void {
         router.push(`/posts/${id}`);
-        console.log(ctx)
+        console.log(ctx);
       },
-      onLoad(index, done): void  {
-        setTimeout(() => {
-           console.log(index)
-           console.log(done)
-        }, 2000)
+      chipClickHandler(name: string): void {
+        console.log(name)
       }
-    }
+    };
     return {
-      ...method
-    }
+      ...method,
+    };
   },
-  methods: {
-  
-  },
+  methods: {},
 };
 </script>
 
 <style lang="scss" scoped>
-.markdown-body hr{
-    height: unset
+.markdown-body hr {
+  height: unset;
 }
 </style>

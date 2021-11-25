@@ -14,8 +14,9 @@ export const getProfileMe = async () => {
 };
 
 export const listArticle = async (params: any) => {
-    console.log(params)
-    return await api.get('/api/blog/articlelist');
+    const pagenum: string = params.pagenum
+    const pagesize: string = params.pagesize
+    return await api.get('/api/blog/articlelist?pagenum='+pagenum+'&pagesize='+pagesize);
 };
 
 export const getArticle = async (id: number) => {

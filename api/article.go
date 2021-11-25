@@ -14,7 +14,7 @@ import (
 func ListArticle(c *gin.Context) {
 	pageSize, _ := strconv.Atoi(c.Query("pagesize"))
 	pageNum, _ := strconv.Atoi(c.Query("pagenum"))
-	id, _ := strconv.Atoi(c.Param("id"))
+	id, _ := strconv.Atoi(c.Query("id"))
 
 	switch {
 	case pageSize >= 100:

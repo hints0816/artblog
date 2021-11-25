@@ -72,6 +72,7 @@ export default {
     const router = useRouter() as any
     console.log(route)
     let data = reactive({
+      isPwd: true,
       onload: false,
       formdata: {
         'username':'',

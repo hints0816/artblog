@@ -1,8 +1,6 @@
 <template>
   <div>
-    <!-- <q-input autogrow v-model="text" label="Label" :dense="dense" />
-    <q-btn push color="primary" label="Push" /> -->
-    <q-input autogrow v-model="text" label="Label" :dense="dense">
+    <q-input v-if="logged" autogrow v-model="text" label="Label" :dense="dense">
         <template v-slot:before>
           <q-avatar rounded>
             <img src="https://cdn.quasar.dev/img/avatar5.jpg">
@@ -22,7 +20,21 @@
             </q-popup-proxy> -->
           </q-btn>
         </template>
-      </q-input>
+    </q-input>
+    <q-card v-else class="bg-primary text-white">
+      <q-card-section>
+        <div class="text-bold">
+          <q-btn push color="white" text-color="black" label="Sign up for free" />
+          to join this conversation on GitHub. Already have an account?
+          <router-link
+            class="text-yellow-8 text-weight-bold"
+            to="/login"
+            style="color: #fff"
+            >Sign in to comment</router-link
+          >
+        </div>
+      </q-card-section>
+    </q-card>
     <q-list
       v-for="(comment,idx) in comments"
       bordered
@@ -43,7 +55,7 @@
           <q-item-label v-html="comment.body_html" class="q-pt-sm"></q-item-label>
         </q-item-section>
         <div class="q-gutter-sm">
-            <q-btn size="10px" round flat color="primary" icon="comment"  @click="commentss(idx,null)" />
+            <q-btn v-if="logged" size="10px" round flat color="primary" icon="comment"  @click="commentss(idx,null)" />
             <q-btn v-if="comment.digg==0?true:false" size="10px" round flat color="#ccc" icon="favorite"  @click="favorite(idx)" />
             <q-btn v-else size="10px" round flat color="red" icon="favorite"  @click="favorite(idx)" />
         </div>
@@ -96,7 +108,7 @@
           <q-item-label v-html="rev.texthtml"></q-item-label>
         </q-item-section>
         <div class="q-gutter-sm">
-            <q-btn size="10px" round flat color="primary" icon="comment"  @click="commentss(idx,index)" />
+            <q-btn v-if="logged" size="10px" round flat color="primary" icon="comment"  @click="commentss(idx,index)" />
             <q-btn v-if="rev.digg==0?true:false" size="10px" round flat color="#ccc" icon="favorite"  @click="favorite(idx)" />
             <q-btn v-else size="10px" round flat color="red" icon="favorite"  @click="favorite(idx)" />
         </div>
@@ -145,12 +157,14 @@
 <script lang="ts">
 import emoji from '../css/emoji.json'
 import { getCurrentInstance, reactive, toRefs, onMounted } from 'vue'
+import { LocalStorage } from 'quasar';
 export default {
   name: 'Comment',
   components: {
   },
   setup () {
     let data = reactive({
+        logged: false,
         marktext: '',
         faceList: [],
         text: '',
@@ -226,6 +240,9 @@ export default {
 
       },
       getTalk(): void {
+          if(LocalStorage.getItem('logged_in') === 'yes') {
+            data.logged = true;
+          }
           const res = data.comments
           data.comments = res.map(item=>{
               item.isshow = false

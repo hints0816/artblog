@@ -8,13 +8,19 @@ import (
 
 type Article struct {
 	gorm.Model
-	Title        string `gorm:"type:varchar(100);not null" json:"title"`
-	Cid          int    `gorm:"type:int;not null" json:"cid"`
-	Desc         string `gorm:"type:varchar(200)" json:"desc"`
-	Content      string `gorm:"type:longtext" json:"content"`
-	Img          string `gorm:"type:varchar(100)" json:"img"`
-	CommentCount int    `gorm:"type:int;not null;default:0" json:"comment_count"`
-	ReadCount    int    `gorm:"type:int;not null;default:0" json:"read_count"`
+	Cateart      []*Cateart `gorm:"foreignkey:ID;"`
+	Title        string     `gorm:"type:varchar(100);not null" json:"title"`
+	Desc         string     `gorm:"type:varchar(200)" json:"desc"`
+	Content      string     `gorm:"type:longtext" json:"content"`
+	Img          string     `gorm:"type:varchar(100)" json:"img"`
+	CommentCount int        `gorm:"type:int;not null;default:0" json:"comment_count"`
+	ReadCount    int        `gorm:"type:int;not null;default:0" json:"read_count"`
+}
+
+type Cateart struct {
+	Category Category `gorm:"foreignkey:Cid;"`
+	ID       int      `gorm:"primary_key;not null" json:"id"`
+	Cid      int      `gorm:"primary_key;not null" json:"cid"`
 }
 
 // CreateArt 新增文章
@@ -37,7 +43,12 @@ func ListArticle(id int, pageSize int, pageNum int) ([]Article, int, int64) {
 	var artList []Article
 	var total int64
 
-	db.Limit(pageSize).Offset((pageNum - 1) * pageSize).Order("Created_At DESC").Find(&artList)
+	err = db.Order("created_at DESC").
+		Preload("Cateart").
+		Preload("Cateart.Category").
+		Limit(pageSize).Offset((pageNum - 1) * pageSize).Where("1 = 1").
+		Find(&artList).Error
+
 	if err != nil {
 		return nil, errormsg.ERROR_CATE_NOT_EXIST, 0
 	}

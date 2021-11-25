@@ -1,5 +1,5 @@
 ###
-GET http://localhost:3000/api/blog/articlelist?pagenum=1&pagesize=10 HTTP/1.1
+GET http://localhost:3000/api/blog/articlelist?pagenum=1&pagesize=10&id=1 HTTP/1.1
 
 ###
 # @name loginAdmin

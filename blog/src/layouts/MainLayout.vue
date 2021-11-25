@@ -275,10 +275,14 @@ export default defineComponent({
           data.profile.avatar = res.data.avatar
           data.profile.name = res.data.name
           data.profile.email = res.data.email
+
+        } else {
+
         }
       },
       loginOut(): void {
         LocalStorage.remove('token')
+        LocalStorage.set('logged_in','no')
         window.location.href = '/'
       },
       send(): void {
