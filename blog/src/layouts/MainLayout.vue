@@ -78,7 +78,7 @@
                   <q-separator />
                   <q-item class="GL__menu-link">
                     <q-item-section>
-                      <q-btn outline color="primary" label="Set status" >
+                      <q-btn style="width:200px" outline color="primary" label="Set status" >
                         <q-icon name="tag_faces" color="blue-9" size="18px" />
                       </q-btn>
                     </q-item-section>
@@ -406,6 +406,13 @@ export default defineComponent({
 });
 </script>
 
+<style scoped>
+/* /deep/ .q-btn__content {
+  display: flex;
+  flex-direction: row;
+  width: 100px;
+} */
+</style>
 <style lang="scss" scoped>
 a {
   text-decoration: none;
