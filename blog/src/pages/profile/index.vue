@@ -119,6 +119,9 @@
                     v-model="filesPng"
                     outlined
                   >
+                  <q-tooltip>
+                    Some text as content of Tooltip
+                  </q-tooltip>
                     <q-avatar round size="200px">
                       <img src="https://cdn.quasar.dev/img/avatar5.jpg" />
                       <q-badge color="red" floating>4</q-badge>
