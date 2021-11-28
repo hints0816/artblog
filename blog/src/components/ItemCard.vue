@@ -26,7 +26,7 @@
             :text-color="label.Category.textcolor"
             :icon="label.Category.icon"
             :key="label.index"
-            @click="chipClickHandler(label.Category.name)"
+            @click="chipClickHandler(label.Category.id)"
           >
             {{ label.Category.name }}
           </q-chip>
@@ -62,7 +62,7 @@ export default {
         console.log(ctx);
       },
       chipClickHandler(name: string): void {
-        console.log(name)
+        ctx.$emit('reloadart', name)
       }
     };
     return {

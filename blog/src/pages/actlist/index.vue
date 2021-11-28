@@ -20,8 +20,6 @@
             </q-item-label>
           </q-item-section>
         </q-item>
-        
-        
       </div>
       <div v-else class="q-mb-lg">
         <q-skeleton width="50%" />
@@ -52,7 +50,7 @@
         </q-chip>
       </div>
       <q-separator color="cyan-9" style="height: 1px;" />
-      <Comment />
+      <Comment :idss="post.id"/>
     </q-page>
   </div>
 </template>
@@ -82,7 +80,7 @@ export default {
         let datas  = await getArticle(route.params.id) as any
         data.onload = true
         console.log(datas)
-        data.post.id = datas.data.id
+        data.post.id = datas.data.ID
         data.post.title = datas.data.title
         let timeStamp = new Date(datas.data.CreatedAt)
         let formattedString = date.formatDate(timeStamp, 'YYYY-MM-DD HH:mm:ss')

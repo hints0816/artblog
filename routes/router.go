@@ -36,13 +36,18 @@ func InitRouter() {
 	{
 		auth.GET("admin/users", api.GetUsers)
 		auth.GET("blog/getme", api.GetMe)
+		auth.POST("blog/article", api.AddArticle)
+
+		auth.POST("blog/comment", api.AddComment)
+		auth.POST("blog/commentchild", api.AddCommentChild)
 	}
 
 	router := r.Group("api")
 	{
-		router.POST("blog/article", api.AddArticle)
 		router.GET("blog/articlelist", api.ListArticle)
 		router.POST("user/add", api.AddUser)
+
+		router.GET("blog/comment/:id", api.GetCommentListFront)
 
 		router.GET("blog/article/:id", api.GetArtInfo)
 		router.POST("login/users", api.Login)

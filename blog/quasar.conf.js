@@ -111,6 +111,7 @@ module.exports = configure(function (ctx) {
         'Notify',
         'LocalStorage',
         'SessionStorage',
+        'Cookies',
         'Loading'
       ]
     },

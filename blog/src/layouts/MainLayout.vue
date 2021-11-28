@@ -78,11 +78,17 @@
                   <q-separator />
                   <q-item class="GL__menu-link">
                     <q-item-section>
-                      <q-btn style="width:200px" outline color="primary" label="Set status" >
+                      <q-btn
+                        outline
+                        @click="alert = true"
+                        color="primary"
+                        label="Set status"
+                      >
                         <q-icon name="tag_faces" color="blue-9" size="18px" />
                       </q-btn>
                     </q-item-section>
                   </q-item>
+
                   <q-separator />
                   <q-item clickable to="/profile" class="GL__menu-link">
                     <q-item-section>Your profile</q-item-section>
@@ -258,6 +264,24 @@
           </q-card-section>
         </q-card>
       </q-dialog>
+      <q-dialog v-model="alert">
+        <q-card>
+          <q-card-section>
+            <div class="text-h6">Alert</div>
+          </q-card-section>
+
+          <q-card-section class="q-pt-none">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum
+            repellendus sit voluptate voluptas eveniet porro. Rerum blanditiis
+            perferendis totam, ea at omnis vel numquam exercitationem aut, natus
+            minima, porro labore.
+          </q-card-section>
+
+          <q-card-actions align="right">
+            <q-btn flat label="OK" color="primary" v-close-popup />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
     </q-page-sticky>
   </q-layout>
 </template>
@@ -284,6 +308,7 @@ export default defineComponent({
 
   setup() {
     let data = reactive({
+      alert: false,
       hex: '',
       tab: 'Home',
       profile: {
@@ -365,6 +390,7 @@ export default defineComponent({
           data.profile.avatar = res.data.avatar;
           data.profile.name = res.data.name;
           data.profile.email = res.data.email;
+          LocalStorage.set('avatar', res.data.avatar);
         } else {
         }
       },

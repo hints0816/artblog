@@ -55,8 +55,6 @@ func GetMe(c *gin.Context) {
 	username2, _ := username1.(*middleware.MyClaims)
 	username3 := username2.Username
 
-	fmt.Print(username3)
-
 	data, total := model.GetProfile(username3)
 	code = errormsg.SUCCSE
 	c.JSON(
@@ -131,6 +129,7 @@ func setToken(c *gin.Context, user model.User) {
 	j := middleware.NewJWT()
 	claims := middleware.MyClaims{
 		Username: user.Username,
+		Id:       user.ID,
 		StandardClaims: jwt.StandardClaims{
 			NotBefore: time.Now().Unix() - 100,
 			ExpiresAt: time.Now().Unix() + 7200,

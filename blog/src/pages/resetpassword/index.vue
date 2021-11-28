@@ -10,6 +10,11 @@
     <q-page-container class="bg-primary">
       <div class="row justify-center">
         <q-page padding>
+          <q-card flat style="background-color: transparent">
+            <q-card-actions class="text-white text-weight-bolder text-h5" align="center">
+              Reset your password
+            </q-card-actions>
+          </q-card>
           <q-card style="width: 380px">
             <q-card-section>
               <q-form @submit="login">
@@ -23,34 +28,6 @@
                   lazy-rules
                   :rules="[(val) => !!val || 'username is required']"
                 />
-                <div class="column items-end">
-                  <div class="col">
-                    <router-link
-                      class="text-blue-10 text-weight-bold"
-                      to="/password_reset"
-                      style="color: #fff"
-                      >Forgot password?
-                    </router-link>
-                  </div>
-                </div>
-                <q-input
-                  outlined
-                  dense
-                  bg-color="grey-2"
-                  v-model="formdata.password"
-                  :type="isPwd ? 'password' : 'text'"
-                  label="password"
-                  lazy-rules
-                  :rules="[(val) => !!val || 'password is required']"
-                >
-                  <template v-slot:append>
-                    <q-icon
-                      :name="isPwd ? 'visibility_off' : 'visibility'"
-                      class="cursor-pointer"
-                      @click="isPwd = !isPwd"
-                    />
-                  </template>
-                </q-input>
                 <q-btn
                   class="full-width"
                   @click="login()"
@@ -60,17 +37,6 @@
                   color="primary"
                 />
               </q-form>
-            </q-card-section>
-          </q-card>
-          <q-card class="q-mt-md" style="width: 380px" align="center">
-            <q-card-section>
-              <span class="text-blue-grey-10">New to GitHub? </span>
-              <router-link
-                class="text-blue-10 text-weight-bold"
-                to="/signup"
-                style="color: #fff"
-                >Create an account.</router-link
-              >
             </q-card-section>
           </q-card>
         </q-page>
@@ -117,7 +83,7 @@ export default {
         LocalStorage.set('logged_in', 'yes');
         console.log(LocalStorage.getItem('token'));
         data.onload = true;
-        router.go(-1)
+        router.push('/');
         console.log(ctx);
       },
     };

@@ -35,19 +35,32 @@ func CreateArt(data *Article) int {
 // GetArtInfo 查询单个文章
 func GetArtInfo(id int) (Article, int) {
 	var art Article
-	db.Where("id = ?", id).First(&art)
+	db.Where("id =?", id).First(&art)
 	return art, errormsg.SUCCSE
 }
 
 func ListArticle(id int, pageSize int, pageNum int) ([]Article, int, int64) {
 	var artList []Article
+	var ids []string
 	var total int64
 
-	err = db.Order("created_at DESC").
+	if id != 0 {
+		db.Model(&Cateart{}).Where("cid =?", id).Pluck("id", &ids)
+	}
+	tx := db.
+		Order("created_at DESC").
 		Preload("Cateart").
-		Preload("Cateart.Category").
-		Limit(pageSize).Offset((pageNum - 1) * pageSize).Where("1 = 1").
+		Preload("Cateart.Category")
+	if id != 0 {
+		tx = tx.Where("id in ?", ids)
+	}
+	err = tx.Limit(pageSize).Offset((pageNum - 1) * pageSize).
 		Find(&artList).Error
+	if id != 0 {
+		db.Model(&artList).Where("id in ?", ids).Count(&total)
+	} else {
+		db.Model(&artList).Count(&total)
+	}
 
 	if err != nil {
 		return nil, errormsg.ERROR_CATE_NOT_EXIST, 0

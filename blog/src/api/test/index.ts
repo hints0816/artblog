@@ -14,9 +14,7 @@ export const getProfileMe = async () => {
 };
 
 export const listArticle = async (params: any) => {
-    const pagenum: string = params.pagenum
-    const pagesize: string = params.pagesize
-    return await api.get('/api/blog/articlelist?pagenum='+pagenum+'&pagesize='+pagesize);
+    return await api.get('/api/blog/articlelist',{params:params});
 };
 
 export const getArticle = async (id: number) => {
@@ -25,4 +23,16 @@ export const getArticle = async (id: number) => {
 
 export const addArticle = async (articleParams: ArticleInfo) => {
     return await api.post('/api/blog/article', articleParams);
+};
+
+export const listComment = async (id: number, params: any) => {
+    return await api.get(`/api/blog/comment/${id}`,{params:params});
+};
+
+export const addComment = async (params: any) => {
+    return await api.post(`/api/blog/comment`,params);
+};
+
+export const addCommentChild = async (params: any) => {
+    return await api.post(`/api/blog/commentchild`,params);
 };
