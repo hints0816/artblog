@@ -26,11 +26,19 @@ export const addArticle = async (articleParams: ArticleInfo) => {
 };
 
 export const listComment = async (id: number, params: any) => {
-    return await api.get(`/api/blog/comment/${id}`,{params:params});
+    return await api.get(`/api/blog/comment/list/${id}`,{params:params});
 };
 
 export const addComment = async (params: any) => {
-    return await api.post(`/api/blog/comment`,params);
+    return await api.post('/api/blog/comment',params);
+};
+
+export const digg = async (params: any) => {
+    return await api.post('/api/blog/comment/digg',params);
+};
+
+export const undigg = async (params: any) => {
+    return await api.post('/api/blog/comment/undigg',params);
 };
 
 export const addCommentChild = async (params: any) => {

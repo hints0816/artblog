@@ -76,6 +76,7 @@ func (j *JWT) ParserToken(tokenString string) (*MyClaims, error) {
 func JwtToken() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var code int
+
 		tokenHeader := c.Request.Header.Get("Authorization")
 		if tokenHeader == "" {
 			code = errormsg.ERROR_TOKEN_EXIST
@@ -110,27 +111,31 @@ func JwtToken() gin.HandlerFunc {
 
 		j := NewJWT()
 		// 解析token
+
 		claims, err := j.ParserToken(checkToken[1])
 		if err != nil {
-			if err == TokenExpired {
+			if strings.HasPrefix(c.Request.RequestURI, "/api/blog/comment/list") {
+				return
+			} else {
+				if err == TokenExpired {
+					c.JSON(http.StatusOK, gin.H{
+						"status":  errormsg.ERROR,
+						"message": "token授权已过期,请重新登录",
+						"data":    nil,
+					})
+					c.Abort()
+					return
+				}
+				// 其他错误
 				c.JSON(http.StatusOK, gin.H{
 					"status":  errormsg.ERROR,
-					"message": "token授权已过期,请重新登录",
+					"message": err.Error(),
 					"data":    nil,
 				})
 				c.Abort()
 				return
 			}
-			// 其他错误
-			c.JSON(http.StatusOK, gin.H{
-				"status":  errormsg.ERROR,
-				"message": err.Error(),
-				"data":    nil,
-			})
-			c.Abort()
-			return
 		}
-
 		c.Set("username", claims)
 		c.Next()
 	}

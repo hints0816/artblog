@@ -30,6 +30,12 @@ func GetProfile(username string) (Profile, int) {
 	return profile, errormsg.SUCCSE
 }
 
+func GetProfileById(id uint) Profile {
+	var profile Profile
+	db.Where("ID = ?", id).First(&profile)
+	return profile
+}
+
 // UpdateProfile 更新个人信息设置
 func UpdateProfile(id int, data *Profile) int {
 	var profile Profile

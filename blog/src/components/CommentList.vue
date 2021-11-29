@@ -27,7 +27,7 @@
             </div>
           </q-popup-edit>
         </q-btn>
-        <q-btn push color="primary" @click="addComment()" label="Comment">
+        <q-btn push color="primary" @click="addComment(0)" label="Comment">
           <!-- <q-popup-proxy :breakpoint="1024">
                 <a href="javascript:void(0);" v-for="(item,index) in faceList" :key="index" class="emotionItem">{{item}}</a>
             </q-popup-proxy> -->
@@ -63,12 +63,12 @@
       <q-item class="q-pa-md">
         <q-item-section avatar>
           <q-avatar rounded>
-            <img alt="avatar" :src="comment.Profile.avatar" />
+            <img alt="avatar" :src="comment.avatar" />
           </q-avatar>
         </q-item-section>
         <q-item-section>
           <q-item-label lines="1">
-            <span class="text-weight-bold">{{ comment.Profile.name }}</span>
+            <span class="text-weight-bold">{{ comment.username }}</span>
             <span class="text-gray-light"> {{ comment.CreatedAt }}</span>
           </q-item-label>
           <q-item-label v-html="comment.content" class="q-pt-sm"></q-item-label>
@@ -84,23 +84,17 @@
             @click="commentss(idx, null)"
           />
           <q-btn
-            v-if="comment.digg == 0 ? true : false"
             size="10px"
             round
             flat
-            color="#ccc"
+            :color="comment.DiggArr.length == 0 ? '#ccc' : 'red'"
             icon="favorite"
-            @click="favorite(idx)"
-          />
-          <q-btn
-            v-else
-            size="10px"
-            round
-            flat
-            color="red"
-            icon="favorite"
-            @click="favorite(idx)"
-          />
+            @click="favorite(idx, null, comment.ID)"
+          >
+            <q-badge color="orange" rounded floating>{{
+              comment.digg
+            }}</q-badge>
+          </q-btn>
         </div>
       </q-item>
       <div v-if="comment.isshow">
@@ -113,8 +107,8 @@
           <q-item-section>
             <q-input
               autogrow
-              v-model="text1"
-              :label="'回复：' + comment.Profile.name"
+              v-model="childtext"
+              :label="'回复：' + comment.username"
               :dense="dense"
             >
               <template v-slot:after>
@@ -138,7 +132,12 @@
                     </div>
                   </q-popup-edit>
                 </q-btn>
-                <q-btn push color="primary" @click="addCommentChild()" label="Comment">
+                <q-btn
+                  push
+                  color="primary"
+                  @click="addComment(comment.ID)"
+                  label="Comment"
+                >
                   <!-- <q-popup-proxy :breakpoint="1024">
                         <a href="javascript:void(0);" v-for="(item,index) in faceList" :key="index" class="emotionItem">{{item}}</a>
                     </q-popup-proxy> -->
@@ -149,21 +148,21 @@
         </q-item>
       </div>
       <q-list
-        v-for="(rev, index) in comment.Commentchild"
+        v-for="(rev, index) in comment.CommentChild"
         class="q-mx-lg"
         :key="index"
       >
         <q-item class="q-pa-md">
           <q-item-section avatar>
             <q-avatar rounded>
-              <img alt="avatar" :src="rev.FromProfile.avatar" />
+              <img alt="avatar" :src="rev.avatar" />
             </q-avatar>
           </q-item-section>
           <q-item-section>
             <q-item-label lines="1">
-              <span class="text-weight-bold">{{ rev.FromProfile.name }}</span>
+              <span class="text-weight-bold">{{ rev.username }}</span>
               <span class="text-weight-bold"> 回复：</span>
-              <span class="text-gray-light"> {{ rev.ToProfile == null?'':rev.ToProfile.name }}</span>
+              <span class="text-gray-light"> {{ rev.to_username }}</span>
             </q-item-label>
             <q-item-label v-html="rev.content"></q-item-label>
           </q-item-section>
@@ -178,23 +177,15 @@
               @click="commentss(idx, index)"
             />
             <q-btn
-              v-if="rev.digg == 0 ? true : false"
               size="10px"
               round
               flat
-              color="#ccc"
+              :color="rev.DiggArr.length == 0 ? '#ccc' : 'red'"
               icon="favorite"
-              @click="favorite(idx)"
-            />
-            <q-btn
-              v-else
-              size="10px"
-              round
-              flat
-              color="red"
-              icon="favorite"
-              @click="favorite(idx)"
-            />
+              @click="favorite(idx, index, rev.ID)"
+            >
+              <q-badge color="orange" rounded floating>{{ rev.digg }}</q-badge>
+            </q-btn>
           </div>
         </q-item>
         <div v-if="rev.isshow">
@@ -207,8 +198,8 @@
             <q-item-section>
               <q-input
                 autogrow
-                v-model="text1"
-                :label="'回复：' + rev.FromProfile.name"
+                v-model="childtext"
+                :label="'回复：' + rev.username"
                 :dense="dense"
               >
                 <template v-slot:after>
@@ -232,7 +223,12 @@
                       </div>
                     </q-popup-edit>
                   </q-btn>
-                  <q-btn push color="primary" @click="addCommentChild(rev.ID)"  label="Comment">
+                  <q-btn
+                    push
+                    color="primary"
+                    @click="addComment(rev.ID)"
+                    label="Comment"
+                  >
                     <!-- <q-popup-proxy :breakpoint="1024">
                         <a href="javascript:void(0);" v-for="(item,index) in faceList" :key="index" class="emotionItem">{{item}}</a>
                     </q-popup-proxy> -->
@@ -258,8 +254,8 @@
 <script lang="ts">
 import emoji from '../css/emoji.json';
 import { getCurrentInstance, reactive, toRefs, onMounted } from 'vue';
-import { LocalStorage } from 'quasar';
-import { listComment, addComment, addCommentChild } from '../api/test/index';
+import { LocalStorage, Notify } from 'quasar';
+import { listComment, addComment, digg, undigg } from '../api/test/index';
 import { useRoute, useRouter } from 'vue-router';
 export default {
   name: 'Comment',
@@ -277,41 +273,81 @@ export default {
       marktext: '',
       faceList: [],
       text: '',
-      text1: '',
+      childtext: '',
       isshow: false,
       isfav: false,
       isshowindex: 0,
       isshowindex1: 0,
       comments: [],
+      paramss: {},
     }) as any;
     const { ctx } = getCurrentInstance() as any;
     const route = useRoute() as any;
-    const router = useRouter() as any;
     console.log(ctx);
     const method = {
       commentss(fatherindex, childindex): void {
-        console.log(fatherindex);
-        console.log(childindex);
-        data.text1 = '';
+        data.childtext = '';
         if (childindex == null) {
-          data.comments[data.isshowindex].Commentchild[
-            data.isshowindex1
-          ].isshow = false;
+          if (data.comments[data.isshowindex].CommentChild.length != 0) {
+            data.comments[data.isshowindex].CommentChild[
+              data.isshowindex1
+            ].isshow = false;
+          }
           data.comments[data.isshowindex].isshow = false;
           data.comments[fatherindex].isshow = true;
           data.isshowindex = fatherindex;
         } else {
-          data.comments[data.isshowindex].Commentchild[
+          data.comments[data.isshowindex].CommentChild[
             data.isshowindex1
           ].isshow = false;
           data.comments[data.isshowindex].isshow = false;
-          data.comments[fatherindex].Commentchild[childindex].isshow = true;
+          data.comments[fatherindex].CommentChild[childindex].isshow = true;
           data.isshowindex = fatherindex;
           data.isshowindex1 = childindex;
         }
       },
-      favorite(comment): void {
-        data.comments[comment].isfav = true;
+      async favorite(
+        fatherindex: number,
+        childindex: number,
+        comment_id: number
+      ): Promise<any> {
+        const params = {
+          comment_id: comment_id,
+        };
+
+        if (childindex == null) {
+          if (data.comments[fatherindex].DiggArr.length == 0) {
+            let res = (await digg(params)) as any;
+            if (res.status == 200) {
+              data.comments[fatherindex].DiggArr[0] = true;
+              data.comments[fatherindex].digg++;
+            }
+          } else {
+            let res = (await undigg(params)) as any;
+            if (res.status == 200) {
+              data.comments[fatherindex].DiggArr = [];
+              data.comments[fatherindex].digg--;
+            }
+          }
+        } else {
+          if (
+            data.comments[fatherindex].CommentChild[childindex].DiggArr
+              .length == 0
+          ) {
+            let res = (await digg(params)) as any;
+            if (res.status == 200) {
+              data.comments[fatherindex].CommentChild[childindex].DiggArr[0] =
+                true;
+              data.comments[fatherindex].CommentChild[childindex].digg++;
+            }
+          } else {
+            let res = (await undigg(params)) as any;
+            if (res.status == 200) {
+              data.comments[fatherindex].CommentChild[childindex].DiggArr = [];
+              data.comments[fatherindex].CommentChild[childindex].digg--;
+            }
+          }
+        }
       },
       async getTalk(): Promise<any> {
         if (LocalStorage.getItem('logged_in') === 'yes') {
@@ -322,32 +358,38 @@ export default {
           pagesize: 10,
         };
         let res = (await listComment(route.params.id, paramss)) as any;
+        console.log(res.data)
         data.comments = res.data.map((item) => {
           item.isshow = false;
-          const res1 = item.Commentchild;
-          res1.forEach((element) => {
-            element.isshow = false;
-          });
+          const res1 = item.CommentChild;
+          if (res1.length != 0) {
+            res1.forEach((element) => {
+              element.isshow = false;
+            });
+          }
           return item;
         });
         console.log(data.comments);
       },
-      async addComment(): Promise<any> {
-        const paramss = {
-          article_id: (route.params.id * 1000) / 1000,
-          content: data.text,
-        };
-        let res = (await addComment(paramss)) as any;
-        console.log(res);
-        await method.getTalk();
-      },
-      async addCommentChild(id: number): Promise<any> {
-        const paramss = {
-          article_id: (route.params.id * 1000) / 1000,
-          content: data.text1,
-          parent_id: id,
-        };
-        let res = (await addCommentChild(paramss)) as any;
+      async addComment(id: number): Promise<any> {
+        data.paramss = {}
+        data.paramss.article_id = (route.params.id * 1000) / 1000;
+        data.paramss.content = data.text;
+        if (id != 0) {
+          data.paramss.content = data.childtext;
+          data.paramss.comment_id = id;
+        }
+        if(data.paramss.content == ""){
+          Notify.create({
+            message: '请填写title',
+            color: 'negative',
+            icon: 'report_problem',
+            position: 'top',
+            timeout: 2000,
+          });
+          return;
+        }
+        let res = (await addComment(data.paramss)) as any;
         console.log(res);
         await method.getTalk();
       },
@@ -357,7 +399,7 @@ export default {
       },
       getEmo1(index): void {
         const face = data.faceList[index] as string;
-        data.text1 = (data.text1 as string) + face;
+        data.childtext = (data.childtext as string) + face;
       },
 
       async getEmo2(): Promise<void> {
