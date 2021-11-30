@@ -93,7 +93,7 @@
                   <q-item clickable to="/profile" class="GL__menu-link">
                     <q-item-section>Your profile</q-item-section>
                   </q-item>
-                  <q-item clickable to="/edit" class="GL__menu-link">
+                  <q-item clickable @click="toRepositories(profile.id)" class="GL__menu-link">
                     <q-item-section>Your repositories</q-item-section>
                   </q-item>
                   <q-separator />
@@ -300,6 +300,7 @@ import {
 } from 'vue';
 import { getProfileMe } from '../api/test/index';
 import { LocalStorage } from 'quasar';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
   name: 'MainLayout',
@@ -315,6 +316,7 @@ export default defineComponent({
         name: '',
         avatar: '',
         email: '',
+        id: 0
       },
       links1: [
         { icon: 'home', text: 'Home' },
@@ -355,6 +357,7 @@ export default defineComponent({
       persistent: false,
       position: 'top',
     });
+    const router = useRouter() as any;
     const { ctx } = getCurrentInstance() as any;
     let leftDrawerOpen = ref(false);
     const method = {
@@ -380,6 +383,9 @@ export default defineComponent({
         data.position = position;
         data.dialog = true;
       },
+      toRepositories(id: number): void {
+        router.push(`/repository/${id}`)
+      },
       getEmo(index): void {
         const face = data.faceList[index] as string;
         data.text = data.text + face;
@@ -388,6 +394,7 @@ export default defineComponent({
         let res = (await getProfileMe()) as any;
         if (res.status == 200) {
           data.profile.avatar = res.data.avatar;
+          data.profile.id = res.data.id;
           data.profile.name = res.data.name;
           data.profile.email = res.data.email;
           LocalStorage.set('avatar', res.data.avatar);

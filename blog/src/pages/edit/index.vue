@@ -93,6 +93,8 @@ import { addArticle, getArticle } from '../../api/test/index'
 import { getCurrentInstance, reactive, toRefs, onBeforeMount } from 'vue'
 import 'vue-cropper/dist/index.css'
 import { VueCropper }  from 'vue-cropper'
+import { useRoute } from 'vue-router';
+
 export default {
   name: 'Post',
   components: [
@@ -120,8 +122,9 @@ export default {
       cookies: true,
       alert: false,
       title_text: '',
-      content_text: '<h1 align="center">Markdown Editor built on Vue</h1><p align="center">',
+      content_text: '',
     })
+    const route = useRoute() as any;
     const {ctx} = getCurrentInstance() as any
     console.log(ctx)
     const method = {
@@ -153,13 +156,14 @@ export default {
         let datas  = await addArticle(params) as any
         console.log(datas)
       },
-      async commentss():Promise<any> {
-        let datas  = await getArticle(587) as any
+      async commentss(id: number):Promise<any> {
+        let datas  = await getArticle(id) as any
+        data.title_text = datas.data.title
         data.content_text = datas.data.content
       }
     }
     onBeforeMount(async()=>{
-        await method.commentss()
+        await method.commentss(route.params.id)
     })
     return {
       ...toRefs(data),

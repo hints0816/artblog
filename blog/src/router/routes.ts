@@ -14,7 +14,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/actlist/index.vue'),
       },
       {
-        path: '/edit',
+        path: '/edit/:id',
         component: () => import('pages/edit/index.vue'),
       },
       {
@@ -22,7 +22,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/profile/index.vue'),
       },
       {
-        path: '/repository',
+        path: '/repository/:id',
         component: () => import('pages/repository/index.vue'),
       }
     ],

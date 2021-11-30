@@ -9,6 +9,10 @@ export const adduser = async (params: any) => {
     return await api.post('/api/user/add', params);
 };
 
+export const getProfile = async (id: number) => {
+    return await api.get(`/api/blog/profile/${id}`);
+};
+
 export const getProfileMe = async () => {
     return await api.get('/api/blog/getme');
 };

@@ -11,32 +11,19 @@
             caption
             class="text-body1 text-gray-light text-justify"
           >
-            <q-item>
-              <q-item-section top thumbnail class="q-ml-none">
-                <img src="https://cdn.quasar.dev/img/mountains.jpg">
-              </q-item-section>
-              <q-item-section>
-                 {{ post.desc }}
-              </q-item-section>
-            </q-item>
+            {{ post.desc }}
           </q-item-label>
         </q-item-section>
-        <q-item-section side top>
+        <q-item-section class="q-mt-sm" side top>
           <q-item-label caption>
             {{ post.UpdatedAt }}
           </q-item-label>
-          <q-chip
-            v-for="label in post.Cateart"
-            clickable
-            class="label"
-            :color="label.Category.color"
-            :text-color="label.Category.textcolor"
-            :icon="label.Category.icon"
-            :key="label.index"
-            @click="chipClickHandler(label.Category.id)"
-          >
-            {{ label.Category.name }}
-          </q-chip>
+        </q-item-section>
+        <q-item-section top side>
+          <div class="text-grey-8">
+            <q-btn class="gt-xs" @click="toEdit(post.ID)" size="12px" flat dense round icon="edit" />
+            <q-btn class="gt-xs" size="12px" flat dense round icon="delete" />
+          </div>
         </q-item-section>
       </q-item>
       <!-- <q-card-actions align="left">
@@ -70,6 +57,9 @@ export default {
       },
       chipClickHandler(name: string): void {
         ctx.$emit('reloadart', name)
+      },
+      toEdit(id: number): void {
+        router.push(`/edit/${id}`)
       }
     };
     return {

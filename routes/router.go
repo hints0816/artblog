@@ -51,6 +51,7 @@ func InitRouter() {
 
 		// router.GET("blog/comment/:id", api.GetCommentListFront)
 
+		router.GET("blog/profile/:id", api.GetProfile)
 		router.GET("blog/article/:id", api.GetArtInfo)
 		router.POST("login/users", api.Login)
 	}

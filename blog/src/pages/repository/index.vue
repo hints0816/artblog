@@ -1,27 +1,118 @@
 <template>
   <div class="row justify-center">
-    <q-page
-      padding
-      class="col-xs-12 col-sm-12"
-      style="max-width: 1200px"
-    >
+    <q-page padding class="col-xs-12 col-sm-12" style="max-width: 1200px">
       <div class="row q-col-gutter-x-lg">
         <div class="col-xs-12 col-sm-3" style="height: 100%">
-          <div class="useravatar" style="width: 200px">
-            <q-file
-              display-value=""
-              @input="pick"
-              @rejected="upload"
-              v-model="filesPng"
-              outlined
-            >
-              <q-tooltip> Some text as content of Tooltip </q-tooltip>
-              <q-avatar round size="200px">
-                <img src="https://cdn.quasar.dev/img/avatar5.jpg" />
-                <q-badge color="red" floating>4</q-badge>
-              </q-avatar>
-            </q-file>
-          </div>
+          <q-card flat class="my-card">
+            <q-card-actions align="center">
+              <div class="useravatar" style="width: 200px">
+                <q-file
+                  display-value=""
+                  @input="pick"
+                  @rejected="upload"
+                  v-model="filesPng"
+                  outlined
+                >
+                  <q-tooltip> Some text as content of Tooltip </q-tooltip>
+                  <q-avatar round size="200px">
+                    <img :src="profile.avatar" />
+                  </q-avatar>
+                </q-file>
+              </div>
+            </q-card-actions>
+            <q-card-actions class="text-weight-bold text-h6" align="left">
+              {{ profile.name }}
+            </q-card-actions>
+            <q-card-actions v-if="!openEditProfile">
+              <q-btn
+                @click="openEditProfile = true"
+                color="primary"
+                class="full-width"
+                label="Edit profile"
+              />
+            </q-card-actions>
+            <q-card-actions v-else class="row q-col-gutter-y-xs">
+              <q-input
+                outlined
+                class="full-width"
+                v-model="profile.name"
+                dense
+                label="name"
+              />
+              <q-input
+                outlined
+                class="full-width"
+                v-model="profile.email"
+                dense
+                label="email"
+              />
+              <q-input
+                outlined
+                class="full-width"
+                v-model="profile.wechat"
+                dense
+                label="weixin"
+              >
+                <template v-slot:before>
+                  <q-avatar>
+                    <q-icon size="20px" name="fab fa-weixin" />
+                  </q-avatar>
+                </template>
+              </q-input>
+              <q-input
+                outlined
+                class="full-width"
+                v-model="profile.qq_chat"
+                dense
+                label="qq"
+              >
+                <template v-slot:before>
+                  <q-avatar>
+                    <q-icon size="20px" name="fab fa-qq" />
+                  </q-avatar>
+                </template>
+              </q-input>
+              <q-input
+                outlined
+                class="full-width"
+                v-model="profile.weibo"
+                dense
+                label="weibo"
+              >
+                <template v-slot:before>
+                  <q-avatar>
+                    <q-icon size="20px" name="fab fa-weibo" />
+                  </q-avatar>
+                </template>
+              </q-input>
+              <q-input
+                outlined
+                class="full-width"
+                v-model="profile.bili"
+                dense
+                label="bilibili"
+              >
+                <template v-slot:before>
+                  <q-avatar>
+                    <q-icon
+                      size="25px"
+                      name="img:icons/icon_bilibili-circle.svg"
+                    />
+                  </q-avatar>
+                </template>
+              </q-input>
+              <div class="q-gutter-sm">
+                <q-btn dense color="primary" label="Save" />
+                <q-btn
+                  dense
+                  @click="openEditProfile = false"
+                  color="white"
+                  text-color="black"
+                  label="Cancel"
+                />
+              </div>
+            </q-card-actions>
+          </q-card>
         </div>
         <q-dialog v-model="cropperAvatarDialog">
           <q-card>
@@ -57,50 +148,35 @@
             </q-card-section>
           </q-card>
         </q-dialog>
-        <div class="col-sm-9 q-col-gutter-x-lg" style="height: 100%">
+        <div class="col-xs-12 col-sm-9 q-col-gutter-x-lg" style="height: 100%">
           <q-card flat>
             <q-tabs v-model="tab" inline-label class="q-my-md" align="left">
               <q-tab name="mails" icon="mail" label="Mails" />
               <q-tab name="alarms" icon="alarm" label="Alarms" />
               <q-tab name="movies" icon="movie" label="Movies" />
             </q-tabs>
-            <q-separator inset />
-            <q-card-actions align="right">
-              <q-input dense outlined v-model="text" label="Outlined" />
+            <q-separator />
+            <q-card-actions class="row q-col-gutter-x-xs justify-between">
+              <q-input class="col-grow col-xs-12 col-sm-8" dense outlined v-model="text" label="Outlined" />
               <q-select
                 dense
                 outlined
                 v-model="model"
+                class="col-grow"
                 :options="['Google', 'Facebook']"
-                style="min-width: 130px"
+                style="width: 130px"
                 label="Outlined"
               />
-              <q-select
-                dense
-                outlined
-                v-model="model"
-                :options="['Google', 'Facebook']"
-                style="min-width: 130px"
-                label="Outlined"
-              />
-              <q-select
-                dense
-                outlined
-                v-model="model"
-                :options="['Google', 'Facebook']"
-                style="min-width: 130px"
-                label="Outlined"
-              />
-              <q-btn color="deep-orange" push>
+              <q-btn color="deep-orange q-mx-xs" push>
                 <div class="row items-center no-wrap">
                   <q-icon left name="book" />
                   <div class="text-center">New</div>
                 </div>
               </q-btn>
             </q-card-actions>
-            <q-separator inset />
-            <q-card-section class="row q-col-gutter-x-lg">
-              <div></div>
+            <q-separator />
+            <q-card-section>
+              <Edit @reloadart="reloadArt" :postList="postList" />
             </q-card-section>
           </q-card>
           <q-dialog v-model="cropperAvatarDialog">
@@ -143,13 +219,32 @@
   </div>
 </template>
 <script lang="ts">
+import Edit from '../../components/EditCard.vue';
 import { ArticleInfo } from '../../api/test/article.model';
-import { addArticle } from '../../api/test/index';
-import { getCurrentInstance, reactive, toRefs } from 'vue';
+import { addArticle, listArticle, getProfile } from '../../api/test/index';
+import { getCurrentInstance, reactive, toRefs, onBeforeMount } from 'vue';
+import { date } from 'quasar';
+import { useRoute } from 'vue-router';
+
 export default {
   name: 'Post',
+  components: { Edit },
   setup() {
     let data = reactive({
+      openEditProfile: false,
+      name:'',
+      profile: {
+        avatar: '',
+        bili: '',
+        desc: '',
+        email: '',
+        id: 0,
+        img: '',
+        name: '',
+        qq_chat: '',
+        wechat: '',
+        weibo: '',
+      },
       tab: 'mails',
       filesPng: null,
       cropperAvatarDialog: false,
@@ -165,10 +260,34 @@ export default {
       },
       title_text: '',
       content_text: '',
+      pagesize: 10,
+      total: 10,
+      postList: [],
     });
+    const route = useRoute() as any;
     const { ctx } = getCurrentInstance() as any;
     console.log(ctx);
     const method = {
+      async listart(): Promise<any> {
+        const paramss = {
+          pagenum: 1,
+          pagesize: data.pagesize,
+        };
+        let datas = (await listArticle(paramss)) as any;
+        datas.data.forEach((element) => {
+          let timeStamp = new Date(element.UpdatedAt);
+          let formattedString = date.formatDate(
+            timeStamp,
+            'YYYY-MM-DD HH:mm:ss'
+          );
+          element.UpdatedAt = formattedString;
+        });
+        data.postList = datas.data;
+        data.total = datas.total;
+        console.log(datas.data);
+        console.log(data.postList);
+        console.log(ctx);
+      },
       async save(): Promise<void> {
         let params: ArticleInfo = {
           title: data.title_text,
@@ -187,7 +306,18 @@ export default {
           console.log(data);
         });
       },
+      async getProfile(id: number): Promise<any> {
+        let res = (await getProfile(id)) as any;
+        if (res.status == 200) {
+          data.profile = res.data;
+        } else {
+        }
+      },
     };
+    onBeforeMount(async () => {
+      await method.getProfile(route.params.id);
+      await method.listart();
+    });
     return {
       ...toRefs(data),
       ...method,
