@@ -68,8 +68,8 @@
         </q-item-section>
         <q-item-section>
           <q-item-label lines="1">
-            <span class="text-weight-bold">{{ comment.username }}</span>
-            <span class="text-gray-light"> {{ comment.CreatedAt }}</span>
+            <span class="text-weight-bold">{{ comment.username }}&#12288;</span>
+            <span class="text-gray-light">{{ comment.CreatedAt }}</span>
           </q-item-label>
           <q-item-label v-html="comment.content" class="q-pt-sm"></q-item-label>
         </q-item-section>
@@ -91,9 +91,12 @@
             icon="favorite"
             @click="favorite(idx, null, comment.ID)"
           >
-            <q-badge color="orange" rounded floating>{{
-              comment.digg
-            }}</q-badge>
+            <q-badge
+              :color="comment.DiggArr.length == 0 ? '#ccc' : 'orange'"
+              rounded
+              floating
+              >{{ comment.digg }}</q-badge
+            >
           </q-btn>
         </div>
       </q-item>
@@ -184,7 +187,12 @@
               icon="favorite"
               @click="favorite(idx, index, rev.ID)"
             >
-              <q-badge color="orange" rounded floating>{{ rev.digg }}</q-badge>
+              <q-badge
+                :color="rev.DiggArr.length == 0 ? '#ccc' : 'orange'"
+                rounded
+                floating
+                >{{ rev.digg }}</q-badge
+              >
             </q-btn>
           </div>
         </q-item>
@@ -254,7 +262,7 @@
 <script lang="ts">
 import emoji from '../css/emoji.json';
 import { getCurrentInstance, reactive, toRefs, onMounted } from 'vue';
-import { LocalStorage, Notify } from 'quasar';
+import { LocalStorage, Notify, date } from 'quasar';
 import { listComment, addComment, digg, undigg } from '../api/test/index';
 import { useRoute, useRouter } from 'vue-router';
 export default {
@@ -279,7 +287,6 @@ export default {
       isshowindex: 0,
       isshowindex1: 0,
       comments: [],
-      paramss: {},
     }) as any;
     const { ctx } = getCurrentInstance() as any;
     const route = useRoute() as any;
@@ -336,8 +343,9 @@ export default {
           ) {
             let res = (await digg(params)) as any;
             if (res.status == 200) {
-              data.comments[fatherindex].CommentChild[childindex].DiggArr[0] =
-                true;
+              data.comments[fatherindex].CommentChild[
+                childindex
+              ].DiggArr[0] = true;
               data.comments[fatherindex].CommentChild[childindex].digg++;
             }
           } else {
@@ -358,13 +366,24 @@ export default {
           pagesize: 10,
         };
         let res = (await listComment(route.params.id, paramss)) as any;
-        console.log(res.data)
         data.comments = res.data.map((item) => {
           item.isshow = false;
+          let timeStamp1 = new Date(item.CreatedAt);
+          let formattedString1 = date.formatDate(
+            timeStamp1,
+            'YYYY-MM-DD HH:mm:ss'
+          );
+          item.CreatedAt = formattedString1;
           const res1 = item.CommentChild;
           if (res1.length != 0) {
             res1.forEach((element) => {
               element.isshow = false;
+              let timeStamp2 = new Date(element.CreatedAt);
+              let formattedString2 = date.formatDate(
+                timeStamp2,
+                'YYYY-MM-DD HH:mm:ss'
+              );
+              element.CreatedAt = formattedString2;
             });
           }
           return item;
@@ -372,14 +391,18 @@ export default {
         console.log(data.comments);
       },
       async addComment(id: number): Promise<any> {
-        data.paramss = {}
-        data.paramss.article_id = (route.params.id * 1000) / 1000;
-        data.paramss.content = data.text;
+        let paramss = {
+          article_id: (route.params.id * 1000) / 1000,
+          content: data.text,
+          comment_id: 0,
+        };
         if (id != 0) {
-          data.paramss.content = data.childtext;
-          data.paramss.comment_id = id;
+          paramss.content = data.childtext;
+          paramss.comment_id = id;
+        } else {
+          delete paramss.comment_id;
         }
-        if(data.paramss.content == ""){
+        if (paramss.content == '') {
           Notify.create({
             message: '请填写title',
             color: 'negative',
@@ -389,7 +412,7 @@ export default {
           });
           return;
         }
-        let res = (await addComment(data.paramss)) as any;
+        let res = (await addComment(paramss)) as any;
         console.log(res);
         await method.getTalk();
       },
