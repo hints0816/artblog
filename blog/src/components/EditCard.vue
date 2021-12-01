@@ -22,7 +22,14 @@
         <q-item-section top side>
           <div class="text-grey-8">
             <q-btn class="gt-xs" @click="toEdit(post.ID)" size="12px" flat dense round icon="edit" />
-            <q-btn class="gt-xs" size="12px" flat dense round icon="delete" />
+            <q-btn class="gt-xs" size="12px" flat dense round icon="delete">
+              <q-popup-proxy>
+                <q-banner>
+                  Are you absolutely sure?
+                  <q-btn color="negative" @click="delArt(post.ID)" label="DELETE" />
+                </q-banner>
+              </q-popup-proxy>
+            </q-btn>
           </div>
         </q-item-section>
       </q-item>
@@ -38,7 +45,8 @@
 <script lang="ts">
 import { getCurrentInstance } from 'vue';
 import { useRouter } from 'vue-router';
-
+import { delArticle } from '../api/test/index';
+import { Notify } from 'quasar';
 export default {
   name: 'Item',
   props: {
@@ -60,6 +68,10 @@ export default {
       },
       toEdit(id: number): void {
         router.push(`/edit/${id}`)
+      },
+      async delArt(id: number): Promise<any> {
+        let res = (await delArticle(id)) as any;
+        console.log(res)
       }
     };
     return {

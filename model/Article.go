@@ -32,6 +32,16 @@ func CreateArt(data *Article) int {
 	return errormsg.SUCCSE
 }
 
+func DelArt(id int) int {
+	var article Article
+	article.ID = id
+	err = db.Delete(&article).Error
+	if err != nil {
+		return errormsg.ERROR
+	}
+	return errormsg.SUCCSE
+}
+
 // GetArtInfo 查询单个文章
 func GetArtInfo(id int) (Article, int) {
 	var art Article

@@ -45,6 +45,6 @@ export const undigg = async (params: any) => {
     return await api.post('/api/blog/comment/undigg',params);
 };
 
-export const addCommentChild = async (params: any) => {
-    return await api.post(`/api/blog/commentchild`,params);
+export const delArticle = async (id: number) => {
+    return await api.delete(`/api/blog/article/${id}`);
 };
