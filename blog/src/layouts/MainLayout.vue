@@ -271,10 +271,15 @@
           </q-card-section>
 
           <q-card-section class="q-pt-none">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum
-            repellendus sit voluptate voluptas eveniet porro. Rerum blanditiis
-            perferendis totam, ea at omnis vel numquam exercitationem aut, natus
-            minima, porro labore.
+             <q-input bottom-slots v-model="text" label="Label" counter maxlength="12" :dense="dense">
+              <template v-slot:before>
+                <q-btn round dense flat icon="send" />
+              </template>
+              <template v-slot:append>
+                <q-icon v-if="text !== ''" name="close" @click="text = ''" class="cursor-pointer" />
+                <q-icon name="schedule" />
+              </template>
+            </q-input>
           </q-card-section>
 
           <q-card-actions align="right">

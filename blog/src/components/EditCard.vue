@@ -61,17 +61,15 @@ export default {
     const method = {
       toPostDetail(id: number): void {
         router.push(`/posts/${id}`);
-        console.log(ctx);
-      },
-      chipClickHandler(name: string): void {
-        ctx.$emit('reloadart', name)
       },
       toEdit(id: number): void {
         router.push(`/edit/${id}`)
       },
       async delArt(id: number): Promise<any> {
         let res = (await delArticle(id)) as any;
-        console.log(res)
+        if(res.status == 200) {
+          ctx.$emit('reloadart')
+        }
       }
     };
     return {

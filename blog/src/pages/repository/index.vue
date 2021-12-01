@@ -176,7 +176,7 @@
             </q-card-actions>
             <q-separator />
             <q-card-section>
-              <Edit @reloadart="reloadArt" :postList="postList" />
+              <Edit @reloadart="listart" :postList="postList" />
             </q-card-section>
           </q-card>
           <q-dialog v-model="cropperAvatarDialog">
