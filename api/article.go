@@ -55,7 +55,7 @@ func AddArticle(c *gin.Context) {
 // DelArticle 删除文章
 func DelArticle(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
-	data, code := model.DelArt(id)
+	data, code := model.DelArt(uint(id))
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,
 		"data":    data,

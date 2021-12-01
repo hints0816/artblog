@@ -32,7 +32,7 @@ func CreateArt(data *Article) int {
 	return errormsg.SUCCSE
 }
 
-func DelArt(id int) int {
+func DelArt(id uint) int {
 	var article Article
 	article.ID = id
 	err = db.Delete(&article).Error
