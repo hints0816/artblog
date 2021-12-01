@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"hello/middleware"
 	"hello/model"
+	"hello/utils/email"
 	"hello/utils/errormsg"
 	"hello/utils/validator"
 	"net/http"
@@ -15,6 +16,17 @@ import (
 )
 
 var code int
+
+// 发送验证码
+func SendvalidateCode(c *gin.Context) {
+	email.SendEmail()
+	code = errormsg.SUCCSE
+	c.JSON(
+		http.StatusOK, gin.H{
+			"message": errormsg.GetErrMsg(code),
+		},
+	)
+}
 
 // GetUsers 查询用户列表
 func GetUsers(c *gin.Context) {
