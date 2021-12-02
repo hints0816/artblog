@@ -5,8 +5,8 @@ export const login = async (params: any) => {
     return await api.post('/api/login/users', params);
 };
 
-export const adduser = async (params: any) => {
-    return await api.post('/api/user/add', params);
+export const sendvalidator = async (params: any) => {
+    return await api.post('/api/login/sendvalidator', params);
 };
 
 export const getProfile = async (id: number) => {

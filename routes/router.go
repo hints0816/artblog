@@ -48,14 +48,11 @@ func InitRouter() {
 	router := r.Group("api")
 	{
 		router.GET("blog/articlelist", api.ListArticle)
-		router.POST("user/add", api.AddUser)
-
-		// router.GET("blog/comment/:id", api.GetCommentListFront)
 
 		router.GET("blog/profile/:id", api.GetProfile)
 		router.GET("blog/article/:id", api.GetArtInfo)
 		router.POST("login/users", api.Login)
-		router.GET("login/sendvalidator", api.SendvalidateCode)
+		router.POST("login/sendvalidator", api.SendvalidateCode)
 	}
 
 	r.Run(":3000")

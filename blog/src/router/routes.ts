@@ -38,7 +38,18 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/signup',
     component: () => import('pages/signup/index.vue'),
+    children: [
+      {
+        path: '/signup/confirm',
+        component: () => import('pages/signup/confirmed.vue'),
+      }
+    ]
   },
+  {
+    path: '/claim',
+    component: () => import('pages/signup/claim.vue')
+  },
+  ,
   {
     path: '/:catchAll(.*)*',
     component: () => import('pages/Error404.vue'),

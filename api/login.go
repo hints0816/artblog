@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"hello/middleware"
 	"hello/model"
-	"hello/utils/email"
 	"hello/utils/errormsg"
+	"hello/utils/uuid"
 	"hello/utils/validator"
 	"net/http"
 	"strconv"
@@ -19,10 +19,31 @@ var code int
 
 // 发送验证码
 func SendvalidateCode(c *gin.Context) {
-	email.SendEmail()
-	code = errormsg.SUCCSE
+	var data model.SignUpEmail
+	_ = c.ShouldBindJSON(&data)
+
+	code = model.CheckEmail(data.EmailName)
+	if code == errormsg.SUCCSE {
+		uuid := uuid.GetSnowFlakeID()
+		code = model.SendvalidateCode(data.EmailName, uuid)
+	}
 	c.JSON(
 		http.StatusOK, gin.H{
+			"status":  code,
+			"message": errormsg.GetErrMsg(code),
+		},
+	)
+}
+
+// 发送验证码
+func CheckvalidateCode(c *gin.Context) {
+	var data model.SignUpEmail
+	_ = c.ShouldBindJSON(&data)
+
+	code = model.CheckvalidateCode(data.EmailName, data.Uuid)
+	c.JSON(
+		http.StatusOK, gin.H{
+			"status":  code,
 			"message": errormsg.GetErrMsg(code),
 		},
 	)

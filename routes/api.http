@@ -4,8 +4,13 @@ GET http://localhost:3000/api/blog/articlelist?pagenum=1&pagesize=10 HTTP/1.1
 ###
 GET http://localhost:3000/api/blog/comment/587?pagenum=1&pagesize=10 HTTP/1.1
 
-###
-GET http://localhost:3000/api/login/sendvalidator HTTP/1.1
+### Send Confirmation Email
+POST http://localhost:3000/api/login/sendvalidator HTTP/1.1
+Content-Type: application/json
+
+{
+    "email":"1152536969@qq.com"
+}
 
 ###
 # @name loginAdmin

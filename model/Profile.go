@@ -36,6 +36,16 @@ func GetProfileById(id uint) Profile {
 	return profile
 }
 
+func CheckEmail(email string) int {
+	var profile Profile
+	db.Where("email = ?", email).First(&profile)
+	if profile.Email == "" {
+		return errormsg.SUCCSE
+	} else {
+		return errormsg.ERROR
+	}
+}
+
 // UpdateProfile 更新个人信息设置
 func UpdateProfile(id int, data *Profile) int {
 	var profile Profile
