@@ -45,6 +45,7 @@
                 v-model="profile.email"
                 dense
                 label="email"
+                readonly 
               />
               <q-input
                 outlined
@@ -151,9 +152,9 @@
         <div class="col-xs-12 col-sm-9 q-col-gutter-x-lg" style="height: 100%">
           <q-card flat>
             <q-tabs v-model="tab" inline-label class="q-my-md" align="left">
-              <q-tab name="mails" icon="mail" label="Mails" />
-              <q-tab name="alarms" icon="alarm" label="Alarms" />
-              <q-tab name="movies" icon="movie" label="Movies" />
+              <q-tab name="Article" icon="mail" label="Mails" />
+              <q-tab name="Movie" icon="alarm" label="Alarms" />
+              <q-tab name="Music" icon="movie" label="Movies" />
             </q-tabs>
             <q-separator />
             <q-card-actions class="row q-col-gutter-x-xs justify-between">
@@ -167,7 +168,7 @@
                 style="width: 130px"
                 label="Outlined"
               />
-              <q-btn color="deep-orange q-mx-xs" push>
+              <q-btn to="/edit" color="deep-orange q-mx-xs" push>
                 <div class="row items-center no-wrap">
                   <q-icon left name="book" />
                   <div class="text-center">New</div>
@@ -223,7 +224,7 @@ import Edit from '../../components/EditCard.vue';
 import { ArticleInfo } from '../../api/test/article.model';
 import { addArticle, listArticle, getProfile } from '../../api/test/index';
 import { getCurrentInstance, reactive, toRefs, onBeforeMount } from 'vue';
-import { date } from 'quasar';
+import { date, Dark } from 'quasar';
 import { useRoute } from 'vue-router';
 
 export default {

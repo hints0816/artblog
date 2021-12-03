@@ -29,7 +29,7 @@
               flat
               bordered
             />
-            <div class="q-gutter-xs row" style="max-width: 300px" :class="{ 'truncate-chip-labels': truncate }">
+            <div style="max-width: 300px" :class="{ 'truncate-chip-labels': truncate }">
                 <q-chip
                   removable
                   v-model="vanilla"
@@ -47,34 +47,8 @@
                   icon="cake"
                   :label="chocolateLabel"
                 >
-                  <q-tooltip>{{ chocolateLabel }}</q-tooltip>
                 </q-chip>
-                <q-chip
-                  removable
-                  v-model="strawberry"
-                  color="orange"
-                  text-color="white"
-                  icon="cake"
-                >
-                  <div class="ellipsis">
-                    {{ strawberryLabel }}
-                    <q-tooltip>{{ strawberryLabel }}</q-tooltip>
-                  </div>
-                </q-chip>
-                <q-chip
-                  removable
-                  v-model="cookies"
-                  color="red"
-                  text-color="white"
-                >
-                  <q-avatar>
-                    <img src="https://cdn.quasar.dev/img/boy-avatar.png">
-                  </q-avatar>
-                  <div class="ellipsis">
-                    {{ cookiesLabel }}
-                    <q-tooltip>{{ cookiesLabel }}</q-tooltip>
-                  </div>
-                </q-chip>
+                <q-btn round dense size="10px" color="primary" icon="shopping_cart" />
               </div>
           </q-card-section>
 

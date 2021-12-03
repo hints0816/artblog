@@ -52,11 +52,8 @@
 </template>
 
 <script lang="ts">
-import { Notify } from 'quasar'
 import { getCurrentInstance, reactive, toRefs } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { adduser } from '../../api/test/index'
-import { LocalStorage } from 'quasar'
 export default {
   name: 'Login',
   components: {
@@ -74,24 +71,9 @@ export default {
       },
     })
     const {ctx} = getCurrentInstance() as any
+    console.log(ctx)
     const method = {
-      async login():Promise<any> {
-        let res  = await adduser(data.formdata) as any
-        if (res.status != 200) 
-        return Notify.create({
-          message: res.message,
-          color: 'negative',
-          icon: 'report_problem',
-          position: 'top',
-          timeout: 2000
-        })
-        console.log(res.token)
-        LocalStorage.set('token', res.token)
-        console.log(LocalStorage.getItem('token'))
-        data.onload = true
-        router.push('/');
-        console.log(ctx)
-      }
+      
     }
     return {
       ...toRefs(data),

@@ -19,7 +19,7 @@
             {{ post.UpdatedAt }}
           </q-item-label>
         </q-item-section>
-        <q-item-section top side>
+        <q-item-section v-if="true" top side>
           <div class="text-grey-8">
             <q-btn class="gt-xs" @click="toEdit(post.ID)" size="12px" flat dense round icon="edit" />
             <q-btn class="gt-xs" size="12px" flat dense round icon="delete">
@@ -46,7 +46,6 @@
 import { getCurrentInstance } from 'vue';
 import { useRouter } from 'vue-router';
 import { delArticle } from '../api/test/index';
-import { Notify } from 'quasar';
 export default {
   name: 'Item',
   props: {

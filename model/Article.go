@@ -32,6 +32,15 @@ func CreateArt(data *Article) int {
 	return errormsg.SUCCSE
 }
 
+// CreateArt 更新文章
+func UpdateArt(data *Article) int {
+	err = db.Model(&Article).Where("ID = ?", data.ID).Updates(&data).Error
+	if err != nil {
+		return errormsg.ERROR // 500
+	}
+	return errormsg.SUCCSE
+}
+
 func DelArt(id uint) int {
 	var article Article
 	article.ID = id

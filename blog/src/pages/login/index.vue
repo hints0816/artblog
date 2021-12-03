@@ -91,6 +91,8 @@ export default {
   setup() {
     const route = useRoute() as any;
     const router = useRouter() as any;
+    const { ctx } = getCurrentInstance() as any;
+
     console.log(route);
     let data = reactive({
       onload: false,
@@ -100,7 +102,6 @@ export default {
         password: '',
       },
     });
-    const { ctx } = getCurrentInstance() as any;
     const method = {
       async login(): Promise<any> {
         let res = (await login(data.formdata)) as any;

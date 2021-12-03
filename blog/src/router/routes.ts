@@ -14,8 +14,14 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/actlist/index.vue'),
       },
       {
-        path: '/edit/:id',
+        path: '/edit',
         component: () => import('pages/edit/index.vue'),
+        children: [
+          {
+            path: '/edit/:id',
+            component: () => import('pages/edit/index.vue'),
+          }
+        ]
       },
       {
         path: '/profile',

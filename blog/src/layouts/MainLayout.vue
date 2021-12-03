@@ -267,17 +267,13 @@
       <q-dialog v-model="alert">
         <q-card>
           <q-card-section>
-            <div class="text-h6">Alert</div>
+            <div class="text-h6">Edit status</div>
           </q-card-section>
 
           <q-card-section class="q-pt-none">
-             <q-input bottom-slots v-model="text" label="Label" counter maxlength="12" :dense="dense">
+             <q-input outlined v-model="text" label="Label" dense>
               <template v-slot:before>
-                <q-btn round dense flat icon="send" />
-              </template>
-              <template v-slot:append>
-                <q-icon v-if="text !== ''" name="close" @click="text = ''" class="cursor-pointer" />
-                <q-icon name="schedule" />
+                <q-btn dense flat icon="mood" />
               </template>
             </q-input>
           </q-card-section>
@@ -304,7 +300,7 @@ import {
   onMounted,
 } from 'vue';
 import { getProfileMe } from '../api/test/index';
-import { LocalStorage } from 'quasar';
+import { LocalStorage, Dark } from 'quasar';
 import { useRouter } from 'vue-router';
 
 export default defineComponent({
