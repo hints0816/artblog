@@ -9,7 +9,6 @@
                 <q-file
                   display-value=""
                   @input="pick"
-                  @rejected="upload"
                   v-model="filesPng"
                   outlined
                 >
@@ -222,7 +221,7 @@
 <script lang="ts">
 import Edit from '../../components/EditCard.vue';
 import { ArticleInfo } from '../../api/test/article.model';
-import { addArticle, listArticle, getProfile } from '../../api/test/index';
+import { addArticle, listMeArticle, getProfile, uploadImage,uploadAvatarImage } from '../../api/test/index';
 import { getCurrentInstance, reactive, toRefs, onBeforeMount } from 'vue';
 import { date, Dark } from 'quasar';
 import { useRoute } from 'vue-router';
@@ -251,7 +250,7 @@ export default {
       cropperAvatarDialog: false,
       model: null,
       option: {
-        img: 'https://img-blog.csdnimg.cn/00f2b25ffece44768f17f9bb892f42d1.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA56qd6JuL5Lq6,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center', // 原图文件
+        img: 'http://47.119.167.128:9999/blog/473562851655553024.png', // 原图文件
         size: 1,
         outputType: 'jpeg',
         info: true,
@@ -274,7 +273,7 @@ export default {
           pagenum: 1,
           pagesize: data.pagesize,
         };
-        let datas = (await listArticle(paramss)) as any;
+        let datas = (await listMeArticle(paramss)) as any;
         datas.data.forEach((element) => {
           let timeStamp = new Date(element.UpdatedAt);
           let formattedString = date.formatDate(
@@ -289,23 +288,39 @@ export default {
         console.log(data.postList);
         console.log(ctx);
       },
-      async save(): Promise<void> {
-        let params: ArticleInfo = {
-          title: data.title_text,
-          content: data.content_text,
-        };
-        let datas = (await addArticle(params)) as any;
-        console.log(datas);
-      },
-      pick(value: any): void {
-        console.log(value);
-        data.cropperAvatarDialog = true;
+      async pick(value: any): Promise<void> {
+        let param = new FormData()
+        param.append('file', value.target.files[0])
+        let res = await uploadImage(param) as any
+        if(res.status == 200) {
+          data.option.img = res.url
+          data.cropperAvatarDialog = true;
+        } else {
+
+        }
       },
       upload(): void {
-        ctx.$refs.cropper.getCropData((data) => {
+        let avatarfile = null
+        ctx.$refs.cropper.getCropData(async (data) => {
           // do something
-          console.log(data);
+          var arr = data.split(','),
+          mime = arr[0].match(/:(.*?);/)[1],
+          bstr = atob(arr[1]),
+          n = bstr.length,
+          u8arr = new Uint8Array(n)
+          while (n--) {
+            u8arr[n] = bstr.charCodeAt(n)
+          }
+          avatarfile = new File([u8arr], "filename.jpeg", { type: mime })
+          let param = new FormData()
+          param.append('file', avatarfile)
+          let res = await uploadAvatarImage(param) as any
+          if(res.status == 200) {
+          } else {
+
+          }
         });
+        
       },
       async getProfile(id: number): Promise<any> {
         let res = (await getProfile(id)) as any;

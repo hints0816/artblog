@@ -12,8 +12,8 @@
             class="text-body1 text-gray-light text-justify"
           >
             <q-item>
-              <q-item-section top thumbnail class="q-ml-none">
-                <img src="https://cdn.quasar.dev/img/mountains.jpg">
+              <q-item-section v-if="post.img" top thumbnail class="q-ml-none">
+                <img :src="post.img">
               </q-item-section>
               <q-item-section>
                  {{ post.desc }}

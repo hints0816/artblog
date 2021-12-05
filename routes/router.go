@@ -41,8 +41,10 @@ func InitRouter() {
 		auth.POST("blog/comment/digg", api.SetCommentDigg)
 		auth.POST("blog/comment/undigg", api.SetCommentUnDigg)
 
+		auth.GET("blog/me/articlelist", api.ListArticleRepository)
 		auth.POST("blog/comment", api.AddComment)
 		auth.DELETE("blog/article/:id", api.DelArticle)
+		auth.POST("blog/avatar/upload", api.UploadAvatarImage)
 	}
 
 	router := r.Group("api")
@@ -54,6 +56,8 @@ func InitRouter() {
 		router.POST("login/users", api.Login)
 		router.POST("login/sendvalidator", api.SendvalidateCode)
 		router.POST("login/checkvalidator", api.CheckvalidateCode)
+		router.POST("blog/upload", api.UploadArtImage)
+		router.GET("blog/category", api.ListCategory)
 	}
 
 	r.Run(":3000")

@@ -21,6 +21,14 @@ export const listArticle = async (params: any) => {
     return await api.get('/api/blog/articlelist',{params:params});
 };
 
+export const listCategory = async (params: any) => {
+    return await api.get('/api/blog/category',{params:params});
+};
+
+export const listMeArticle = async (params: any) => {
+    return await api.get('/api/blog/me/articlelist',{params:params});
+};
+
 export const getArticle = async (id: number) => {
     return await api.get(`/api/blog/article/${id}`);
 };
@@ -47,4 +55,18 @@ export const undigg = async (params: any) => {
 
 export const delArticle = async (id: number) => {
     return await api.delete(`/api/blog/article/${id}`);
+};
+
+export const uploadImage = async (params: any) => {
+    const config = {
+        headers: {'Content-Type': 'multipart/form-data'}
+    }
+    return await api.post('/api/blog/upload', params, config);
+};
+
+export const uploadAvatarImage = async (params: any) => {
+    const config = {
+        headers: {'Content-Type': 'multipart/form-data'}
+    }
+    return await api.post('/api/blog/avatar/upload', params, config);
 };

@@ -4,6 +4,17 @@ GET http://localhost:3000/api/blog/articlelist?pagenum=1&pagesize=10 HTTP/1.1
 ###
 GET http://localhost:3000/api/blog/comment/587?pagenum=1&pagesize=10 HTTP/1.1
 
+###
+POST http://localhost:3000/api/blog/upload
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="20200619144647232.png"
+Content-Type: image/png
+
+< ./20200619144647232.png
+--WebAppBoundary--
+
 ### Send Confirmation Email
 POST http://localhost:3000/api/login/sendvalidator HTTP/1.1
 Content-Type: application/json

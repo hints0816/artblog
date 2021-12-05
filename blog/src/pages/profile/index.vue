@@ -190,14 +190,6 @@ export default {
     const { ctx } = getCurrentInstance() as any;
     console.log(ctx);
     const method = {
-      async save(): Promise<void> {
-        let params: ArticleInfo = {
-          title: data.title_text,
-          content: data.content_text,
-        };
-        let datas = (await addArticle(params)) as any;
-        console.log(datas);
-      },
       pick(value: any): void {
         console.log(value);
         data.cropperAvatarDialog = true;

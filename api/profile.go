@@ -1,7 +1,10 @@
 package api
 
 import (
+	"hello/middleware"
 	"hello/model"
+	"hello/utils/errormsg"
+
 	"net/http"
 	"strconv"
 
@@ -18,4 +21,24 @@ func GetProfile(c *gin.Context) {
 			"data":   data,
 		},
 	)
+}
+
+func UploadAvatarImage(c *gin.Context) {
+	file, fileHeader, _ := c.Request.FormFile("file")
+
+	usernamekey, _ := c.Get("username")
+	userinfo, _ := usernamekey.(*middleware.MyClaims)
+
+	fileSize := fileHeader.Size
+	contentType := fileHeader.Header.Get("Content-Type")
+	url, code := model.UpLoadFile(file, contentType, fileSize)
+
+	profile := model.GetProfileById(userinfo.Id)
+	profile.Avatar = url
+	code1 := model.UpdateProfile(profile.ID, &profile)
+
+	c.JSON(http.StatusOK, gin.H{
+		"status":  code1,
+		"message": errormsg.GetErrMsg(code),
+	})
 }

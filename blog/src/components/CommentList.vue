@@ -404,7 +404,7 @@ export default {
         }
         if (paramss.content == '') {
           Notify.create({
-            message: '请填写title',
+            message: '请填写comment',
             color: 'negative',
             icon: 'report_problem',
             position: 'top',
@@ -413,6 +413,10 @@ export default {
           return;
         }
         let res = (await addComment(paramss)) as any;
+        if (res.status == 200 ) {
+          data.text = ''
+          data.childtext = ''
+        }
         console.log(res);
         await method.getTalk();
       },

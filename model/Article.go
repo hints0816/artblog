@@ -15,6 +15,8 @@ type Article struct {
 	Img          string     `gorm:"type:varchar(100)" json:"img"`
 	CommentCount int        `gorm:"type:int;not null;default:0" json:"comment_count"`
 	ReadCount    int        `gorm:"type:int;not null;default:0" json:"read_count"`
+	Status       int8       `gorm:"type:tinyint;default:0" json:"status"`
+	UserID       uint       `gorm:"type:bigint;not null" json:"user_id"`
 }
 
 type Cateart struct {
@@ -34,7 +36,7 @@ func CreateArt(data *Article) int {
 
 // CreateArt 更新文章
 func UpdateArt(data *Article) int {
-	err = db.Model(&Article).Where("ID = ?", data.ID).Updates(&data).Error
+	err = db.Model(&Article{}).Where("ID = ?", data.ID).Updates(&data).Error
 	if err != nil {
 		return errormsg.ERROR // 500
 	}
@@ -69,16 +71,47 @@ func ListArticle(id int, pageSize int, pageNum int) ([]Article, int, int64) {
 	tx := db.
 		Order("created_at DESC").
 		Preload("Cateart").
-		Preload("Cateart.Category")
+		Preload("Cateart.Category").
+		Where("status =?", 1)
 	if id != 0 {
 		tx = tx.Where("id in ?", ids)
 	}
 	err = tx.Limit(pageSize).Offset((pageNum - 1) * pageSize).
 		Find(&artList).Error
 	if id != 0 {
-		db.Model(&artList).Where("id in ?", ids).Count(&total)
+		db.Model(&artList).Where("status =?", 1).Where("id in ?", ids).Count(&total)
 	} else {
-		db.Model(&artList).Count(&total)
+		db.Model(&artList).Where("status =?", 1).Count(&total)
+	}
+
+	if err != nil {
+		return nil, errormsg.ERROR_CATE_NOT_EXIST, 0
+	}
+	return artList, errormsg.SUCCSE, total
+}
+
+func ListArticleRepository(userId uint, id int, pageSize int, pageNum int) ([]Article, int, int64) {
+	var artList []Article
+	var ids []string
+	var total int64
+
+	if id != 0 {
+		db.Model(&Cateart{}).Where("cid =?", id).Pluck("id", &ids)
+	}
+	tx := db.
+		Order("created_at DESC").
+		Preload("Cateart").
+		Preload("Cateart.Category").
+		Where("user_id =?", 1)
+	if id != 0 {
+		tx = tx.Where("id in ?", ids)
+	}
+	err = tx.Limit(pageSize).Offset((pageNum - 1) * pageSize).
+		Find(&artList).Error
+	if id != 0 {
+		db.Model(&artList).Where("user_id =?", 1).Where("id in ?", ids).Count(&total)
+	} else {
+		db.Model(&artList).Where("user_id =?", 1).Count(&total)
 	}
 
 	if err != nil {

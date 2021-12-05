@@ -3,11 +3,16 @@
     <q-page padding class="col-xs-12 col-sm-10">
       <q-input autogrow v-model="title_text" label="title" :dense="dense">
         <template v-slot:after>
-          <q-btn push color="primary" @click="save()" label="Save"/>
-          <q-btn push color="primary" @click="alert = true" label="Comment"/>
+          <q-btn v-if="content_status == 0" push color="primary" @click="save(0)" label="Save"/>
+          <q-btn push color="primary" @click="commentAlert()" label="Comment"/>
         </template>
       </q-input>
-      <v-md-editor v-model="content_text" height="90%"></v-md-editor>
+      <v-md-editor 
+        v-model="content_text" 
+        height="90%"
+            :disabled-menus="[]"
+        @upload-image="handleUploadImage"
+      ></v-md-editor>
       <v-md-preview :text="marktext"></v-md-preview>
       <q-dialog v-model="alert">
         <q-card>
@@ -22,7 +27,7 @@
           </q-toolbar>
           <q-card-section class="q-pt-none">
             <q-uploader
-              url="http://localhost:4444/upload"
+              @added="addImage"
               style="max-width: 300px"
               hide-upload-btn=false
               color="teal"
@@ -30,30 +35,39 @@
               bordered
             />
             <div style="max-width: 300px" :class="{ 'truncate-chip-labels': truncate }">
-                <q-chip
+                 <q-chip
+                  v-for="label in select_tag"
                   removable
-                  v-model="vanilla"
-                  color="primary"
-                  text-color="white"
-                  icon="cake"
-                  :label="vanillaLabel"
-                  :title="vanillaLabel"
-                />
-                <q-chip
-                  removable
-                  v-model="chocolate"
-                  color="teal"
-                  text-color="white"
-                  icon="cake"
-                  :label="chocolateLabel"
+                  class="label"
+                  :color="label.color"
+                  :text-color="label.text_color"
+                  :icon="label.icon"
+                  :key="label.index"
+                  @click="chipClickHandler(label.id)"
                 >
+                  {{ label.name }}
                 </q-chip>
                 <q-btn round dense size="10px" color="primary" icon="shopping_cart" />
               </div>
           </q-card-section>
-
+          <q-card-section>
+            <q-input outlined dense v-model="text" label="Label" />
+            <q-chip
+            v-for="label in unselect_tag"
+            clickable
+            class="label"
+            :color="label.color"
+            :text-color="label.text_color"
+            :icon="label.icon"
+            :key="label.index"
+            @click="chipClickHandler(label.index)"
+          >
+            {{ label.name }}
+          </q-chip>
+          </q-card-section>
+          
           <q-card-actions align="right">
-            <q-btn flat label="OK" color="primary" v-close-popup />
+            <q-btn flat label="OK" @click="save(1)" color="primary" v-close-popup />
           </q-card-actions>
         </q-card>
       </q-dialog>
@@ -63,11 +77,11 @@
 <script lang="ts">
 import { Notify } from 'quasar'
 import { ArticleInfo } from '../../api/test/article.model';
-import { addArticle, getArticle } from '../../api/test/index'
+import { addArticle, getArticle, uploadImage, listCategory } from '../../api/test/index'
 import { getCurrentInstance, reactive, toRefs, onBeforeMount } from 'vue'
 import 'vue-cropper/dist/index.css'
 import { VueCropper }  from 'vue-cropper'
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 export default {
   name: 'Post',
@@ -97,12 +111,32 @@ export default {
       alert: false,
       title_text: '',
       content_text: '',
+      content_img: '',
+      content_id: 0,
+      content_status: 0,
+      select_tag: [],
+      unselect_tag: []
     })
     const route = useRoute() as any;
+    const router = useRouter() as any;
     const {ctx} = getCurrentInstance() as any
     console.log(ctx)
     const method = {
-      async save(): Promise<void> {
+      chipClickHandler(index: number): void{
+        console.log(data.unselect_tag)
+        data.select_tag.push(data.unselect_tag[index])
+        data.unselect_tag.splice(index+1,1)
+      },
+      async commentAlert(): Promise<void> {
+        data.alert = true
+        const paramss = {
+          pagenum: 1,
+          pagesize: 20,
+        };
+        let res  = await listCategory(paramss) as any
+        data.unselect_tag = res.data
+      },
+      async save(status: number): Promise<void> {
         if(data.title_text === '') {
           Notify.create({
             message: '请填写title',
@@ -125,15 +159,74 @@ export default {
         }
         let params: ArticleInfo = {
           title: data.title_text,
-          content: data.content_text, 
+          content: data.content_text,
+          status: status,
+          id: data.content_id,
+          img: data.content_img
         }
-        let datas  = await addArticle(params) as any
-        console.log(datas)
+        let res  = await addArticle(params) as any
+        if (res.status == 200) {
+          if (res.data.status == 0) {
+            if (data.content_id == 0) {
+              let contentId = res.data.ID as string
+              let url = route.path as string
+              history.replaceState('','','#'+url+'/'+contentId)
+              data.content_id = res.data.ID
+            }
+            Notify.create({
+              message: 'Save Successful',
+              color: 'positive',
+              icon: 'report_problem',
+              position: 'top',
+              timeout: 3000
+            })
+          } else {
+            Notify.create({
+              message: 'Publish Successful',
+              type: 'positive',
+              position: 'top',
+              timeout: 5000,
+              actions: [
+                { label: 'Dismiss', color: 'white', handler: () => { /* ... */ } }
+              ]
+            })
+            router.go(-1)
+          }
+        } 
+        console.log(res)
       },
       async commentss(id: number):Promise<any> {
         let datas  = await getArticle(id) as any
-        data.title_text = datas.data.title
-        data.content_text = datas.data.content
+        console.log(datas)
+        if (datas != undefined) {
+          data.content_status = datas.data.status
+          data.content_id = datas.data.ID
+          data.title_text = datas.data.title
+          data.content_text = datas.data.content
+        }
+      },
+      async handleUploadImage(event, insertImage, files):Promise<any> {
+        let param = new FormData()
+        param.append('file', files[0])
+        let res = await uploadImage(param) as any
+        if(res.status == 200) {
+          insertImage({
+            url: res.url,
+            desc: '七龙珠',
+            // width: 'auto',
+            // height: 'auto',
+          });
+        } else {
+
+        }
+      },
+      async addImage(files: Array<File>): Promise<any> {
+        let param = new FormData()
+        param.append('file', files[0])
+        let res = await uploadImage(param) as any
+        if(res.status == 200) {
+          data.content_img = res.url
+        }
       }
     }
     onBeforeMount(async()=>{

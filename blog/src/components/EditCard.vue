@@ -16,6 +16,7 @@
         </q-item-section>
         <q-item-section class="q-mt-sm" side top>
           <q-item-label caption>
+            <q-chip v-if="post.status == 0" dense square icon="bookmark">draft</q-chip>
             {{ post.UpdatedAt }}
           </q-item-label>
         </q-item-section>
