@@ -224,7 +224,7 @@ import { ArticleInfo } from '../../api/test/article.model';
 import { addArticle, listMeArticle, getProfile, uploadImage,uploadAvatarImage } from '../../api/test/index';
 import { getCurrentInstance, reactive, toRefs, onBeforeMount } from 'vue';
 import { date, Dark } from 'quasar';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 export default {
   name: 'Post',
@@ -265,6 +265,7 @@ export default {
       postList: [],
     });
     const route = useRoute() as any;
+    const router = useRouter() as any;
     const { ctx } = getCurrentInstance() as any;
     console.log(ctx);
     const method = {
@@ -316,6 +317,7 @@ export default {
           param.append('file', avatarfile)
           let res = await uploadAvatarImage(param) as any
           if(res.status == 200) {
+            router.go(0)
           } else {
 
           }

@@ -15,7 +15,7 @@
       ></v-md-editor>
       <v-md-preview :text="marktext"></v-md-preview>
       <q-dialog v-model="alert">
-        <q-card>
+        <q-card style="width: 300px">
           <q-toolbar>
             <q-avatar>
               <img src="https://cdn.quasar.dev/logo-v2/svg/logo.svg">
@@ -28,39 +28,42 @@
           <q-card-section class="q-pt-none">
             <q-uploader
               @added="addImage"
-              style="max-width: 300px"
+              style="width:initial!important;"
               hide-upload-btn=false
-              color="teal"
               flat
               bordered
             />
             <div style="max-width: 300px" :class="{ 'truncate-chip-labels': truncate }">
                  <q-chip
-                  v-for="label in select_tag"
+                  v-for="label,index in select_tag"
                   removable
                   class="label"
                   :color="label.color"
                   :text-color="label.text_color"
                   :icon="label.icon"
-                  :key="label.index"
-                  @click="chipClickHandler(label.id)"
+                  :key="index"
+                  @remove="removeChipClickHandler(index)"
                 >
                   {{ label.name }}
                 </q-chip>
-                <q-btn round dense size="10px" color="primary" icon="shopping_cart" />
               </div>
           </q-card-section>
           <q-card-section>
-            <q-input outlined dense v-model="text" label="Label" />
+            <q-form
+              @submit="onSubmit"
+              class="q-gutter-md"
+            >
+              <q-input outlined dense v-model="category_text" label="Label" />
+            </q-form>
             <q-chip
-            v-for="label in unselect_tag"
+            v-for="label,index in unselect_tag"
             clickable
             class="label"
             :color="label.color"
             :text-color="label.text_color"
             :icon="label.icon"
-            :key="label.index"
-            @click="chipClickHandler(label.index)"
+            :key="index"
+            @click="addChipClickHandler(index)"
           >
             {{ label.name }}
           </q-chip>
@@ -115,17 +118,28 @@ export default {
       content_id: 0,
       content_status: 0,
       select_tag: [],
-      unselect_tag: []
+      unselect_tag: [],
+      category_text:''
     })
     const route = useRoute() as any;
     const router = useRouter() as any;
     const {ctx} = getCurrentInstance() as any
     console.log(ctx)
     const method = {
-      chipClickHandler(index: number): void{
-        console.log(data.unselect_tag)
+      onSubmit(): void {
+        data.select_tag.push({
+          name: data.category_text
+        })
+      },
+      addChipClickHandler(index: number): void{
         data.select_tag.push(data.unselect_tag[index])
-        data.unselect_tag.splice(index+1,1)
+        data.unselect_tag.splice(index,1)
+      },
+      removeChipClickHandler(index: number): void{
+        if(data.select_tag[index].id != undefined) {
+          data.unselect_tag.push(data.select_tag[index])
+        }
+        data.select_tag.splice(index,1)  
       },
       async commentAlert(): Promise<void> {
         data.alert = true
@@ -135,6 +149,7 @@ export default {
         };
         let res  = await listCategory(paramss) as any
         data.unselect_tag = res.data
+        data.select_tag = []
       },
       async save(status: number): Promise<void> {
         if(data.title_text === '') {
