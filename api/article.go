@@ -1,12 +1,11 @@
 package api
 
 import (
+	"hello/middleware"
 	"hello/model"
 	"hello/utils/errormsg"
 	"net/http"
 	"strconv"
-
-	"fmt"
 
 	"github.com/gin-gonic/gin"
 )
@@ -37,14 +36,56 @@ func ListArticle(c *gin.Context) {
 	})
 }
 
+func ListArticleRepository(c *gin.Context) {
+	pageSize, _ := strconv.Atoi(c.Query("pagesize"))
+	pageNum, _ := strconv.Atoi(c.Query("pagenum"))
+	id, _ := strconv.Atoi(c.Query("id"))
+
+	usernamekey, _ := c.Get("username")
+	userinfo, _ := usernamekey.(*middleware.MyClaims)
+
+	switch {
+	case pageSize >= 100:
+		pageSize = 100
+	case pageSize <= 0:
+		pageSize = 15
+	}
+
+	if pageNum == 0 {
+		pageNum = 1
+	}
+
+	data, code, total := model.ListArticleRepository(userinfo.Id, id, pageSize, pageNum)
+
+	c.JSON(http.StatusOK, gin.H{
+		"status":  code,
+		"data":    data,
+		"total":   total,
+		"message": errormsg.GetErrMsg(code),
+	})
+}
+
 // AddArticle 添加文章
 func AddArticle(c *gin.Context) {
 	var data model.Article
-	_ = c.ShouldBindJSON(&data)
-	fmt.Print(data.Content)
-	data.Desc = data.Content[0:19]
+	// file, fileHeader, _ := c.Request.FormFile("file")
+	// fileSize := fileHeader.Size
+	// contentType := fileHeader.Header.Get("Content-Type")
+	// model.UpLoadFile(file, contentType, fileSize)
+	// err := c.Bind(&data)
+	// fmt.Println(err)
+	usernamekey, _ := c.Get("username")
+	userinfo, _ := usernamekey.(*middleware.MyClaims)
 
-	code = model.CreateArt(&data)
+	_ = c.ShouldBindJSON(&data)
+	data.Desc = data.Content[0:19]
+	data.UserID = userinfo.Id
+	if data.ID == 0 {
+		code = model.CreateArt(&data)
+	} else {
+		code = model.UpdateArt(&data)
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,
 		"data":    data,
@@ -69,6 +110,19 @@ func GetArtInfo(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,
 		"data":    data,
+		"message": errormsg.GetErrMsg(code),
+	})
+}
+
+func UploadArtImage(c *gin.Context) {
+	file, fileHeader, _ := c.Request.FormFile("file")
+	fileSize := fileHeader.Size
+	contentType := fileHeader.Header.Get("Content-Type")
+	url, code := model.UpLoadFile(file, contentType, fileSize)
+
+	c.JSON(http.StatusOK, gin.H{
+		"status":  code,
+		"url":     url,
 		"message": errormsg.GetErrMsg(code),
 	})
 }
