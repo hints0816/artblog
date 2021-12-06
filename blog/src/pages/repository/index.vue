@@ -16,6 +16,9 @@
                   <q-avatar round size="200px">
                     <img :src="profile.avatar" />
                   </q-avatar>
+                   <q-badge  floating>
+                     <q-btn round icon="notifications"></q-btn>
+                   </q-badge>
                 </q-file>
               </div>
             </q-card-actions>
