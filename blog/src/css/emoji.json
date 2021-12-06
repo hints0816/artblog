@@ -98,5 +98,115 @@
         "codes": "1F619",
         "char": "😙",
         "name": "kissing face with smiling eyes"
+    },
+    {
+        "codes": "1F4AA",
+        "char": "💪",
+        "name": "Flexed Biceps"
+    },
+    {
+        "codes": "1F448",
+        "char": "👈",
+        "name": "Backhand Index Pointing Left"
+    },
+    {
+        "codes": "1F449",
+        "char": "👉",
+        "name": "Backhand Index Pointing Right"
+    },
+    {
+        "codes": "1F446",
+        "char": "👆",
+        "name": "Backhand Index Pointing Up"
+    },
+    {
+        "codes": "1F595",
+        "char": "🖕",
+        "name": "Middle Finger"
+    },
+    {
+        "codes": "1F447",
+        "char": "👇",
+        "name": "Backhand Index Pointing Down"
+    },
+    {
+        "codes": "1F91E",
+        "char": "🤞",
+        "name": "Crossed Fingers"
+    },
+    {
+        "codes": "1F596",
+        "char": "🖖",
+        "name": "Vulcan Salute"
+    },
+    {
+        "codes": "1F918",
+        "char": "🤘",
+        "name": "Sign of the Horns"
+    },
+    {
+        "codes": "1F919",
+        "char": "🤙",
+        "name": "Call Me Hand"
+    },
+    {
+        "codes": "1F590",
+        "char": "🖐",
+        "name": "Hand With Fingers Splayed"
+    },
+    {
+        "codes": "270B",
+        "char": "✋",
+        "name": "Raised Hand"
+    },
+    {
+        "codes": "1F44C",
+        "char": "👌",
+        "name": "OK Hand"
+    },
+    {
+        "codes": "1F44D",
+        "char": "👍",
+        "name": "Thumbs Up"
+    },
+    {
+        "codes": "1F44E",
+        "char": "👎",
+        "name": "Thumbs Down"
+    },
+    {
+        "codes": "270A",
+        "char": "✊",
+        "name": "Raised Fist"
+    },
+    {
+        "codes": "1F44A",
+        "char": "👊",
+        "name": "Oncoming Fist"
+    },
+    {
+        "codes": "1F44B",
+        "char": "👋",
+        "name": "Waving Hand"
+    },
+    {
+        "codes": "1F44F",
+        "char": "👏",
+        "name": "Clapping Hands"
+    },
+    {
+        "codes": "1F64C",
+        "char": "🙌",
+        "name": "Raising Hands"
+    },
+    {
+        "codes": "1F64F",
+        "char": "🙏",
+        "name": "Folded Hands"
+    },
+    {
+        "codes": "1F91D",
+        "char": "🤝",
+        "name": "Handshake"
     }
 ]
