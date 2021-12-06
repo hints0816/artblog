@@ -35,12 +35,39 @@ func SendvalidateCode(c *gin.Context) {
 	)
 }
 
-// 发送验证码
-func CheckvalidateCode(c *gin.Context) {
-	var data model.SignUpEmail
+// // 发送验证码
+// func CheckvalidateCode(c *gin.Context) {
+// 	var data model.SignUpEmail
+// 	_ = c.ShouldBindJSON(&data)
+
+// 	code = model.CheckvalidateCode(data.EmailName, data.Uuid)
+// 	c.JSON(
+// 		http.StatusOK, gin.H{
+// 			"status":  code,
+// 			"message": errormsg.GetErrMsg(code),
+// 		},
+// 	)
+// }
+
+func SignUpInClaim(c *gin.Context) {
+	var data model.ClaimInfo
+	var msg string
+	var validCode int
 	_ = c.ShouldBindJSON(&data)
 
-	code = model.CheckvalidateCode(data.EmailName, data.Uuid)
+	msg, validCode = validator.Validate(&data)
+	if validCode != errormsg.SUCCSE {
+		c.JSON(
+			http.StatusOK, gin.H{
+				"status":  validCode,
+				"message": msg,
+			},
+		)
+		c.Abort()
+		return
+	}
+
+	code = model.CheckvalidateCode(data)
 	c.JSON(
 		http.StatusOK, gin.H{
 			"status":  code,

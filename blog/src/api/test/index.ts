@@ -9,6 +9,10 @@ export const sendvalidator = async (params: any) => {
     return await api.post('/api/login/sendvalidator', params);
 };
 
+export const signup = async (params: any) => {
+    return await api.post('/api/blog/signup', params);
+};
+
 export const getProfile = async (id: number) => {
     return await api.get(`/api/blog/profile/${id}`);
 };

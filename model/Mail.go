@@ -1,6 +1,7 @@
 package model
 
 import (
+	"fmt"
 	"hello/utils/email"
 	"hello/utils/errormsg"
 	"log"
@@ -28,19 +29,23 @@ func SendvalidateCode(emailName string, uuid int64) int {
 	return errormsg.SUCCSE
 }
 
-func CheckvalidateCode(emailName string, uuid int64) int {
-
+func CheckvalidateCode(claim ClaimInfo) int {
+	var data User
 	c := pool.Get() //从连接池，取一个链接
 	defer c.Close() //函数运行结束 ，把连接放回连接池
 
-	redisEmail, err := redis.String(c.Do("Get", uuid))
-	if err != nil {
-		log.Fatal(err)
+	redisEmail, _ := redis.String(c.Do("Get", claim.Token))
+	if redisEmail != "" {
+		data.Password = claim.Password
+		data.Username = redisEmail
+		code := CreateUser(&data)
+		if code == errormsg.SUCCSE {
+			count, _ := redis.String(c.Do("Del", claim.Token))
+			fmt.Println(count)
+			return code
+		}
+		return code
+	} else {
 		return errormsg.ERROR
 	}
-	if redisEmail == "" {
-		log.Fatal(err)
-		return errormsg.ERROR
-	}
-	return errormsg.SUCCSE
 }

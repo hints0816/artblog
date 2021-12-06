@@ -16,6 +16,11 @@ type User struct {
 	Role     int    `gorm:"type:int;DEFAULT:2" json:"role" label:"角色码"`
 }
 
+type ClaimInfo struct {
+	Token    string `json:"token" binding:"required"`
+	Password string `json:"password" binding:"required`
+}
+
 // CheckUser 查询用户是否存在
 func CheckUser(name string) (code int) {
 	var user User

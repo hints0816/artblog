@@ -29,10 +29,10 @@
                     </template>
                   </q-input>
                   <q-input outlined dense bg-color="grey-2" 
-                    v-model="formdata.password" 
+                    v-model="formdata.comfirm_password" 
                     :type="isPwd ? 'password' : 'text'" label="comfirm password"
                     lazy-rules
-                    :rules="[val => !!val || 'comfirm password is required']">
+                    :rules="[val => !!val || 'comfirm password is required', val => val == formdata.password || 'Make sure the password twice']">
                     <template v-slot:append>
                       <q-icon
                         :name="isPwd ? 'visibility_off' : 'visibility'"
@@ -41,7 +41,7 @@
                       />
                     </template>
                   </q-input>
-                  <q-btn class="full-width" @click="login" style="padding-top: 0" label="sign up" type="submit" color="primary"/>
+                  <q-btn class="full-width" @click="signup" style="padding-top: 0" label="sign up" type="submit" color="primary"/>
                 </q-form>
               </q-card-section>
             </q-card>
@@ -54,26 +54,32 @@
 <script lang="ts">
 import { getCurrentInstance, reactive, toRefs } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { signup } from '../../api/test/index';
 export default {
   name: 'Login',
   components: {
   },
   setup () {
     const route = useRoute() as any
-    const router = useRouter() as any
     console.log(route)
     let data = reactive({
       isPwd: true,
       onload: false,
       formdata: {
-        'username':'',
-        'password':''
+        password:'',
       },
     })
     const {ctx} = getCurrentInstance() as any
     console.log(ctx)
     const method = {
-      
+      async signup(): Promise<any> {
+        const params = {
+          token: route.query.token as string,
+          password: data.formdata.password,
+        };
+        let res = await signup(params) as any;
+        
+      }
     }
     return {
       ...toRefs(data),
