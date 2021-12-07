@@ -29,23 +29,36 @@ func SendvalidateCode(emailName string, uuid int64) int {
 	return errormsg.SUCCSE
 }
 
-func CheckvalidateCode(claim ClaimInfo) int {
-	var data User
+func CheckCodeAndCreate(claim ClaimInfo) int {
+	var userData User
+	var profileData Profile
 	c := pool.Get() //从连接池，取一个链接
 	defer c.Close() //函数运行结束 ，把连接放回连接池
 
 	redisEmail, _ := redis.String(c.Do("Get", claim.Token))
 	if redisEmail != "" {
-		data.Password = claim.Password
-		data.Username = redisEmail
-		code := CreateUser(&data)
-		if code == errormsg.SUCCSE {
+		userData.Password = claim.Password
+		userData.Username = redisEmail
+		code := CreateUser(&userData)
+
+		profileData.ID = int(userData.ID)
+		profileData.Name = redisEmail
+		code1 := AddProfile(&profileData)
+
+		if code == errormsg.SUCCSE && code1 == errormsg.SUCCSE {
 			count, _ := redis.String(c.Do("Del", claim.Token))
 			fmt.Println(count)
-			return code
+			return errormsg.SUCCSE
 		}
-		return code
+		return errormsg.ERROR
 	} else {
 		return errormsg.ERROR
 	}
+}
+
+func CheckvalidateCode(token string) string {
+	c := pool.Get() //从连接池，取一个链接
+	defer c.Close() //函数运行结束 ，把连接放回连接池
+	redisEmail, _ := redis.String(c.Do("Get", token))
+	return redisEmail
 }

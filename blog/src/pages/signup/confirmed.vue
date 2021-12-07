@@ -31,7 +31,6 @@
           @click="login"
           style="padding-top: 0"
           label="Resend Confirmation Email"
-          type="submit"
           icon-right="send"
           color="primary"
         />

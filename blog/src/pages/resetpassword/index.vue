@@ -3,7 +3,7 @@
     <q-header>
       <q-toolbar>
         <q-toolbar-title shrink class="text-weight-bold">
-          <router-link to="/" style="color: #fff">blogName</router-link>
+          <router-link to="/" style="color: #fff">ArtBlog</router-link>
         </q-toolbar-title>
       </q-toolbar>
     </q-header>

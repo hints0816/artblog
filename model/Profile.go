@@ -16,6 +16,7 @@ type Profile struct {
 	Img       string `gorm:"type:varchar(200)" json:"img"`
 	Avatar    string `gorm:"type:varchar(200)" json:"avatar"`
 	IcpRecord string `gorm:"type:varchar(200)" json:"icp_record"`
+	Emoji     string `gorm:"type:varchar(100)" json:"emoji"`
 }
 
 // GetProfile 获取个人信息设置
@@ -50,6 +51,15 @@ func CheckEmail(email string) int {
 func UpdateProfile(id int, data *Profile) int {
 	var profile Profile
 	err = db.Model(&profile).Where("ID = ?", id).Updates(&data).Error
+	if err != nil {
+		return errormsg.ERROR
+	}
+	return errormsg.SUCCSE
+}
+
+// UpdateProfile 更新个人信息设置
+func AddProfile(data *Profile) int {
+	err := db.Create(&data).Error
 	if err != nil {
 		return errormsg.ERROR
 	}

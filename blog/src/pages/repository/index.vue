@@ -16,8 +16,12 @@
                   <q-avatar round size="200px">
                     <img :src="profile.avatar" />
                   </q-avatar>
-                   <q-badge  floating>
-                     <q-btn round icon="notifications"></q-btn>
+                   <q-badge 
+                    style="background-color:initial!important;color:initial!important;top:144px;" 
+                    floating>
+                     <q-btn class="bg-white" round>
+                        {{ profile.emoji }}
+                     </q-btn>
                    </q-badge>
                 </q-file>
               </div>
@@ -238,6 +242,7 @@ export default {
       name:'',
       profile: {
         avatar: '',
+        emoji: '😚',
         bili: '',
         desc: '',
         email: '',

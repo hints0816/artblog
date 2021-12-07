@@ -5,6 +5,10 @@ export const login = async (params: any) => {
     return await api.post('/api/login/users', params);
 };
 
+export const checkToken = async (params: any) => {
+    return await api.get('/api/login/checktoken', {params:params});
+};
+
 export const sendvalidator = async (params: any) => {
     return await api.post('/api/login/sendvalidator', params);
 };

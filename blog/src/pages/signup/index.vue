@@ -3,7 +3,7 @@
     <q-header>
       <q-toolbar>
         <q-toolbar-title shrink class="text-weight-bold">
-          <router-link to="/" style="color: #fff;">blogName</router-link>
+          <router-link to="/" style="color: #fff;">ArtBlog</router-link>
         </q-toolbar-title>
       </q-toolbar>
     </q-header>
@@ -30,7 +30,7 @@
                   <q-icon name="mail" />
                 </template>
               </q-input>
-                <q-btn class="full-width" @click="login" style="padding-top: 0" label="sign up" type="submit" color="primary"/>
+                <q-btn class="full-width" style="padding-top: 0" label="sign up" type="submit" color="primary"/>
               </q-form>
             </q-card-section>
           </q-card>
@@ -67,8 +67,9 @@ export default {
     })
     const {ctx} = getCurrentInstance() as any
     const method = {
-      async login():Promise<any> {
+      async onSubmit():Promise<any> {
         let res  = await sendvalidator(data.formdata) as any
+        console.log(res)
         if (res.status != 200) 
           return Notify.create({
             message: res.message,

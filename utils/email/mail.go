@@ -46,7 +46,8 @@ func SendEmail(emailName string, uuid int64) {
 		"</body>" +
 		"</html>")
 	//设置服务器相关的配置
-	err := e.Send("smtp.qq.com:25", smtp.PlainAuth("", "1152536969@qq.com", "srdvhmxkaqeshbhj", "smtp.qq.com"))
+	// srdvhmxkaqeshbhj
+	err := e.Send("smtp.qq.com:25", smtp.PlainAuth("", "1152536969@qq.com", "qtmdlzgwzfmajbjj", "smtp.qq.com"))
 	if err != nil {
 		log.Fatal(err)
 	}

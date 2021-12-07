@@ -22,7 +22,7 @@ func SendvalidateCode(c *gin.Context) {
 	var data model.SignUpEmail
 	_ = c.ShouldBindJSON(&data)
 
-	code = model.CheckEmail(data.EmailName)
+	code = model.CheckUser(data.EmailName)
 	if code == errormsg.SUCCSE {
 		uuid := uuid.GetSnowFlakeID()
 		code = model.SendvalidateCode(data.EmailName, uuid)
@@ -49,6 +49,22 @@ func SendvalidateCode(c *gin.Context) {
 // 	)
 // }
 
+func CheckCode(c *gin.Context) {
+	token := c.Query("token")
+	email := model.CheckvalidateCode(token)
+	if email != "" {
+		code = errormsg.SUCCSE
+	} else {
+		code = errormsg.ERROR
+	}
+	c.JSON(
+		http.StatusOK, gin.H{
+			"status":  code,
+			"message": errormsg.GetErrMsg(code),
+		},
+	)
+}
+
 func SignUpInClaim(c *gin.Context) {
 	var data model.ClaimInfo
 	var msg string
@@ -67,7 +83,7 @@ func SignUpInClaim(c *gin.Context) {
 		return
 	}
 
-	code = model.CheckvalidateCode(data)
+	code = model.CheckCodeAndCreate(data)
 	c.JSON(
 		http.StatusOK, gin.H{
 			"status":  code,

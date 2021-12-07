@@ -14,14 +14,16 @@
         />
 
         <q-toolbar-title shrink class="text-weight-bold">
-          <router-link to="/" style="color: #fff">blogName</router-link>
+          <router-link to="/" style="color: #fff">ArtBlog</router-link>
         </q-toolbar-title>
         <q-tabs v-if="$q.screen.gt.sm" v-model="tab">
           <div style="height: 100%" v-for="link in links1" :key="link.text">
-            <q-tab
+            <q-route-tab
               v-if="link.child == undefined"
               :name="link.text"
               :label="link.text"
+              :to="link.to"
+              exact
             />
             <q-btn-dropdown
               style="height: 100%"
@@ -47,7 +49,7 @@
         <q-space></q-space>
         <div class="q-gutter-sm row items-center no-wrap">
           <iframe
-            src="https://ghbtns.com/github-btn.html?user=hints0816&repo=gofile3&type=star&count=true&size=large"
+            src="https://ghbtns.com/github-btn.html?user=hints0816&repo=artblog&type=star&count=true&size=large"
             frameborder="0"
             scrolling="0"
             width="170"
@@ -61,9 +63,9 @@
           </q-btn-dropdown>
           <div v-if="$q.screen.gt.sm">
             <q-btn v-if="profile.name" dense flat no-wrap>
-              <q-avatar color="orange" text-color="white">
+              <q-avatar color="white" text-color="white">
                 <q-badge color="red" floating>4</q-badge>
-                <img :src="profile.avatar" />
+                <img :src="profile.avatar == ''?'https://cdn.quasar.dev/logo-v2/svg/logo.svg':profile.avatar" />
               </q-avatar>
               <q-icon name="arrow_drop_down" size="16px" />
               <q-menu auto-close>
@@ -90,9 +92,9 @@
                   </q-item>
 
                   <q-separator />
-                  <q-item clickable to="/profile" class="GL__menu-link">
+                  <!-- <q-item clickable to="/profile" class="GL__menu-link">
                     <q-item-section>Your profile</q-item-section>
-                  </q-item>
+                  </q-item> -->
                   <q-item clickable @click="toRepositories(profile.id)" class="GL__menu-link">
                     <q-item-section>Your repositories</q-item-section>
                   </q-item>
@@ -135,26 +137,41 @@
     >
       <q-scroll-area style="height: calc(100% - 150px); margin-top: 150px">
         <q-list padding>
-          <q-item v-for="link in links1" :key="link.text" v-ripple clickable>
-            <q-item-section avatar>
-              <q-icon color="grey" :name="link.icon" />
-            </q-item-section>
-            <q-item-section>
-              <q-item-label>{{ link.text }}</q-item-label>
-            </q-item-section>
-          </q-item>
+          <div v-for="link in links1" :key="link.text">
+            <q-item v-if="link.child == undefined" v-ripple clickable>
+              <q-item-section avatar>
+                <q-icon color="grey" :name="link.icon" />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>{{ link.text }}</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-expansion-item
+              v-if="link.child != undefined"
+              expand-separator
+              :icon="link.icon"
+              :label="link.text"
+            >
+             <q-expansion-item
+                :header-inset-level="1"
+                icon="receipt"
+                label="Receipts"
+              >
+              </q-expansion-item>
+            </q-expansion-item>
+          </div>
         </q-list>
       </q-scroll-area>
       <q-img
         class="absolute-top"
         contain
-        src="https://cdn.quasar.dev/img/material.png"
+        :src="profile.img == ''?'https://cdn.quasar.dev/img/material.png':profile.img"
         style="height: 150px"
       >
         <div v-if="profile.name" class="absolute-bottom bg-transparent">
-          <q-btn round to="/profile">
-            <q-avatar>
-              <img :src="profile.avatar" />
+          <q-btn round @click="toRepositories(profile.id)">
+            <q-avatar color="white">
+              <img :src="profile.avatar == ''?'https://cdn.quasar.dev/logo-v2/svg/logo.svg':profile.avatar" />
             </q-avatar>
           </q-btn>
           <div class="text-weight-bold">{{ profile.name }}</div>
@@ -317,17 +334,18 @@ export default defineComponent({
         name: '',
         avatar: '',
         email: '',
+        img: '',
         id: 0
       },
       links1: [
-        { icon: 'home', text: 'Home' },
-        { icon: 'whatshot', text: 'Trending' },
+        { icon: 'home', text: 'Home', to: '/' },
+        { icon: 'whatshot', text: 'ArtList', to: '/imglist' },
         {
           icon: 'subscriptions',
           text: 'Subscriptions',
           child: [
-            { icon: 'subscriptions', text: 'Subscriptions' },
-            { icon: 'whatshot', text: 'Trending' },
+            { icon: 'subscriptions', text: 'Subscriptions', to: '/' },
+            { icon: 'whatshot', text: 'Trending', to: '/' },
           ],
         },
       ],
@@ -395,6 +413,7 @@ export default defineComponent({
         let res = (await getProfileMe()) as any;
         if (res.status == 200) {
           data.profile.avatar = res.data.avatar;
+          data.profile.img = res.data.img;
           data.profile.id = res.data.id;
           data.profile.name = res.data.name;
           data.profile.email = res.data.email;
