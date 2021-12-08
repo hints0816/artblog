@@ -2,7 +2,7 @@ package model
 
 import (
 	"hello/utils/errormsg"
-
+	"log"
 	"gorm.io/gorm"
 )
 
@@ -29,6 +29,7 @@ type Cateart struct {
 func CreateArt(data *Article) int {
 	err := db.Create(&data).Error
 	if err != nil {
+		log.Fatalln(err)
 		return errormsg.ERROR // 500
 	}
 	return errormsg.SUCCSE
@@ -38,6 +39,7 @@ func CreateArt(data *Article) int {
 func UpdateArt(data *Article) int {
 	err = db.Model(&Article{}).Where("ID = ?", data.ID).Updates(&data).Error
 	if err != nil {
+		log.Fatalln(err)
 		return errormsg.ERROR // 500
 	}
 	return errormsg.SUCCSE
