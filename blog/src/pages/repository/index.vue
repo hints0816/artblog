@@ -310,6 +310,7 @@ export default {
       },
       upload(): void {
         let avatarfile = null
+        console.log(1)
         ctx.$refs.cropper.getCropData(async (data) => {
           // do something
           var arr = data.split(','),
@@ -320,7 +321,7 @@ export default {
           while (n--) {
             u8arr[n] = bstr.charCodeAt(n)
           }
-          avatarfile = new File([u8arr], "filename.jpeg", { type: mime })
+          avatarfile = new File([u8arr], 'filename.jpeg', { type: mime })
           let param = new FormData()
           param.append('file', avatarfile)
           let res = await uploadAvatarImage(param) as any
