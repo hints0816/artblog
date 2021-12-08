@@ -39,10 +39,12 @@ func CheckCodeAndCreate(claim ClaimInfo) int {
 	if redisEmail != "" {
 		userData.Password = claim.Password
 		userData.Username = redisEmail
+		userData.Role = 1
 		code := CreateUser(&userData)
 
 		profileData.ID = int(userData.ID)
 		profileData.Name = redisEmail
+		profileData.Avatar = "https://cdn.quasar.dev/logo-v2/svg/logo.svg"
 		code1 := AddProfile(&profileData)
 
 		if code == errormsg.SUCCSE && code1 == errormsg.SUCCSE {
