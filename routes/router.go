@@ -45,6 +45,7 @@ func InitRouter() {
 		auth.POST("blog/comment", api.AddComment)
 		auth.DELETE("blog/article/:id", api.DelArticle)
 		auth.POST("blog/avatar/upload", api.UploadAvatarImage)
+		auth.POST("blog/emoji", api.EditEmoji)
 	}
 
 	router := r.Group("api")

@@ -42,3 +42,20 @@ func UploadAvatarImage(c *gin.Context) {
 		"message": errormsg.GetErrMsg(code),
 	})
 }
+
+func EditEmoji(c *gin.Context) {
+	var data model.Profile
+	_ = c.ShouldBindJSON(&data)
+	usernamekey, _ := c.Get("username")
+	userinfo, _ := usernamekey.(*middleware.MyClaims)
+
+	profile := model.GetProfileById(userinfo.Id)
+	profile.Emoji = data.Emoji
+	profile.EmojiText = data.EmojiText
+	code := model.UpdateProfile(profile.ID, &profile)
+
+	c.JSON(http.StatusOK, gin.H{
+		"status":  code,
+		"message": errormsg.GetErrMsg(code),
+	})
+}

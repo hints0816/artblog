@@ -78,3 +78,8 @@ export const uploadAvatarImage = async (params: any) => {
     }
     return await api.post('/api/blog/avatar/upload', params, config);
 };
+
+export const editEmoji = async (params: any) => {
+    return await api.post('/api/blog/emoji', params);
+};
+

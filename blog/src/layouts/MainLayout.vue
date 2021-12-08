@@ -84,9 +84,9 @@
                         outline
                         @click="alert = true"
                         color="primary"
-                        label="Set status"
+                        :label="profile.emoji == ''?'Set status':profile.emoji+profile.emoji_text"
                       >
-                        <q-icon name="tag_faces" color="blue-9" size="18px" />
+                        <q-icon v-if="profile.emoji == ''" name="tag_faces" color="blue-9" size="18px" />
                       </q-btn>
                     </q-item-section>
                   </q-item>
@@ -99,9 +99,9 @@
                     <q-item-section>Your repositories</q-item-section>
                   </q-item>
                   <q-separator />
-                  <q-item clickable class="GL__menu-link">
+                  <!-- <q-item clickable class="GL__menu-link">
                     <q-item-section>Settings</q-item-section>
-                  </q-item>
+                  </q-item> -->
                   <q-item clickable @click="loginOut" class="GL__menu-link">
                     <q-item-section>Sign out</q-item-section>
                   </q-item>
@@ -138,7 +138,7 @@
       <q-scroll-area style="height: calc(100% - 150px); margin-top: 150px">
         <q-list padding>
           <div v-for="link in links1" :key="link.text">
-            <q-item v-if="link.child == undefined" v-ripple clickable>
+            <q-item v-if="link.child == undefined" :to="link.to" v-ripple clickable>
               <q-item-section avatar>
                 <q-icon color="grey" :name="link.icon" />
               </q-item-section>
@@ -152,12 +152,12 @@
               :icon="link.icon"
               :label="link.text"
             >
-             <q-expansion-item
+             <q-item
                 :header-inset-level="1"
                 icon="receipt"
                 label="Receipts"
               >
-              </q-expansion-item>
+              </q-item>
             </q-expansion-item>
           </div>
         </q-list>
@@ -282,21 +282,41 @@
         </q-card>
       </q-dialog>
       <q-dialog v-model="alert">
-        <q-card>
+        <q-card style="min-width: 350px">
           <q-card-section>
             <div class="text-h6">Edit status</div>
           </q-card-section>
 
           <q-card-section class="q-pt-none">
-             <q-input outlined v-model="text" label="Label" dense>
+             <q-input outlined v-model="profile.emoji_text" label="What's happening?" dense>
               <template v-slot:before>
-                <q-btn dense flat icon="mood" />
+                <q-btn style="color:rgba(0, 0, 0, 1);"  round dense flat :label="profile.emoji">
+                  <q-icon v-if="profile.emoji == ''" name="mood"/>
+                  <q-popup-edit
+                    max-width="320px"
+                    style="padding: 4px 8px"
+                    self="top start"
+                    cover="false"
+                  >
+                    <div class="q-gutter-sm" style="margin-top: 0px">
+                      <a
+                        href="javascript:void(0);"
+                        @click="setEmojiStatus(index)"
+                        style="text-decoration: none"
+                        v-for="(item, index) in faceList"
+                        :key="index"
+                        class="emotionItem"
+                        >{{ item }}</a
+                      >
+                    </div>
+                  </q-popup-edit>
+                </q-btn>
               </template>
             </q-input>
           </q-card-section>
 
           <q-card-actions align="right">
-            <q-btn flat label="OK" color="primary" v-close-popup />
+            <q-btn flat label="OK" @click="editStatus()" color="primary" v-close-popup />
           </q-card-actions>
         </q-card>
       </q-dialog>
@@ -316,8 +336,8 @@ import {
   toRefs,
   onMounted,
 } from 'vue';
-import { getProfileMe } from '../api/test/index';
-import { LocalStorage, Dark } from 'quasar';
+import { getProfileMe, editEmoji } from '../api/test/index';
+import { LocalStorage, Notify } from 'quasar';
 import { useRouter } from 'vue-router';
 
 export default defineComponent({
@@ -335,7 +355,9 @@ export default defineComponent({
         avatar: '',
         email: '',
         img: '',
-        id: 0
+        id: 0,
+        emoji: '',
+        emoji_text: ''
       },
       links1: [
         { icon: 'home', text: 'Home', to: '/' },
@@ -405,14 +427,37 @@ export default defineComponent({
       toRepositories(id: number): void {
         router.push(`/repository/${id}`)
       },
-      getEmo(index): void {
+      getEmo(index: number): void {
         const face = data.faceList[index] as string;
         data.text = data.text + face;
+      },
+      setEmojiStatus(index: number): void {
+        const face = data.faceList[index] as string;
+        data.profile.emoji = face;
+      },
+      async editStatus(): Promise<any> {
+        const params = {
+          emoji: data.profile.emoji,
+          emoji_text: data.profile.emoji_text
+        };
+        let res = await editEmoji(params) as any;
+        if (res.status == 200) {
+          router.go(0)
+          return Notify.create({
+            message: 'Edit Successful',
+            color: 'positive',
+            icon: 'report_problem',
+            position: 'top',
+            timeout: 2000
+          })
+        }
       },
       async getProfileMe(): Promise<any> {
         let res = (await getProfileMe()) as any;
         if (res.status == 200) {
           data.profile.avatar = res.data.avatar;
+          data.profile.emoji = res.data.emoji;
+          data.profile.emoji_text = res.data.emoji_text;
           data.profile.img = res.data.img;
           data.profile.id = res.data.id;
           data.profile.name = res.data.name;

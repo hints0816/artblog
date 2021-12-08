@@ -3,6 +3,7 @@ package model
 import (
 	"hello/utils/errormsg"
 	"log"
+
 	"gorm.io/gorm"
 )
 
@@ -104,16 +105,16 @@ func ListArticleRepository(userId uint, id int, pageSize int, pageNum int) ([]Ar
 		Order("created_at DESC").
 		Preload("Cateart").
 		Preload("Cateart.Category").
-		Where("user_id =?", 1)
+		Where("user_id =?", userId)
 	if id != 0 {
 		tx = tx.Where("id in ?", ids)
 	}
 	err = tx.Limit(pageSize).Offset((pageNum - 1) * pageSize).
 		Find(&artList).Error
 	if id != 0 {
-		db.Model(&artList).Where("user_id =?", 1).Where("id in ?", ids).Count(&total)
+		db.Model(&artList).Where("user_id =?", userId).Where("id in ?", ids).Count(&total)
 	} else {
-		db.Model(&artList).Where("user_id =?", 1).Count(&total)
+		db.Model(&artList).Where("user_id =?", userId).Count(&total)
 	}
 
 	if err != nil {

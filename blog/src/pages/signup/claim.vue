@@ -10,58 +10,58 @@
     <q-page-container class="bg-primary"> 
       <div class="row justify-center">
         <q-page padding>
-            <q-card v-if="valid" style="width:380px">
-              <q-card-section>
-                <q-form
-                  @submit="onSubmit"
-                >
-                  <q-input outlined dense bg-color="grey-2" 
-                    v-model="formdata.password" 
-                    :type="isPwd ? 'password' : 'text'" label="password"
-                    lazy-rules
-                    :rules="[val => !!val || 'password is required']">
-                    <template v-slot:append>
-                      <q-icon
-                        :name="isPwd ? 'visibility_off' : 'visibility'"
-                        class="cursor-pointer"
-                        @click="isPwd = !isPwd"
-                      />
-                    </template>
-                  </q-input>
-                  <q-input outlined dense bg-color="grey-2" 
-                    v-model="formdata.comfirm_password" 
-                    :type="isPwd ? 'password' : 'text'" label="comfirm password"
-                    lazy-rules
-                    :rules="[val => !!val || 'comfirm password is required', val => val == formdata.password || 'Make sure the password twice']">
-                    <template v-slot:append>
-                      <q-icon
-                        :name="isPwd ? 'visibility_off' : 'visibility'"
-                        class="cursor-pointer"
-                        @click="isPwd = !isPwd"
-                      />
-                    </template>
-                  </q-input>
-                  <q-btn class="full-width" style="padding-top: 0" label="sign up" type="submit" color="primary"/>
-                </q-form>
-              </q-card-section>
-            </q-card>
-            <q-card v-else class="q-pa-lg" style="width: 380px">
-              <q-item align="center">
-                <q-item-section>
-                  <q-item-label class="text-weight-bold text-red-6">
-                    OOPSIES! OUR BAD
-                  </q-item-label>
-                  <q-item-label class="text-h6">
-                    This Set-up Link is Bad                    
-                  </q-item-label>
-                </q-item-section>
-              </q-item>
-              <q-card-actions align="center">
-                <div align="center" class="text-subtitle2">
-                  Hmm, this account set up link isn't valid.
-                </div>
-              </q-card-actions>
-            </q-card>
+          <q-card v-if="valid" style="width:380px">
+            <q-card-section>
+              <q-form
+                @submit="onSubmit"
+              >
+                <q-input outlined dense bg-color="grey-2" 
+                  v-model="formdata.password" 
+                  :type="isPwd ? 'password' : 'text'" label="password"
+                  lazy-rules
+                  :rules="[val => !!val || 'password is required']">
+                  <template v-slot:append>
+                    <q-icon
+                      :name="isPwd ? 'visibility_off' : 'visibility'"
+                      class="cursor-pointer"
+                      @click="isPwd = !isPwd"
+                    />
+                  </template>
+                </q-input>
+                <q-input outlined dense bg-color="grey-2" 
+                  v-model="formdata.comfirm_password" 
+                  :type="isPwd ? 'password' : 'text'" label="comfirm password"
+                  lazy-rules
+                  :rules="[val => !!val || 'comfirm password is required', val => val == formdata.password || 'Make sure the password twice']">
+                  <template v-slot:append>
+                    <q-icon
+                      :name="isPwd ? 'visibility_off' : 'visibility'"
+                      class="cursor-pointer"
+                      @click="isPwd = !isPwd"
+                    />
+                  </template>
+                </q-input>
+                <q-btn class="full-width" style="padding-top: 0" label="sign up" type="submit" color="primary"/>
+              </q-form>
+            </q-card-section>
+          </q-card>
+          <q-card v-else class="q-pa-lg" style="width: 380px">
+            <q-item align="center">
+              <q-item-section>
+                <q-item-label class="text-weight-bold text-red-6">
+                  OOPSIES! OUR BAD
+                </q-item-label>
+                <q-item-label class="text-h6">
+                  This Set-up Link is Bad                    
+                </q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-card-actions align="center">
+              <div align="center" class="text-subtitle2">
+                Hmm, this account set up link isn't valid.
+              </div>
+            </q-card-actions>
+          </q-card>
         </q-page>
       </div>
     </q-page-container>
@@ -82,7 +82,7 @@ export default {
     const route = useRoute() as any
     let data = reactive({
       isPwd: true,
-      valid: false,
+      valid: true,
       formdata: {
         password:'',
       },
@@ -104,7 +104,7 @@ export default {
             position: 'top',
             timeout: 3000
           })
-          router.push('/login')
+          router.push({ path: '/login', query: { login_redirect: 'claim' }})
         }
       },
       async checkToken(): Promise<any> {

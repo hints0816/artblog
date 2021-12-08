@@ -17,6 +17,7 @@ type Profile struct {
 	Avatar    string `gorm:"type:varchar(200)" json:"avatar"`
 	IcpRecord string `gorm:"type:varchar(200)" json:"icp_record"`
 	Emoji     string `gorm:"type:varchar(100)" json:"emoji"`
+	EmojiText string `gorm:"type:varchar(200)" json:"emoji_text"`
 }
 
 // GetProfile 获取个人信息设置
