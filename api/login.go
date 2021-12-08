@@ -26,7 +26,7 @@ func SendvalidateCode(c *gin.Context) {
 	if code == errormsg.SUCCSE {
 		uuid := uuid.GetSnowFlakeID()
 		fmt.Println(uuid)
-		// code = model.SendvalidateCode(data.EmailName, uuid)
+		code = model.SendvalidateCode(data.EmailName, uuid)
 	}
 	c.JSON(
 		http.StatusOK, gin.H{
