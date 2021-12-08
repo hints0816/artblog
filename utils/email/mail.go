@@ -49,7 +49,7 @@ func SendEmail(emailName string, uuid int64) {
 	// 阿里云服务器的限制，没有备案的服务器不能使用smtp服务
 	// srdvhmxkaqeshbhj
 	// qtmdlzgwzfmajbjj
-	err := e.Send("smtp.qq.com:465", smtp.PlainAuth("", "1152536969@qq.com", "rrbjqpiyqzjqgfbd", "smtp.qq.com"))
+	err := e.Send("smtp.qq.com:587", smtp.PlainAuth("", "1152536969@qq.com", "rrbjqpiyqzjqgfbd", "smtp.qq.com"))
 	if err != nil {
 		log.Fatal(err)
 	}
