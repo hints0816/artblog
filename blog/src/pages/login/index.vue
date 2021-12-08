@@ -113,12 +113,14 @@ export default {
             position: 'top',
             timeout: 2000,
           });
-        console.log(res.token);
         LocalStorage.set('token', res.token);
         LocalStorage.set('logged_in', 'yes');
-        console.log(LocalStorage.getItem('token'));
         data.onload = true;
-        router.go(-1)
+        if(route.query.login_redirect == 'claim') {
+          router.push('/')
+        } else {
+          router.go(-1)
+        }
         console.log(ctx);
       },
     };
