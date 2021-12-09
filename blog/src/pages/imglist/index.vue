@@ -8,13 +8,13 @@
 
     <div
       class="row justify-center q-gutter-sm q-mx-auto scroll relative-position"
-      style="max-width: 80vw; max-height: 80vh"
+      style="max-width: 80vw;"
     >
       <q-img
         v-for="(src, index) in images"
         :key="index"
         :ref="el => { thumbRef[index] = el }"
-        class="image-gallery__image"
+        class="image-gallery__image col-xs-12 col-md-3"
         :style="index === indexZoomed ? 'opacity: 0.8' : void 0"
         :src="src"
         @click="zoomImage(index)"

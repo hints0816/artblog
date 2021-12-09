@@ -71,7 +71,7 @@
             <span class="text-weight-bold">{{ comment.username }}&#12288;</span>
             <span class="text-gray-light">{{ comment.CreatedAt }}</span>
           </q-item-label>
-          <q-item-label v-html="comment.content" class="q-pt-sm"></q-item-label>
+          <q-item-label style="word-break:break-all;" v-html="comment.content" class="q-pt-sm"></q-item-label>
         </q-item-section>
         <div class="q-gutter-sm">
           <q-btn
@@ -167,7 +167,7 @@
               <span class="text-weight-bold"> 回复：</span>
               <span class="text-gray-light"> {{ rev.to_username }}</span>
             </q-item-label>
-            <q-item-label v-html="rev.content"></q-item-label>
+            <q-item-label style="word-break:break-all;" v-html="rev.content"></q-item-label>
           </q-item-section>
           <div class="q-gutter-sm">
             <q-btn

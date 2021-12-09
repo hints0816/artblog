@@ -72,6 +72,16 @@ func (j *JWT) ParserToken(tokenString string) (*MyClaims, error) {
 	return nil, TokenInvalid
 }
 
+func apiFilter(url string) bool {
+	apis := [...]string{"/api/blog/comment/list", "/api/blog/articlelist"}
+	for _, x := range apis {
+		if strings.HasPrefix(url, x) {
+			return true
+		}
+	}
+	return false
+}
+
 // JwtToken jwt中间件
 func JwtToken() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -114,7 +124,7 @@ func JwtToken() gin.HandlerFunc {
 
 		claims, err := j.ParserToken(checkToken[1])
 		if err != nil {
-			if strings.HasPrefix(c.Request.RequestURI, "/api/blog/comment/list") {
+			if apiFilter(c.Request.RequestURI) {
 				return
 			} else {
 				if err == TokenExpired {

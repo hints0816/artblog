@@ -46,11 +46,11 @@ func InitRouter() {
 		auth.DELETE("blog/article/:id", api.DelArticle)
 		auth.POST("blog/avatar/upload", api.UploadAvatarImage)
 		auth.POST("blog/emoji", api.EditEmoji)
+		auth.GET("blog/articlelist", api.ListArticle)
 	}
 
 	router := r.Group("api")
 	{
-		router.GET("blog/articlelist", api.ListArticle)
 
 		router.GET("blog/profile/:id", api.GetProfile)
 		router.GET("blog/article/:id", api.GetArtInfo)

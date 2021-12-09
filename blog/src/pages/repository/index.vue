@@ -183,7 +183,7 @@
             </q-card-actions>
             <q-separator />
             <q-card-section>
-              <Edit @reloadart="listart" :postList="postList" />
+              <Edit @reloadart="listart" :postList="postList" :edit="edit" />
             </q-card-section>
           </q-card>
           <q-dialog v-model="cropperAvatarDialog">
@@ -228,7 +228,7 @@
 <script lang="ts">
 import Edit from '../../components/EditCard.vue';
 import { ArticleInfo } from '../../api/test/article.model';
-import { addArticle, listMeArticle, getProfile, uploadImage,uploadAvatarImage } from '../../api/test/index';
+import { addArticle, listArticle, getProfile, uploadImage,uploadAvatarImage } from '../../api/test/index';
 import { getCurrentInstance, reactive, toRefs, onBeforeMount } from 'vue';
 import { date, Dark } from 'quasar';
 import { useRoute, useRouter } from 'vue-router';
@@ -270,6 +270,7 @@ export default {
       content_text: '',
       pagesize: 10,
       total: 10,
+      edit: false,
       postList: [],
     });
     const route = useRoute() as any;
@@ -281,8 +282,9 @@ export default {
         const paramss = {
           pagenum: 1,
           pagesize: data.pagesize,
+          user_id: route.params.id
         };
-        let datas = (await listMeArticle(paramss)) as any;
+        let datas = (await listArticle(paramss)) as any;
         datas.data.forEach((element) => {
           let timeStamp = new Date(element.UpdatedAt);
           let formattedString = date.formatDate(
@@ -293,8 +295,7 @@ export default {
         });
         data.postList = datas.data;
         data.total = datas.total;
-        console.log(datas.data);
-        console.log(data.postList);
+        data.edit = datas.edit;
         console.log(ctx);
       },
       async pick(value: any): Promise<void> {

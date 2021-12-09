@@ -13,7 +13,17 @@ import (
 func ListArticle(c *gin.Context) {
 	pageSize, _ := strconv.Atoi(c.Query("pagesize"))
 	pageNum, _ := strconv.Atoi(c.Query("pagenum"))
-	id, _ := strconv.Atoi(c.Query("id"))
+	cid, _ := strconv.Atoi(c.Query("id"))
+	userId, _ := strconv.Atoi(c.Query("user_id"))
+
+	usernamekey, _ := c.Get("username")
+	userinfo, _ := usernamekey.(*middleware.MyClaims)
+	edit := false
+	if userinfo != nil {
+		if userId == int(userinfo.Id) {
+			edit = true
+		}
+	}
 
 	switch {
 	case pageSize >= 100:
@@ -26,12 +36,13 @@ func ListArticle(c *gin.Context) {
 		pageNum = 1
 	}
 
-	data, code, total := model.ListArticle(id, pageSize, pageNum)
+	data, code, total := model.ListArticle(userId, cid, pageSize, pageNum)
 
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,
 		"data":    data,
 		"total":   total,
+		"edit":    edit,
 		"message": errormsg.GetErrMsg(code),
 	})
 }

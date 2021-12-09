@@ -20,24 +20,20 @@
             {{ post.UpdatedAt }}
           </q-item-label>
         </q-item-section>
-        <q-item-section v-if="true" top side>
+        <q-item-section v-if="edit" top side>
           <div class="text-grey-8">
             <q-btn class="gt-xs" @click="toEdit(post.ID)" size="12px" flat dense round icon="edit" />
-            <q-btn class="gt-xs" size="12px" flat dense round icon="delete">
-              <q-popup-proxy>
+            <q-btn class="gt-xs" @click="showDelNotify(post.ID)"  size="12px" flat dense round icon="delete">
+              <!-- <q-popup-proxy>
                 <q-banner>
                   Are you absolutely sure?
                   <q-btn color="negative" @click="delArt(post.ID)" label="DELETE" />
                 </q-banner>
-              </q-popup-proxy>
+              </q-popup-proxy> -->
             </q-btn>
           </div>
         </q-item-section>
       </q-item>
-      <!-- <q-card-actions align="left">
-              <q-btn flat color="red" icon="favorite" />
-              <q-btn flat color="teal" icon="comment" />
-          </q-card-actions> -->
       <q-separator spaced inset />
     </div>
   </div>
@@ -45,6 +41,7 @@
 
 <script lang="ts">
 import { getCurrentInstance } from 'vue';
+import { Notify } from 'quasar'
 import { useRouter } from 'vue-router';
 import { delArticle } from '../api/test/index';
 export default {
@@ -52,6 +49,10 @@ export default {
   props: {
     postList: {
       type: Array,
+      required: true,
+    },
+    edit: {
+      type: Boolean,
       required: true,
     },
   },
@@ -65,11 +66,21 @@ export default {
       toEdit(id: number): void {
         router.push(`/edit/${id}`)
       },
-      async delArt(id: number): Promise<any> {
-        let res = (await delArticle(id)) as any;
-        if(res.status == 200) {
-          ctx.$emit('reloadart')
-        }
+      showDelNotify(id: number) {
+        Notify.create({
+          message: 'Are you absolutely sure?',
+          color: 'negative',
+          icon: 'report_problem',
+          position: 'top',
+          actions: [
+            { label: 'yes', color: 'white', handler: async () => { 
+              let res = (await delArticle(id)) as any;
+              if(res.status == 200) {
+                ctx.$emit('reloadart')
+              }
+            }}
+          ]
+        })
       }
     };
     return {
