@@ -68,6 +68,7 @@ func ListArticleRepository(c *gin.Context) {
 // AddArticle 添加文章
 func AddArticle(c *gin.Context) {
 	var data model.Article
+	var data1 model.ArticleVo
 	// file, fileHeader, _ := c.Request.FormFile("file")
 	// fileSize := fileHeader.Size
 	// contentType := fileHeader.Header.Get("Content-Type")
@@ -78,10 +79,11 @@ func AddArticle(c *gin.Context) {
 	userinfo, _ := usernamekey.(*middleware.MyClaims)
 
 	_ = c.ShouldBindJSON(&data)
+	_ = c.ShouldBindJSON(&data1)
 	data.Desc = data.Content[0:19]
 	data.UserID = userinfo.Id
 	if data.ID == 0 {
-		code = model.CreateArt(&data)
+		code = model.CreateArt(&data1)
 	} else {
 		code = model.UpdateArt(&data)
 	}
