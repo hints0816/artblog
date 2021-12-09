@@ -20,7 +20,7 @@ type Article struct {
 }
 
 type Cateart struct {
-	Category Category `gorm:"foreignkey:Cid;"`
+	Category Category `gorm:"foreignkey:ID;refenrences:Cid"`
 	ID       int      `gorm:"primary_key;not null" json:"id"`
 	Cid      int      `gorm:"primary_key;not null" json:"cid"`
 }
