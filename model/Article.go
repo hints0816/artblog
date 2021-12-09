@@ -8,7 +8,7 @@ import (
 
 type Article struct {
 	gorm.Model
-	Cateart      []*Cateart `gorm:"foreignkey:ID;"`
+	Cateart      []Cateart  `gorm:"foreignkey:ID;refenrences:ID"`
 	Title        string     `gorm:"type:varchar(100);not null" json:"title"`
 	Desc         string     `gorm:"type:varchar(200)" json:"desc"`
 	Content      string     `gorm:"type:longtext" json:"content"`
