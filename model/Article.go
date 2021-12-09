@@ -3,7 +3,6 @@ package model
 import (
 	"hello/utils/errormsg"
 	"log"
-	"fmt"
 	"gorm.io/gorm"
 )
 
