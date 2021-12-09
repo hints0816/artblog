@@ -21,14 +21,14 @@ type Article struct {
 }
 
 type Cateart struct {
-	Category Category `gorm:"foreignkey:ID;"`
+	Category Category `gorm:"foreignkey:Cid;"`
 	ID       int      `gorm:"primary_key;not null" json:"id"`
 	Cid      int      `gorm:"primary_key;not null" json:"cid"`
 }
 
 // CreateArt 新增文章
 func CreateArt(data *Article) int {
-	fmt.Println(data)
+	fmt.Println(data.Cateart)
 	err := db.Create(&data).Error
 	if err != nil {
 		log.Fatalln(err)
