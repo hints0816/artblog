@@ -20,6 +20,19 @@ type Article struct {
 	UserID       uint       `gorm:"type:bigint;not null" json:"user_id"`
 }
 
+type ArticleVo struct {
+	gorm.Model
+	Title        string     `gorm:"type:varchar(100);not null" json:"title"`
+	Desc         string     `gorm:"type:varchar(200)" json:"desc"`
+	Content      string     `gorm:"type:longtext" json:"content"`
+	Img          string     `gorm:"type:varchar(100)" json:"img"`
+	CommentCount int        `gorm:"type:int;not null;default:0" json:"comment_count"`
+	ReadCount    int        `gorm:"type:int;not null;default:0" json:"read_count"`
+	Status       int8       `gorm:"type:tinyint;default:0" json:"status"`
+	UserID       uint       `gorm:"type:bigint;not null" json:"user_id"`
+}
+
+
 type Cateart struct {
 	Category Category `gorm:"foreignkey:Cid;"`
 	ID       int      `gorm:"primary_key;not null" json:"id"`
@@ -27,8 +40,7 @@ type Cateart struct {
 }
 
 // CreateArt 新增文章
-func CreateArt(data *Article) int {
-	fmt.Println(data.Cateart)
+func CreateArt(data *ArticleVo) int {
 	err := db.Create(&data).Error
 	if err != nil {
 		log.Fatalln(err)
