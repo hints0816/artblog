@@ -21,3 +21,13 @@ profile 添加bar color字段
 搭建mq
 异步存储点赞
 
+
+export GOROOT=/usr/local/go
+export GOPATH=/root/gopath
+export PATH=${PATH}:${MAVEN_HOME}/bin:${JAVA_HOME}/bin:${JRE_HOME}/bin:$GOPATH/bin:$GOROOT/bin
+
+
+1.邮件服务器如何对接？476,587,25分别是什么端口
+2.quasar 内置图标插件如何使用，外置图标如何引入
+3.go如何与minio整合?minio如何做预览功能？
+4.
