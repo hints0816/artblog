@@ -74,7 +74,7 @@ func ListArticle(edit bool, edituserId int, cid int, pageSize int, pageNum int) 
 	tx := db.
 		Order("created_at DESC").
 		Preload("Cateart").
-		Preload("Cateart.Category").
+		Preload("Cateart.Category")
 	if !edit {
 		tx = tx.Where("status =?", 1)
 	}
