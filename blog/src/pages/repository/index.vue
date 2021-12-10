@@ -186,40 +186,6 @@
               <Edit @reloadart="listart" :postList="postList" :edit="edit" />
             </q-card-section>
           </q-card>
-          <q-dialog v-model="cropperAvatarDialog">
-            <q-card>
-              <q-toolbar>
-                <q-toolbar-title>
-                  <span class="text-weight-bold">
-                    Crop your new profile picture
-                  </span>
-                </q-toolbar-title>
-                <q-btn flat round dense icon="close" v-close-popup />
-              </q-toolbar>
-              <q-card-section style="height: 300px">
-                <vue-cropper
-                  ref="cropper"
-                  :img="option.img"
-                  :outputSize="option.size"
-                  :outputType="option.outputType"
-                  :info="option.info"
-                  :canScale="option.canScale"
-                  :autoCrop="option.autoCrop"
-                  :fixedBox="option.fixedBox"
-                  autoCropWidth="200"
-                  autoCropHeight="200"
-                ></vue-cropper>
-              </q-card-section>
-              <q-card-section>
-                <q-btn
-                  class="full-width"
-                  color="primary"
-                  @click="upload"
-                  label="Set new profile picture"
-                />
-              </q-card-section>
-            </q-card>
-          </q-dialog>
         </div>
       </div>
     </q-page>
@@ -227,10 +193,9 @@
 </template>
 <script lang="ts">
 import Edit from '../../components/EditCard.vue';
-import { ArticleInfo } from '../../api/test/article.model';
-import { addArticle, listArticle, getProfile, uploadImage,uploadAvatarImage } from '../../api/test/index';
+import { listArticle, getProfile, uploadImage,uploadAvatarImage } from '../../api/test/index';
 import { getCurrentInstance, reactive, toRefs, onBeforeMount } from 'vue';
-import { date, Dark } from 'quasar';
+import { date } from 'quasar';
 import { useRoute, useRouter } from 'vue-router';
 
 export default {
@@ -311,8 +276,8 @@ export default {
       },
       upload(): void {
         let avatarfile = null
-        console.log(1)
-        ctx.$refs.cropper.getCropData(async (data) => {
+        ctx.$refs.cropper.getCropData(async (data:any) => {
+          console.log(data)
           // do something
           var arr = data.split(','),
           mime = arr[0].match(/:(.*?);/)[1],
