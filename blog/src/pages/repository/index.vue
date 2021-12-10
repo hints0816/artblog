@@ -276,7 +276,7 @@ export default {
       },
       upload(): void {
         let avatarfile = null
-        ctx.$refs.cropper.getCropBlob(async (data:any) => {
+        this.$refs.cropper.getCropData(async (data:any) => {
           console.log(data)
           // do something
           var arr = data.split(','),
