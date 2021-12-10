@@ -63,7 +63,7 @@ func GetArtInfo(id int) (Article, int) {
 	return art, errormsg.SUCCSE
 }
 
-func ListArticle(userId int, cid int, pageSize int, pageNum int) ([]Article, int, int64) {
+func ListArticle(edit bool, edituserId int, cid int, pageSize int, pageNum int) ([]Article, int, int64) {
 	var artList []Article
 	var ids []string
 	var total int64
@@ -75,7 +75,9 @@ func ListArticle(userId int, cid int, pageSize int, pageNum int) ([]Article, int
 		Order("created_at DESC").
 		Preload("Cateart").
 		Preload("Cateart.Category").
-		Where("status =?", 1)
+	if !edit {
+		tx = tx.Where("status =?", 1)
+	}
 	if cid != 0 {
 		tx = tx.Where("id in ?", ids)
 	}
@@ -85,7 +87,10 @@ func ListArticle(userId int, cid int, pageSize int, pageNum int) ([]Article, int
 	err = tx.Limit(pageSize).Offset((pageNum - 1) * pageSize).
 		Find(&artList).Error
 
-	tx2 := db.Model(&artList).Where("status =?", 1)
+	tx2 := db.Model(&artList)
+	if !edit {
+		tx2 = tx2.Where("status =?", 1)
+	}
 	if cid != 0 {
 		tx2 = tx2.Where("id in ?", ids)
 	}

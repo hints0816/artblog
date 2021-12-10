@@ -36,7 +36,7 @@ func ListArticle(c *gin.Context) {
 		pageNum = 1
 	}
 
-	data, code, total := model.ListArticle(userId, cid, pageSize, pageNum)
+	data, code, total := model.ListArticle(edit, userId, cid, pageSize, pageNum)
 
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,
