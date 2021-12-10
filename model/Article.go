@@ -63,7 +63,7 @@ func GetArtInfo(id int) (Article, int) {
 	return art, errormsg.SUCCSE
 }
 
-func ListArticle(edit bool, edituserId int, cid int, pageSize int, pageNum int) ([]Article, int, int64) {
+func ListArticle(edit bool, userId int, cid int, pageSize int, pageNum int) ([]Article, int, int64) {
 	var artList []Article
 	var ids []string
 	var total int64
