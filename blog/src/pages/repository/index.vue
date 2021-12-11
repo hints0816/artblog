@@ -194,7 +194,7 @@
 <script lang="ts">
 import Edit from '../../components/EditCard.vue';
 import { listArticle, getProfile, uploadImage,uploadAvatarImage } from '../../api/test/index';
-import { getCurrentInstance, reactive, toRefs, onBeforeMount } from 'vue';
+import { computed, ref, getCurrentInstance, reactive, toRefs, onBeforeMount } from 'vue';
 import { date } from 'quasar';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -241,6 +241,7 @@ export default {
     const route = useRoute() as any;
     const router = useRouter() as any;
     const { ctx } = getCurrentInstance() as any;
+    const cropper = ref(null)
     console.log(ctx);
     const method = {
       async listart(): Promise<any> {
@@ -276,7 +277,8 @@ export default {
       },
       upload(): void {
         let avatarfile = null
-        this.$refs.cropper.getCropData(async (data:any) => {
+        
+        cropper.value.getCropData(async (data:any) => {
           console.log(data)
           // do something
           var arr = data.split(','),
@@ -312,6 +314,7 @@ export default {
       await method.listart();
     });
     return {
+      cropper,
       ...toRefs(data),
       ...method,
     };
