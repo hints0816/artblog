@@ -4,5 +4,6 @@ export interface ArticleInfo {
     status: number;
     id: number;
     img : string;
+    desc: string;
 }
   

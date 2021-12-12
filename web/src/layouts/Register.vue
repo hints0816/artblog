@@ -82,7 +82,6 @@ export default {
 
    const init = async () => {
       let data  = await getCart()
-      console.log(data)
     }
   }
 };
