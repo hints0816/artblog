@@ -23,6 +23,27 @@ func GetProfile(c *gin.Context) {
 	)
 }
 
+func UpdateProfile(c *gin.Context) {
+	var data model.Profile
+	_ = c.ShouldBindJSON(&data)
+	usernamekey, _ := c.Get("username")
+	userinfo, _ := usernamekey.(*middleware.MyClaims)
+
+	dataUpdate := model.GetProfileById(userinfo.Id)
+	dataUpdate.Name = data.Name
+	dataUpdate.Wechat = data.Wechat
+	dataUpdate.Qqchat = data.Qqchat
+	dataUpdate.Weibo = data.Weibo
+	dataUpdate.Bili = data.Bili
+	code := model.UpdateProfile(dataUpdate.ID, &dataUpdate)
+	c.JSON(
+		http.StatusOK, gin.H{
+			"status": code,
+			"data":   data,
+		},
+	)
+}
+
 func UploadAvatarImage(c *gin.Context) {
 	file, fileHeader, _ := c.Request.FormFile("file")
 
