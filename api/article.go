@@ -5,7 +5,9 @@ import (
 	"hello/model"
 	"hello/utils/errormsg"
 	"net/http"
+	"regexp"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -89,6 +91,28 @@ func AddArticle(c *gin.Context) {
 	userinfo, _ := usernamekey.(*middleware.MyClaims)
 
 	_ = c.ShouldBindJSON(&data)
+
+	src := data.Desc
+	//将HTML标签全转换成小写
+	re, _ := regexp.Compile("\\<[\\S\\s]+?\\>")
+	src = re.ReplaceAllStringFunc(src, strings.ToLower)
+
+	//去除STYLE
+	re, _ = regexp.Compile("\\<style[\\S\\s]+?\\</style\\>")
+	src = re.ReplaceAllString(src, "")
+
+	//去除SCRIPT
+	re, _ = regexp.Compile("\\<script[\\S\\s]+?\\</script\\>")
+	src = re.ReplaceAllString(src, "")
+
+	//去除所有尖括号内的HTML代码，并换成换行符
+	re, _ = regexp.Compile("\\<[\\S\\s]+?\\>")
+	src = re.ReplaceAllString(src, "\n")
+
+	//去除连续的换行符
+	re, _ = regexp.Compile("\\s{2,}")
+	src = re.ReplaceAllString(src, "\n")
+
 	data.Desc = data.Content[0:19]
 	data.UserID = userinfo.Id
 	if data.ID == 0 {
@@ -118,6 +142,8 @@ func DelArticle(c *gin.Context) {
 func GetArtInfo(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 	data, code := model.GetArtInfo(id)
+	profile := model.GetProfileById(data.UserID)
+	data.Profile = profile
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,
 		"data":    data,
