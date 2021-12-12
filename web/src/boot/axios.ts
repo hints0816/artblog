@@ -24,7 +24,6 @@ api.interceptors.request.use((cinfig: AxiosRequestConfig) => {
 //响应拦截
 api.interceptors.response.use(
   (response): any => {
-    // console.log(response);
     if (response.status === 200) {
       return response.data;
     } else {

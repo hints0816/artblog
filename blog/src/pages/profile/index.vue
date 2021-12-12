@@ -166,8 +166,6 @@
   </div>
 </template>
 <script lang="ts">
-import { ArticleInfo } from '../../api/test/article.model';
-import { addArticle } from '../../api/test/index';
 import { getCurrentInstance, reactive, toRefs } from 'vue';
 export default {
   name: 'Post',
@@ -188,7 +186,6 @@ export default {
       content_text: '',
     });
     const { ctx } = getCurrentInstance() as any;
-    console.log(ctx);
     const method = {
       pick(value: any): void {
         console.log(value);

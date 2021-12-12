@@ -88,7 +88,6 @@ export default {
       },
     })
     const {ctx} = getCurrentInstance() as any
-    console.log(ctx)
     const method = {
       async onSubmit(): Promise<any> {
         const params = {

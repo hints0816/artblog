@@ -66,7 +66,6 @@ export default {
     const method = {
       toPostDetail(id: number): void {
         router.push(`/posts/${id}`);
-        console.log(ctx);
       },
       chipClickHandler(name: string): void {
         ctx.$emit('reloadart', name)

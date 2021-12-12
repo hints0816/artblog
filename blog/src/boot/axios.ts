@@ -33,7 +33,6 @@ api.interceptors.request.use((cinfig: AxiosRequestConfig) => {
 //响应拦截
 api.interceptors.response.use(
   (response): any => {
-    console.log(response);
     Loading.hide()
     if (response.status === 200) {
       if (response.data.status === 500 && response.data.message === 'token授权已过期,请重新登录') {

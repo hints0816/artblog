@@ -5,17 +5,17 @@
         <h4 class="text-cyan-9">{{ post.title }}</h4>
         <q-item>
           <q-item-section avatar>
-            <q-btn round>
+            <q-btn @click="toRepositories(post.profile.id)" round>
               <q-avatar>
-                <img src="https://cdn.quasar.dev/img/avatar2.jpg">
+                <img :src="post.profile.avatar">
               </q-avatar>
             </q-btn>
           </q-item-section>
           <q-item-section>
-            <q-item-label caption>Caption</q-item-label>
+            <q-item-label caption>{{ post.profile.name }}</q-item-label>
             <q-item-label>
               <code class="text-italic">
-                Updated by {{ $store.getters.username }} {{ post.updated_at }}
+                Updated by {{ $store.getters.username }} {{ post.CreatedAt }}
               </code>
             </q-item-label>
           </q-item-section>
@@ -26,7 +26,7 @@
         <q-skeleton type="text" width="30%" />
       </div>
       <div v-if="onload" class="q-mt-lg">
-        <v-md-preview :text="post.body_html"></v-md-preview>
+        <v-md-preview :text="post.content"></v-md-preview>
       </div>
       <div v-else class="q-mt-lg">
         <q-skeleton type="text" />
@@ -58,20 +58,22 @@
 import { getCurrentInstance, reactive, onBeforeMount, toRefs } from 'vue'
 import Comment from '../../components/CommentList.vue';
 import { getArticle } from '../../api/test/index'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { date } from 'quasar'
 export default {
   name: 'Post',
   components: { Comment },
   setup () {
     const route = useRoute() as any
+    const router = useRouter() as any;
     let data = reactive({
       onload: false,
       post: {
-        'id':'',
-        'title':'',
-        'updated_at':'',
-        'body_html':''
+        id:'',
+        title:'',
+        CreatedAt:'',
+        content:'',
+        profile: null
       },
     })
     const {ctx} = getCurrentInstance() as any
@@ -79,14 +81,16 @@ export default {
       async commentss():Promise<any> {
         let datas  = await getArticle(route.params.id) as any
         data.onload = true
-        console.log(datas)
         data.post.id = datas.data.ID
         data.post.title = datas.data.title
         let timeStamp = new Date(datas.data.CreatedAt)
         let formattedString = date.formatDate(timeStamp, 'YYYY-MM-DD HH:mm:ss')
-        data.post.updated_at = formattedString
-        data.post.body_html = datas.data.content
-        console.log(ctx)
+        data.post.CreatedAt = formattedString
+        data.post.content = datas.data.content
+        data.post.profile = datas.data.Profile
+      },
+      toRepositories(id: number): void {
+        router.push(`/repository/${id}`)
       }
     }
      onBeforeMount(async()=>{

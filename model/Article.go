@@ -18,6 +18,7 @@ type Article struct {
 	ReadCount    int        `gorm:"type:int;not null;default:0" json:"read_count"`
 	Status       int8       `gorm:"type:tinyint;default:0" json:"status"`
 	UserID       uint       `gorm:"type:bigint;not null" json:"user_id"`
+	Profile      Profile    `gorm:"-"`
 }
 
 type Cateart struct {

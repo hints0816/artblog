@@ -13,7 +13,6 @@
             :disabled-menus="[]"
         @upload-image="handleUploadImage"
       ></v-md-editor>
-      <v-md-preview :text="marktext"></v-md-preview>
       <q-dialog v-model="alert">
         <q-card style="width: 300px">
           <q-toolbar>
@@ -82,15 +81,11 @@ import { Notify } from 'quasar'
 import { ArticleInfo } from '../../api/test/article.model';
 import { addArticle, getArticle, uploadImage, listCategory } from '../../api/test/index'
 import { getCurrentInstance, reactive, toRefs, onBeforeMount } from 'vue'
-import 'vue-cropper/dist/index.css'
-import { VueCropper }  from 'vue-cropper'
 import { useRoute, useRouter } from 'vue-router';
+import VueMarkdownEditor, { xss } from '@kangc/v-md-editor';
 
 export default {
   name: 'Post',
-  components: [
-    VueCropper
-  ],
   setup () {
     let data = reactive({
        options: {
@@ -124,7 +119,6 @@ export default {
     const route = useRoute() as any;
     const router = useRouter() as any;
     const {ctx} = getCurrentInstance() as any
-    console.log(ctx)
     const method = {
       onSubmit(): void {
         data.select_tag.push({
@@ -154,7 +148,7 @@ export default {
       async save(status: number): Promise<void> {
         if(data.title_text === '') {
           Notify.create({
-            message: '请填写title',
+            message: 'title can\'t be empty',
             color: 'negative',
             icon: 'report_problem',
             position: 'top',
@@ -164,7 +158,7 @@ export default {
         }
         if(data.content_text === '') {
           Notify.create({
-            message: '请填写content',
+            message: 'content can\'t be empty',
             color: 'negative',
             icon: 'report_problem',
             position: 'top',
@@ -177,15 +171,16 @@ export default {
           content: data.content_text,
           status: status,
           id: data.content_id,
-          img: data.content_img
+          img: data.content_img,
+          desc: xss.process(VueMarkdownEditor.vMdParser.themeConfig.markdownParser.render(data.content_text))
         }
         let res  = await addArticle(params) as any
         if (res.status == 200) {
           if (res.data.status == 0) {
             if (data.content_id == 0) {
-              let contentId = res.data.ID as string
-              let url = route.path as string
-              history.replaceState('','','#'+url+'/'+contentId)
+              // let contentId = res.data.ID as string
+              // let url = route.path as string
+              // history.replaceState('','','#'+url+'/'+contentId)
               data.content_id = res.data.ID
             }
             Notify.create({
@@ -208,11 +203,9 @@ export default {
             router.go(-1)
           }
         } 
-        console.log(res)
       },
       async commentss(id: number):Promise<any> {
         let datas  = await getArticle(id) as any
-        console.log(datas)
         if (datas != undefined) {
           data.content_status = datas.data.status
           data.content_id = datas.data.ID

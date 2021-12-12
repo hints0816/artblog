@@ -2,19 +2,25 @@
   <div class="q-pa-md">
     <div
       class="fixed-full image-gallery__blinder bg-grey-8"
-      :class="indexZoomed !== void 0 ? 'image-gallery__blinder--active' : void 0"
+      :class="
+        indexZoomed !== void 0 ? 'image-gallery__blinder--active' : void 0
+      "
       @click="zoomImage()"
     />
 
     <div
       class="row justify-center q-gutter-sm q-mx-auto scroll relative-position"
-      style="max-width: 80vw;"
+      style="max-width: 80vw"
     >
       <q-img
         v-for="(src, index) in images"
         :key="index"
-        :ref="el => { thumbRef[index] = el }"
-        class="image-gallery__image col-xs-12 col-md-3"
+        :ref="
+          (el) => {
+            thumbRef[index] = el;
+          }
+        "
+        class="image-gallery__image col-xs-12 col-sm-5 col-md-3"
         :style="index === indexZoomed ? 'opacity: 0.8' : void 0"
         :src="src"
         @click="zoomImage(index)"
@@ -22,102 +28,103 @@
     </div>
 
     <q-card
-        ref="fullRef"
-        class="image-gallery__image image-gallery__image-full fixed-center"
-        :class="indexZoomed !== void 0 ? 'image-gallery__image-full--active' : void 0"
-        :style="index === indexZoomed ? 'opacity: 0' : void 0"
+      ref="fullRef"
+      class="image-gallery__image image-gallery__image-full fixed-center"
+      :class="indexZoomed !== void 0 ? 'image-gallery__image-full--active' : void 0"
+      :style="index === indexZoomed ? 'opacity: 0' : void 0"
     >
-        <q-card-section>
-            <q-img
-                  v-touch-hold.mouse="handleHold"
-        :src="images[indexZoomed]"
-        @load="imgLoadedResolve"
-        @error="imgLoadedReject"
+      <q-card-section>
+        <q-img
+          v-touch-hold.mouse="handleHold"
+          :src="images[indexZoomed]"
+          @load="imgLoadedResolve"
+          @error="imgLoadedReject"
         />
-          </q-card-section>
+      </q-card-section>
 
-          <q-card-section class="q-pt-none">
-             <q-input v-if="display" v-model="text" label="Label" dense>
-              <template v-slot:before>
-                <q-btn dense flat icon="mood" />
-              </template>
-            </q-input>
-          </q-card-section>
-        
+      <q-card-section class="q-pt-none">
+        <q-input v-if="display" v-model="text" label="Label" dense>
+          <template v-slot:before>
+            <q-btn dense flat icon="mood" />
+          </template>
+        </q-input>
+      </q-card-section>
     </q-card>
-    
   </div>
 </template>
 <script>
-import { ref, onBeforeUpdate, reactive, toRefs } from 'vue'
-import { morph } from 'quasar'
+import { ref, onBeforeUpdate, reactive, toRefs } from 'vue';
+import { morph } from 'quasar';
 
 export default {
-  setup () {
+  setup() {
     let data = reactive({
       display: false,
-      text: '电脑信息'
-    })
-    const thumbRef = ref([])
-    const fullRef = ref(null)
+      text: '电脑信息',
+    });
+    const thumbRef = ref([]);
+    const fullRef = ref(null);
 
-    const indexZoomed = ref(void 0)
-    const images = ref(Array(24).fill(null).map((_, i) => 'https://picsum.photos/id/1' + '/500/300'))
+    const indexZoomed = ref(void 0);
+    const images = ref(
+      Array(24)
+        .fill(null)
+        .map((_, i) => 'https://picsum.photos/id/1' + '/500/300')
+    );
     const imgLoaded = {
       promise: Promise.resolve(),
       resolve: () => {},
-      reject: () => {}
+      reject: () => {},
+    };
+
+    function imgLoadedResolve() {
+      imgLoaded.resolve();
     }
 
-    function imgLoadedResolve () {
-      imgLoaded.resolve()
+    function imgLoadedReject() {
+      imgLoaded.reject();
     }
 
-    function imgLoadedReject () {
-      imgLoaded.reject()
-    }
+    function zoomImage(index) {
+      const indexZoomedState = indexZoomed.value;
+      let cancel = void 0;
 
-    function zoomImage (index) {
-        console.log(index)
-      const indexZoomedState = indexZoomed.value
-      let cancel = void 0
-
-      imgLoaded.reject()
+      imgLoaded.reject();
 
       const zoom = () => {
         if (index !== void 0 && index !== indexZoomedState) {
           imgLoaded.promise = new Promise((resolve, reject) => {
             imgLoaded.resolve = () => {
-              imgLoaded.resolve = () => {}
-              imgLoaded.reject = () => {}
+              imgLoaded.resolve = () => {};
+              imgLoaded.reject = () => {};
 
-              resolve()
-            }
+              resolve();
+            };
             imgLoaded.reject = () => {
-              imgLoaded.resolve = () => {}
-              imgLoaded.reject = () => {}
+              imgLoaded.resolve = () => {};
+              imgLoaded.reject = () => {};
 
-              reject()
-            }
-          })
+              reject();
+            };
+          });
 
           cancel = morph({
-            from: thumbRef.value[ index ].$el,
+            from: thumbRef.value[index].$el,
             to: fullRef.value.$el,
             onToggle: () => {
-              indexZoomed.value = index
+              indexZoomed.value = index;
             },
             waitFor: imgLoaded.promise,
             duration: 400,
             hideFromClone: true,
-            onEnd: end => {
+            onEnd: (end) => {
               if (end === 'from' && indexZoomed.value === index) {
-                indexZoomed.value = void 0
+                indexZoomed.value = void 0;
               }
-            }
-          })
+            },
+          });
         }
-      }
+      };
 
       if (
         indexZoomedState !== void 0 &&
@@ -125,45 +132,40 @@ export default {
       ) {
         morph({
           from: fullRef.value.$el,
-          to: thumbRef.value[ indexZoomedState ].$el,
+          to: thumbRef.value[indexZoomedState].$el,
           onToggle: () => {
-            indexZoomed.value = void 0
+            indexZoomed.value = void 0;
           },
           duration: 200,
           keepToClone: true,
-          onEnd: zoom
-        })
-      }
-      else {
-        zoom()
+          onEnd: zoom,
+        });
+      } else {
+        zoom();
       }
     }
 
     // Make sure to reset the dynamic refs before each update.
     onBeforeUpdate(() => {
-      thumbRef.value = []
-    })
+      thumbRef.value = [];
+    });
 
     return {
-        ...toRefs(data),
+      ...toRefs(data),
       thumbRef,
       fullRef,
       indexZoomed,
       images,
       zoomImage,
-      handleHold ({ evt, ...newInfo }) {
-        data.display = true
-        console.log(newInfo)
-
-        // native Javascript event
-        console.log(evt)
+      handleHold({ evt, ...newInfo }) {
+        data.display = true;
       },
 
       imgLoadedResolve,
-      imgLoadedReject
-    }
-  }
-}
+      imgLoadedReject,
+    };
+  },
+};
 </script>
 <style lang="sass">
 .image-gallery
@@ -174,8 +176,8 @@ export default {
     cursor: pointer
 
     &-full
-      width: 800px
-      max-width: 70vw
+      width: 900px
+      max-width: 90vw
       z-index: 2002
       pointer-events: none
 

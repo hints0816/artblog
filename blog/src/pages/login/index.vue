@@ -93,7 +93,6 @@ export default {
     const router = useRouter() as any;
     const { ctx } = getCurrentInstance() as any;
 
-    console.log(route);
     let data = reactive({
       onload: false,
       isPwd: true,
@@ -121,7 +120,6 @@ export default {
         } else {
           router.go(-1)
         }
-        console.log(ctx);
       },
     };
     return {

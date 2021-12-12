@@ -57,7 +57,6 @@ export default {
   setup() {
     const route = useRoute() as any;
     const router = useRouter() as any;
-    console.log(route);
     let data = reactive({
       onload: false,
       isPwd: true,
@@ -78,13 +77,10 @@ export default {
             position: 'top',
             timeout: 2000,
           });
-        console.log(res.token);
         LocalStorage.set('token', res.token);
         LocalStorage.set('logged_in', 'yes');
-        console.log(LocalStorage.getItem('token'));
         data.onload = true;
         router.push('/');
-        console.log(ctx);
       },
     };
     return {

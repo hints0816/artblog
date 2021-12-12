@@ -83,3 +83,6 @@ export const editEmoji = async (params: any) => {
     return await api.post('/api/blog/emoji', params);
 };
 
+export const updateProfile = async (params: any) => {
+    return await api.put('/api/blog/profile', params);
+};

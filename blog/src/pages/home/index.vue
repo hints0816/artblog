@@ -16,7 +16,7 @@
 </template>
 <script lang="ts">
 import Item from '../../components/ItemCard.vue';
-import { getCurrentInstance, reactive, onBeforeMount, toRefs } from 'vue';
+import { reactive, onBeforeMount, toRefs } from 'vue';
 import { listArticle } from '../../api/test/index';
 import { date } from 'quasar';
 export default {
@@ -29,7 +29,7 @@ export default {
       cid: 0,
       postList: [],
     });
-    const { ctx } = getCurrentInstance() as any;
+    // const { ctx } = getCurrentInstance() as any;
     const method = {
       async commentss(): Promise<any> {
         const paramss = {
@@ -47,9 +47,6 @@ export default {
         });
         data.postList = datas.data;
         data.total = datas.total;
-        console.log(datas.data);
-        console.log(data.postList);
-        console.log(ctx);
       },
       async onLoad(index, done): Promise<any> {
         if (data.total > data.pagesize) {
@@ -71,7 +68,6 @@ export default {
             });
             data.postList = datas.data;
             data.total = datas.total;
-            console.log(data.postList);
             done();
           }, 2000);
         } else {

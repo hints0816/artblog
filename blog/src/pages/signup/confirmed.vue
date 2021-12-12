@@ -55,7 +55,6 @@ export default {
   },
   setup() {
     const route = useRoute() as any;
-    console.log(route);
     let data = reactive({
     });
     const { ctx } = getCurrentInstance() as any;
@@ -70,7 +69,6 @@ export default {
           position: 'top',
           timeout: 2000,
         });
-        console.log(ctx);
       },
     };
     return {

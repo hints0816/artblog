@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-input v-if="logged" autogrow v-model="text" label="Label" :dense="dense">
+    <q-input v-if="logged" autogrow v-model="text" label="Comment" :dense="dense">
       <template v-slot:before>
         <q-avatar rounded>
           <img :src="meinfo.avatar" />
@@ -62,13 +62,13 @@
     >
       <q-item class="q-pa-md">
         <q-item-section avatar>
-          <q-avatar rounded>
-            <img alt="avatar" :src="comment.avatar" />
+          <q-avatar class="cursor-pointer" @click="toRepositories(comment.FromProfile.id)" rounded>
+            <img alt="avatar" :src="comment.FromProfile.avatar" />
           </q-avatar>
         </q-item-section>
         <q-item-section>
           <q-item-label lines="1">
-            <span class="text-weight-bold">{{ comment.username }}&#12288;</span>
+            <span class="text-weight-bold">{{ comment.FromProfile.name }}&#12288;</span>
             <span class="text-gray-light">{{ comment.CreatedAt }}</span>
           </q-item-label>
           <q-item-label style="word-break:break-all;" v-html="comment.content" class="q-pt-sm"></q-item-label>
@@ -111,7 +111,7 @@
             <q-input
               autogrow
               v-model="childtext"
-              :label="'回复：' + comment.username"
+              :label="'回复：' + comment.FromProfile.name"
               :dense="dense"
             >
               <template v-slot:after>
@@ -157,15 +157,15 @@
       >
         <q-item class="q-pa-md">
           <q-item-section avatar>
-            <q-avatar rounded>
-              <img alt="avatar" :src="rev.avatar" />
+            <q-avatar class="cursor-pointer" @click="toRepositories(rev.FromProfile.id)" rounded>
+              <img alt="avatar" :src="rev.FromProfile.avatar" />
             </q-avatar>
           </q-item-section>
           <q-item-section>
             <q-item-label lines="1">
-              <span class="text-weight-bold">{{ rev.username }}</span>
+              <span class="text-weight-bold">{{ rev.FromProfile.name }}</span>
               <span class="text-weight-bold"> 回复：</span>
-              <span class="text-gray-light"> {{ rev.to_username }}</span>
+              <span class="text-gray-light"> {{ rev.ToProfile.name }}</span>
             </q-item-label>
             <q-item-label style="word-break:break-all;" v-html="rev.content"></q-item-label>
           </q-item-section>
@@ -207,7 +207,7 @@
               <q-input
                 autogrow
                 v-model="childtext"
-                :label="'回复：' + rev.username"
+                :label="'回复：' + rev.ToProfile.name"
                 :dense="dense"
               >
                 <template v-slot:after>
@@ -261,10 +261,10 @@
 
 <script lang="ts">
 import emoji from '../css/emoji.json';
-import { getCurrentInstance, reactive, toRefs, onMounted } from 'vue';
+import { reactive, toRefs, onMounted } from 'vue';
 import { LocalStorage, Notify, date } from 'quasar';
 import { listComment, addComment, digg, undigg } from '../api/test/index';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 export default {
   name: 'Comment',
   components: {},
@@ -288,9 +288,8 @@ export default {
       isshowindex1: 0,
       comments: [],
     }) as any;
-    const { ctx } = getCurrentInstance() as any;
     const route = useRoute() as any;
-    console.log(ctx);
+    const router = useRouter() as any;
     const method = {
       commentss(fatherindex, childindex): void {
         data.childtext = '';
@@ -312,6 +311,9 @@ export default {
           data.isshowindex = fatherindex;
           data.isshowindex1 = childindex;
         }
+      },
+      toRepositories(id: number): void {
+        router.push(`/repository/${id}`)
       },
       async favorite(
         fatherindex: number,
@@ -366,29 +368,31 @@ export default {
           pagesize: 10,
         };
         let res = (await listComment(route.params.id, paramss)) as any;
-        data.comments = res.data.map((item) => {
-          item.isshow = false;
-          let timeStamp1 = new Date(item.CreatedAt);
-          let formattedString1 = date.formatDate(
-            timeStamp1,
-            'YYYY-MM-DD HH:mm:ss'
-          );
-          item.CreatedAt = formattedString1;
-          const res1 = item.CommentChild;
-          if (res1.length != 0) {
-            res1.forEach((element) => {
-              element.isshow = false;
-              let timeStamp2 = new Date(element.CreatedAt);
-              let formattedString2 = date.formatDate(
-                timeStamp2,
-                'YYYY-MM-DD HH:mm:ss'
-              );
-              element.CreatedAt = formattedString2;
-            });
-          }
-          return item;
-        });
-        console.log(data.comments);
+        if(res.data != null)
+          data.comments = res.data.map((item) => {
+            item.isshow = false;
+            let timeStamp1 = new Date(item.CreatedAt);
+            let formattedString1 = date.formatDate(
+              timeStamp1,
+              'YYYY-MM-DD HH:mm:ss'
+            );
+            item.CreatedAt = formattedString1;
+            const res1 = item.CommentChild;
+            if (res1 != null) {
+              if (res1.length != 0) {
+                res1.forEach((element) => {
+                  element.isshow = false;
+                  let timeStamp2 = new Date(element.CreatedAt);
+                  let formattedString2 = date.formatDate(
+                    timeStamp2,
+                    'YYYY-MM-DD HH:mm:ss'
+                  );
+                  element.CreatedAt = formattedString2;
+                });
+              }
+            }
+            return item;
+          });
       },
       async addComment(id: number): Promise<any> {
         let paramss = {
@@ -404,7 +408,7 @@ export default {
         }
         if (paramss.content == '') {
           Notify.create({
-            message: '请填写comment',
+            message: 'comment can\'t be empty',
             color: 'negative',
             icon: 'report_problem',
             position: 'top',
@@ -417,7 +421,6 @@ export default {
           data.text = ''
           data.childtext = ''
         }
-        console.log(res);
         await method.getTalk();
       },
       getEmo(index): void {

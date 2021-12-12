@@ -56,7 +56,6 @@ export default {
   setup () {
     const route = useRoute() as any
     const router = useRouter() as any
-    console.log(route)
     let data = reactive({
       isPwd: true,
       onload: false,
@@ -69,7 +68,6 @@ export default {
     const method = {
       async onSubmit():Promise<any> {
         let res  = await sendvalidator(data.formdata) as any
-        console.log(res)
         if (res.status != 200) 
           return Notify.create({
             message: res.message,
@@ -80,7 +78,6 @@ export default {
           })
         data.email = data.formdata.email
         router.push('/signup/confirm');
-        console.log(ctx)
       }
     }
     return {

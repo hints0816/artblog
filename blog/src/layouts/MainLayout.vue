@@ -56,6 +56,10 @@
             height="30"
             title="GitHub"
           ></iframe>
+          <q-toggle
+            v-model="darkValue"
+            color="orange"
+          />
           <q-btn-dropdown v-if="$q.screen.gt.sm" stretch flat icon="color_lens">
             <q-list>
               <q-color v-model="hex" no-header class="my-picker" />
@@ -70,7 +74,7 @@
               <q-icon name="arrow_drop_down" size="16px" />
               <q-menu auto-close>
                 <q-list style="min-width: 100px">
-                  <q-item class="GL__menu-link-signed-in">
+                  <q-item clickable @click="toRepositories(profile.id)" class="GL__menu-link-signed-in">
                     <q-item-section>
                       <div>
                         Sign in as <strong> {{ profile.name }}</strong>
@@ -95,10 +99,10 @@
                   <!-- <q-item clickable to="/profile" class="GL__menu-link">
                     <q-item-section>Your profile</q-item-section>
                   </q-item> -->
-                  <q-item clickable @click="toRepositories(profile.id)" class="GL__menu-link">
+                  <!-- <q-item clickable @click="toRepositories(profile.id)" class="GL__menu-link">
                     <q-item-section>Your repositories</q-item-section>
                   </q-item>
-                  <q-separator />
+                  <q-separator /> -->
                   <!-- <q-item clickable class="GL__menu-link">
                     <q-item-section>Settings</q-item-section>
                   </q-item> -->
@@ -286,7 +290,6 @@
           <q-card-section>
             <div class="text-h6">Edit status</div>
           </q-card-section>
-
           <q-card-section class="q-pt-none">
              <q-input outlined v-model="profile.emoji_text" label="What's happening?" dense>
               <template v-slot:before>
@@ -331,13 +334,13 @@ import {
   onBeforeMount,
   defineComponent,
   ref,
-  getCurrentInstance,
   reactive,
   toRefs,
   onMounted,
+  watch
 } from 'vue';
 import { getProfileMe, editEmoji } from '../api/test/index';
-import { LocalStorage, Notify } from 'quasar';
+import { LocalStorage, Notify, Dark } from 'quasar';
 import { useRouter } from 'vue-router';
 
 export default defineComponent({
@@ -346,9 +349,12 @@ export default defineComponent({
   components: {},
 
   setup() {
+    let darkdata = reactive({
+      darkValue:false,
+    })
     let data = reactive({
       alert: false,
-      hex: '',
+      hex: 'rgb(99, 24, 105)',
       tab: 'Home',
       profile: {
         name: '',
@@ -399,11 +405,9 @@ export default defineComponent({
       position: 'top',
     });
     const router = useRouter() as any;
-    const { ctx } = getCurrentInstance() as any;
     let leftDrawerOpen = ref(false);
     const method = {
       backToTop() {
-        console.log(ctx);
         let timer: any = '';
         const gotoTop = () => {
           let currentPosition =
@@ -487,17 +491,20 @@ export default defineComponent({
       await method.getProfileMe();
     });
     onMounted(() => {
-      console.log(data.links1[1].child);
       emoji.forEach((element) => {
         data.faceList.push(element.char);
       });
     });
+    watch(darkdata,(newVal,oldVal)=>{
+      Dark.toggle()
+    })
     return {
       leftDrawerOpen,
       toggleLeftDrawer() {
         leftDrawerOpen.value = !leftDrawerOpen.value;
       },
       ...toRefs(data),
+      ...toRefs(darkdata),
       ...method,
     };
   },
