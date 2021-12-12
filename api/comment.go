@@ -19,7 +19,6 @@ func AddComment(c *gin.Context) {
 	_ = c.ShouldBindJSON(&comment)
 
 	comment.UserId = userinfo.Id
-	comment.Username = userinfo.Username
 	from_profile := model.GetProfileById(userinfo.Id)
 	comment.Avatar = from_profile.Avatar
 	if comment.CommentId != 0 {
@@ -29,9 +28,7 @@ func AddComment(c *gin.Context) {
 		} else {
 			comment.ParentId = parentComment.ParentId
 		}
-		comment.ToId = parentComment.UserId
-		to_profile := model.GetProfileById(parentComment.UserId)
-		comment.ToUsername = to_profile.Name
+		comment.TouserId = parentComment.UserId
 	}
 
 	comment.Status = 1
