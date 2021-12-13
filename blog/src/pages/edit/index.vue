@@ -175,7 +175,7 @@ export default {
         let cateart = []
         data.select_tag.forEach((item,i) => {
           if(item.id !== undefined) {
-            item.name = ""
+            item.name = ''
           }
           cateart.push({
             ID: data.content_id,
