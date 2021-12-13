@@ -113,7 +113,11 @@ func AddArticle(c *gin.Context) {
 	re, _ = regexp.Compile("\\s{2,}")
 	src = re.ReplaceAllString(src, "\n")
 
-	data.Desc = data.Content[0:19]
+	if len(src) < 200 {
+		data.Desc = src
+	} else {
+		data.Desc = data.Content[0:200]
+	}
 	data.UserID = userinfo.Id
 	if data.ID == 0 {
 		code = model.CreateArt(&data)
