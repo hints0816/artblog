@@ -15,7 +15,7 @@
 <img src="img/QQ截图20211213004356.png" alt="QQ截图20211213004356" style="zoom: 80%;" />
 phone
 <img src="img/QQ截图20211213010217.png" alt="QQ截图20211213010217" style="zoom: 80%;" />
-### 快速启动
+### Quick Start
 
 ```bash
 $ npm install -g @quasar/cli
@@ -25,12 +25,12 @@ quasar init web(这和vue-cli初始化差不多)
 
 go mod tidy
 
-前端启动:
+Running quasar:
 quasar dev
-前端构建：
+Building quasar：
 quasar build
 
-后端启动：
+Running Go：
 go run main.go
 ```
 
