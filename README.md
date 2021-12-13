@@ -5,16 +5,16 @@
 ### 演示图
 
 <img src="img/QQ截图20211213003453.png" alt="QQ截图20211213003453" style="zoom: 80%;" />
-<img src="img\QQ截图20211213003520.png" alt="QQ截图20211213003520" style="zoom: 80%;" />
-<img src="img\QQ截图20211213003751.png" alt="QQ截图20211213003751" style="zoom: 80%;" />
-<img src="img\QQ截图20211213003836.png" alt="QQ截图20211213003836" style="zoom: 80%;" />
-<img src="img\QQ截图20211213003909.png" alt="QQ截图20211213003909" style="zoom: 80%;" />
-<img src="img\QQ截图20211213004007.png" alt="QQ截图20211213004007" style="zoom: 80%;" />
-<img src="img\QQ截图20211213004119.png" alt="QQ截图20211213004119" style="zoom: 80%;" />
-<img src="img\QQ截图20211213004229.png" alt="QQ截图20211213004229" style="zoom: 80%;" />
-<img src="img\QQ截图20211213004356.png" alt="QQ截图20211213004356" style="zoom: 80%;" />
+<img src="img/QQ截图20211213003520.png" alt="QQ截图20211213003520" style="zoom: 80%;" />
+<img src="img/QQ截图20211213003751.png" alt="QQ截图20211213003751" style="zoom: 80%;" />
+<img src="img/QQ截图20211213003836.png" alt="QQ截图20211213003836" style="zoom: 80%;" />
+<img src="img/QQ截图20211213003909.png" alt="QQ截图20211213003909" style="zoom: 80%;" />
+<img src="img/QQ截图20211213004007.png" alt="QQ截图20211213004007" style="zoom: 80%;" />
+<img src="img/QQ截图20211213004119.png" alt="QQ截图20211213004119" style="zoom: 80%;" />
+<img src="img/QQ截图20211213004229.png" alt="QQ截图20211213004229" style="zoom: 80%;" />
+<img src="img/QQ截图20211213004356.png" alt="QQ截图20211213004356" style="zoom: 80%;" />
 phone
-<img src="img\QQ截图20211213010217.png" alt="QQ截图20211213010217" style="zoom: 80%;" />
+<img src="img/QQ截图20211213010217.png" alt="QQ截图20211213010217" style="zoom: 80%;" />
 ### 快速启动
 
 ```bash
