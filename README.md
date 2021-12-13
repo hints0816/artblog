@@ -1,6 +1,6 @@
 ### 平台简介
 
-  quasar+vu3+gogin 搭建的个人艺术博客
+  ArtBlog is an open source blog built with Quasar and Vue3 and Gogin. Trying to build an art sharing blog that you can share art works and comment on them from a seated position in picture
 
 ### 演示图
 
