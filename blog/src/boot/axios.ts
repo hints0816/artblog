@@ -16,7 +16,7 @@ declare module '@vue/runtime-core' {
 // "export default () => {}" function below (which runs individually
 // for each client)
 const api = axios.create({
-  baseURL: 'http://47.119.111.110:3000',
+  baseURL: 'http://47.119.167.128:3000',
   withCredentials: true,
 });
 // 请求拦截import { config } from 'process';
