@@ -1,8 +1,8 @@
 <template>
   <div class="row justify-center">
     <q-page padding class="col-xs-12 col-sm-12" style="max-width: 1200px">
-      <div class="row q-col-gutter-x-lg">
-        <div class="col-xs-12 col-md-3" style="height: 100%">
+      <div class="row q-col-gutter-x-lg" style="margin-left: 0px;">
+        <div class="col-xs-12 col-md-3" style="height: 100%;padding-left: 0;">
           <q-card style="background-color:transparent;" flat class="my-card">
             <q-card-actions align="center">
               <div class="useravatar" style="width: 200px">
@@ -233,8 +233,8 @@
             </q-card-section>
           </q-card>
         </q-dialog>
-        <div class="col-xs-12 col-md-9 q-col-gutter-x-lg" style="height: 100%">
-          <q-card style="padding-right:20px;" flat>
+        <div class="col-xs-12 col-md-9 q-col-gutter-x-lg" style="height: 100%;margin-left:0;padding-left:0;">
+          <q-card style="padding-right: 24px;" flat>
             <q-tabs v-model="tab" inline-label class="q-my-md" align="left">
               <q-tab name="Article" icon="mail" label="Mails" />
               <q-tab name="Movie" icon="alarm" label="Alarms" />
@@ -324,7 +324,7 @@ export default {
       cropperAvatarDialog: false,
       model: null,
       option: {
-        img: 'http://47.119.111.110:9999/blog/473562851655553024.png', // 原图文件
+        img: 'http://47.119.167.128:9999/blog/473562851655553024.png', // 原图文件
         size: 1,
         outputType: 'jpeg',
         info: true,

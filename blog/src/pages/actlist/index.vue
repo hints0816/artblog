@@ -104,3 +104,9 @@ export default {
 };
 </script>
 
+<style lang="sass">
+blockquote
+  margin: 0 10px
+.github-markdown-body
+  padding: 0 10px
+</style>
