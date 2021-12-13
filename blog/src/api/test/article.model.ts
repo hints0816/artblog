@@ -5,5 +5,6 @@ export interface ArticleInfo {
     id: number;
     img : string;
     desc: string;
+    cateart: any[];
 }
   

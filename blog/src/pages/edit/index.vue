@@ -143,7 +143,13 @@ export default {
         };
         let res  = await listCategory(paramss) as any
         data.unselect_tag = res.data
-        data.select_tag = []
+        res.data.forEach((item,i) => {
+          const flag = data.select_tag.findIndex(item1 => item1.id === item.id)
+          if (flag !== -1) {
+             data.unselect_tag.splice(i,1)
+          }
+        })
+        // data.select_tag = []
       },
       async save(status: number): Promise<void> {
         if(data.title_text === '') {
@@ -166,13 +172,27 @@ export default {
           })
           return 
         }
+        let cateart = []
+        data.select_tag.forEach((item,i) => {
+          if(item.id !== undefined) {
+            item.name = ""
+          }
+          cateart.push({
+            ID: data.content_id,
+            Cid: item.id,
+            Category: {
+              name: item.name
+            }
+          })
+        })
         let params: ArticleInfo = {
           title: data.title_text,
           content: data.content_text,
           status: status,
           id: data.content_id,
           img: data.content_img,
-          desc: xss.process(VueMarkdownEditor.vMdParser.themeConfig.markdownParser.render(data.content_text))
+          desc: xss.process(VueMarkdownEditor.vMdParser.themeConfig.markdownParser.render(data.content_text)),
+          cateart: cateart
         }
         let res  = await addArticle(params) as any
         if (res.status == 200) {
@@ -206,11 +226,15 @@ export default {
       },
       async commentss(id: number):Promise<any> {
         let datas  = await getArticle(id) as any
+        console.log(datas)
         if (datas != undefined) {
           data.content_status = datas.data.status
           data.content_id = datas.data.ID
           data.title_text = datas.data.title
           data.content_text = datas.data.content
+          datas.data.Cateart.forEach((item,i) => {
+            data.select_tag.push(item.Category)
+          });
         }
       },
       async handleUploadImage(event, insertImage, files):Promise<any> {

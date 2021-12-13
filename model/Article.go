@@ -1,6 +1,7 @@
 package model
 
 import (
+	"fmt"
 	"hello/utils/errormsg"
 	"log"
 
@@ -9,7 +10,7 @@ import (
 
 type Article struct {
 	gorm.Model
-	Cateart      []*Cateart `gorm:"foreignkey:ID;"`
+	Cateart      []*Cateart `gorm:"foreignkey:ID;references:ID"`
 	Title        string     `gorm:"type:varchar(100);not null" json:"title"`
 	Desc         string     `gorm:"type:varchar(200)" json:"desc"`
 	Content      string     `gorm:"type:longtext" json:"content"`
@@ -22,7 +23,7 @@ type Article struct {
 }
 
 type Cateart struct {
-	Category Category `gorm:"foreignkey:Cid;"`
+	Category Category `gorm:"foreignkey:Cid;references:ID"`
 	ID       int      `gorm:"primary_key;not null" json:"id"`
 	Cid      int      `gorm:"primary_key;not null" json:"cid"`
 }
@@ -40,6 +41,11 @@ func CreateArt(data *Article) int {
 // CreateArt 更新文章
 func UpdateArt(data *Article) int {
 	err = db.Model(&Article{}).Where("ID = ?", data.ID).Updates(&data).Error
+	careart := data.Cateart
+	err1 := db.Delete(&careart).Error
+	fmt.Println(err1)
+	err2 := db.Create(&careart).Error
+	fmt.Println(err2)
 	if err != nil {
 		log.Fatalln(err)
 		return errormsg.ERROR // 500
@@ -60,7 +66,7 @@ func DelArt(id uint) int {
 // GetArtInfo 查询单个文章
 func GetArtInfo(id int) (Article, int) {
 	var art Article
-	db.Where("id =?", id).First(&art)
+	db.Preload("Cateart").Preload("Cateart.Category").Where("id =?", id).First(&art)
 	return art, errormsg.SUCCSE
 }
 
