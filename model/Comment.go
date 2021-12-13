@@ -71,7 +71,7 @@ func GetCommentList(user_id uint, id int, pageSize int, pageNum int) ([]Comment,
 			diggChildNum, _ := redis.Int(c.Do("getbit", commentChildList[childKey].ID, user_id))
 			var diggChildArr Digg
 			if diggChildNum == 1 {
-				diggChildArr.CommentId = commentChildList[key].ID
+				diggChildArr.CommentId = commentChildList[childKey].ID
 				diggChildArr.ID = user_id
 				commentChildList[childKey].DiggArr = []Digg{diggChildArr}
 			} else {
