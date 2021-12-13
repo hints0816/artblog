@@ -4,7 +4,7 @@
 
 ### 演示图
 
-<img src="img\QQ截图20211213003453.png" alt="QQ截图20211213003453" style="zoom: 80%;" />
+<img src="img/QQ截图20211213003453.png" alt="QQ截图20211213003453" style="zoom: 80%;" />
 <img src="img\QQ截图20211213003520.png" alt="QQ截图20211213003520" style="zoom: 80%;" />
 <img src="img\QQ截图20211213003751.png" alt="QQ截图20211213003751" style="zoom: 80%;" />
 <img src="img\QQ截图20211213003836.png" alt="QQ截图20211213003836" style="zoom: 80%;" />
