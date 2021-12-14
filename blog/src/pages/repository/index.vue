@@ -324,7 +324,7 @@ export default {
       cropperAvatarDialog: false,
       model: null,
       option: {
-        img: 'http://47.119.111.111:9999/blog/473562851655553024.png', // 原图文件
+        img: 'http://47.119.167.128:9999/blog/473562851655553024.png', // 原图文件
         size: 1,
         outputType: 'jpeg',
         info: true,
