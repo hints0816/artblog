@@ -17,7 +17,7 @@ func GetProfile(c *gin.Context) {
 	data := model.GetProfileById(uint(id))
 	c.JSON(
 		http.StatusOK, gin.H{
-			"status": code,
+			"status": 200,
 			"data":   data,
 		},
 	)

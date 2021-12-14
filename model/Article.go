@@ -19,7 +19,7 @@ type Article struct {
 	ReadCount    int        `gorm:"type:int;not null;default:0" json:"read_count"`
 	Status       int8       `gorm:"type:tinyint;default:0" json:"status"`
 	UserID       uint       `gorm:"type:bigint;not null" json:"user_id"`
-	Profile      Profile    `gorm:"-"`
+	Profile      Profile    `gorm:"foreignkey:UserID"`
 }
 
 type Cateart struct {
@@ -80,6 +80,7 @@ func ListArticle(edit bool, userId int, cid int, pageSize int, pageNum int) ([]A
 	}
 	tx := db.
 		Order("created_at DESC").
+		Preload("Profile").
 		Preload("Cateart").
 		Preload("Cateart.Category")
 	if !edit {
