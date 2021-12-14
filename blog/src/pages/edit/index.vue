@@ -244,7 +244,7 @@ export default {
         if(res.status == 200) {
           insertImage({
             url: res.url,
-            desc: '七龙珠',
+            desc: '在这里插入图片描述',
             // width: 'auto',
             // height: 'auto',
           });
