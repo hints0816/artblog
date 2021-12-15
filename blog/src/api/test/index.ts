@@ -33,6 +33,10 @@ export const listCategory = async (params: any) => {
     return await api.get('/api/blog/category',{params:params});
 };
 
+export const updateCategory = async (params: any) => {
+    return await api.put('/api/blog/category', params);
+};
+
 export const listMeArticle = async (params: any) => {
     return await api.get('/api/blog/me/articlelist',{params:params});
 };

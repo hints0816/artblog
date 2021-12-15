@@ -2,6 +2,7 @@ package api
 
 import (
 	"hello/model"
+	"hello/utils/errormsg"
 	"net/http"
 	"strconv"
 
@@ -28,5 +29,16 @@ func ListCategory(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"data":  data,
 		"total": total,
+	})
+}
+
+func UpdateCategory(c *gin.Context) {
+	var data model.Category
+	_ = c.ShouldBindJSON(&data)
+	code := model.EditCate(int(data.ID), &data)
+
+	c.JSON(http.StatusOK, gin.H{
+		"status":  code,
+		"message": errormsg.GetErrMsg(code),
 	})
 }

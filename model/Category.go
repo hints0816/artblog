@@ -55,10 +55,10 @@ func GetCate(pageSize int, pageNum int) ([]Category, int64) {
 // EditCate 编辑分类信息
 func EditCate(id int, data *Category) int {
 	var cate Category
-	var maps = make(map[string]interface{})
-	maps["name"] = data.Name
+	// var maps = make(map[string]interface{})
+	// maps["name"] = data.Name
 
-	err = db.Model(&cate).Where("id = ? ", id).Updates(maps).Error
+	err = db.Model(&cate).Where("id = ? ", id).Updates(&data).Error
 	if err != nil {
 		return errormsg.ERROR
 	}

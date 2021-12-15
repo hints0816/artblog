@@ -49,6 +49,7 @@ func InitRouter() {
 		auth.GET("blog/articlelist", api.ListArticle)
 
 		auth.PUT("blog/profile", api.UpdateProfile)
+		auth.PUT("blog/category", api.UpdateCategory)
 	}
 
 	router := r.Group("api")
