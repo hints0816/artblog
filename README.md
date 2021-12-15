@@ -1,6 +1,6 @@
 ### 平台简介
 
-  quasar+vu3+gogin 搭建的个人艺术博客
+  ArtBlog is an open source blog built with Quasar and Vue3 and Gogin. Trying to build an art sharing blog that you can share art works and comment on them from a seated position in picture
 
 ### 演示图
 
@@ -15,7 +15,7 @@
 <img src="img/QQ截图20211213004356.png" alt="QQ截图20211213004356" style="zoom: 80%;" />
 phone
 <img src="img/QQ截图20211213010217.png" alt="QQ截图20211213010217" style="zoom: 80%;" />
-### 快速启动
+### Quick Start
 
 ```bash
 $ npm install -g @quasar/cli
@@ -25,12 +25,12 @@ quasar init web(这和vue-cli初始化差不多)
 
 go mod tidy
 
-前端启动:
+Running quasar:
 quasar dev
-前端构建：
+Building quasar：
 quasar build
 
-后端启动：
+Running Go：
 go run main.go
 ```
 
