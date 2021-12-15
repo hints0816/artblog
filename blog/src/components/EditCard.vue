@@ -45,7 +45,7 @@ import { Notify } from 'quasar'
 import { useRouter } from 'vue-router';
 import { delArticle } from '../api/test/index';
 export default {
-  name: 'Item',
+  name: 'Edit',
   props: {
     postList: {
       type: Array,

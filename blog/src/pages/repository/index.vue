@@ -236,39 +236,46 @@
         <div class="col-xs-12 col-md-9 q-col-gutter-x-lg" style="height: 100%;margin-left:0;padding-left:0;">
           <q-card style="padding-right: 24px;" flat>
             <q-tabs v-model="tab" inline-label class="q-my-md" align="left">
-              <q-tab name="Article" icon="mail" label="Mails" />
-              <q-tab name="Movie" icon="alarm" label="Alarms" />
-              <q-tab name="Music" icon="movie" label="Movies" />
+              <q-tab name="article" icon="mail" label="ArtList" />
+              <!-- <q-tab name="Movie" icon="alarm" label="Alarms" /> -->
+              <q-tab name="setting" icon="movie" label="Setting" />
             </q-tabs>
             <q-separator />
-            <q-card-actions class="row q-col-gutter-x-xs justify-between">
-              <q-input
-                class="col-grow col-xs-12 col-sm-8"
-                dense
-                outlined
-                v-model="text"
-                label="Outlined"
-              />
-              <q-select
-                dense
-                outlined
-                v-model="model"
-                class="col-grow"
-                :options="['Google', 'Facebook']"
-                style="width: 130px"
-                label="Outlined"
-              />
-              <q-btn outline to="/edit" class="text-purple q-mx-xs">
-                <div class="row items-center no-wrap">
-                  <q-icon left name="book" />
-                  <div class="text-center">New</div>
-                </div>
-              </q-btn>
-            </q-card-actions>
-            <q-separator />
-            <q-card-section>
-              <Edit @reloadart="listart" :postList="postList" :edit="edit" />
-            </q-card-section>
+            <q-tab-panels v-model="tab" animated>
+              <q-tab-panel name="article">
+                <q-card-actions class="row q-col-gutter-x-xs justify-between">
+                  <q-input
+                    class="col-grow col-xs-12 col-sm-8"
+                    dense
+                    outlined
+                    v-model="text"
+                    label="Outlined"
+                  />
+                  <q-select
+                    dense
+                    outlined
+                    v-model="model"
+                    class="col-grow"
+                    :options="['Google', 'Facebook']"
+                    style="width: 130px"
+                    label="Outlined"
+                  />
+                  <q-btn outline to="/edit" class="text-purple q-mx-xs">
+                    <div class="row items-center no-wrap">
+                      <q-icon left name="book" />
+                      <div class="text-center">New</div>
+                    </div>
+                  </q-btn>
+                </q-card-actions>
+                <q-separator />
+                <q-card-section>
+                  <Edit @reloadart="listart" :postList="postList" :edit="edit" />
+                </q-card-section>
+              </q-tab-panel>
+              <q-tab-panel name="setting">
+                <Category/>
+              </q-tab-panel>
+            </q-tab-panels>
           </q-card>
         </div>
       </div>
@@ -279,6 +286,7 @@
 import emoji from '../../css/emoji.json';
 import { updateProfile, editEmoji } from '../../api/test/index';
 import Edit from '../../components/EditCard.vue';
+import Category from '../../components/CategoryCard.vue';
 import {
   listArticle,
   getProfile,
@@ -297,7 +305,7 @@ import { Notify } from 'quasar';
 
 export default {
   name: 'Post',
-  components: { Edit },
+  components: { Edit, Category },
   setup() {
     let data = reactive({
       alert: false,
@@ -319,7 +327,7 @@ export default {
         emoji_text: ''
       },
       emoji: '',
-      tab: 'mails',
+      tab: 'article',
       filesPng: null,
       cropperAvatarDialog: false,
       model: null,
