@@ -62,8 +62,9 @@
               </q-form>
             </q-card-section>
           </q-card>
-          <q-card class="q-mt-md" style="width: 380px" align="center">
-            <q-card-section>
+          <q-card class="q-mt-md" style="width: 380px;" align="center">
+            <q-card-section style="padding: 5px;">
+              <q-btn @click="toGithub" dense round flat icon="ion-logo-github"/>
               <span class="text-blue-grey-10">New to GitHub? </span>
               <router-link
                 class="text-blue-10 text-weight-bold"
@@ -121,6 +122,9 @@ export default {
           router.go(-1)
         }
       },
+      toGithub():void {
+        window.location.href='https://github.com/login/oauth/authorize?client_id=6c85823c1a121313be52&state=s76de&redirect_uri=http://localhost:3000/api/blog/github'
+      }
     };
     return {
       ...toRefs(data),
