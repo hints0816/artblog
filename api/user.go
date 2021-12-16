@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"hello/model"
 	"net/http"
 	"strconv"
@@ -21,6 +22,20 @@ func GetUserInfo(c *gin.Context) {
 			"data":    maps,
 			"total":   1,
 			"message": 1,
+		},
+	)
+}
+
+// GitHub OAuth App Callback
+func GithubCallback(c *gin.Context) {
+	code := c.Query("code")
+	state := c.Query("state")
+	fmt.Println(code)
+	fmt.Println(state)
+	c.JSON(
+		http.StatusOK, gin.H{
+			"code":  code,
+			"state": state,
 		},
 	)
 

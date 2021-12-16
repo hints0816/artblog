@@ -64,6 +64,7 @@ func InitRouter() {
 		router.GET("blog/category", api.ListCategory)
 		router.POST("blog/signup", api.SignUpInClaim)
 		router.GET("login/checktoken", api.CheckCode)
+		router.GET("blog/github", api.GithubCallback)
 	}
 
 	r.Run(":3000")
