@@ -64,7 +64,7 @@ func GithubCallback(c *gin.Context) {
 	m := i.(map[string]interface{})
 	login := m["login"].(string)
 	fmt.Println(err3)
-	c.SetCookie("key_cookie", login, 60, "/",
-		"47.119.167.128", false, true)
+	c.SetCookie("key_cookie", login, 600, "/",
+		"http://localhost:8080", false, true)
 	c.Redirect(302, "http://localhost:8080")
 }
