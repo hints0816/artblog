@@ -36,7 +36,7 @@ func GithubCallback(c *gin.Context) {
 	code := c.Query("code")
 	state := c.Query("state")
 	fmt.Println(state)
-	resp, err := http.PostForm("https://github.com/login/oauth/access_token", url.Values{"client_id": {client_id}, "client_secret": {client_secret}, "code": {code}, "redirect_uri": {"http://localhost:3000/api/blog/github"}})
+	resp, err := http.PostForm("https://github.com/login/oauth/access_token", url.Values{"client_id": {client_id}, "client_secret": {client_secret}, "code": {code}, "redirect_uri": {"http://47.119.167.128:3000/api/blog/github"}})
 	defer resp.Body.Close()
 	b, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
@@ -64,7 +64,7 @@ func GithubCallback(c *gin.Context) {
 	m := i.(map[string]interface{})
 	login := m["login"].(string)
 	fmt.Println(err3)
-	c.SetCookie("key_cookie", login, 60, "/",
-		"47.119.167.128", false, true)
+	c.SetCookie("key_cookie", login, 600, "/",
+		"http://localhost:8080", false, true)
 	c.Redirect(302, "http://localhost:8080")
 }
