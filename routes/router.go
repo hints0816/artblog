@@ -50,6 +50,9 @@ func InitRouter() {
 
 		auth.PUT("blog/profile", api.UpdateProfile)
 		auth.PUT("blog/category", api.UpdateCategory)
+		auth.DELETE("blog/category/:id", api.DeleteCategory)
+
+		auth.GET("blog/logout", api.LoginOut)
 	}
 
 	router := r.Group("api")

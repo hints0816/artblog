@@ -90,3 +90,11 @@ export const editEmoji = async (params: any) => {
 export const updateProfile = async (params: any) => {
     return await api.put('/api/blog/profile', params);
 };
+
+export const logout = async () => {
+    return await api.get('/api/blog/logout');
+};
+
+export const deleteCategory = async (id: number) => {
+    return await api.delete(`/api/blog/category/${id}`);
+};

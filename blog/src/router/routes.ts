@@ -34,6 +34,14 @@ const routes: RouteRecordRaw[] = [
       {
         path: '/imglist',
         component: () => import('pages/imglist/index.vue'),
+      },
+      {
+        path: '/setting/article',
+        component: () => import('pages/setting/index.vue'),
+      },
+      {
+        path: '/setting/category',
+        component: () => import('pages/setting/category.vue'),
       }
     ],
   },

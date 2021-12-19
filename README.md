@@ -6,7 +6,7 @@
 
 
 demo in using:
-http://47.119.167.128
+http://www.arthins.com
 
 
 <img src="img/QQ截图20211213003453.png" alt="QQ截图20211213003453" style="zoom: 80%;" />

@@ -14,6 +14,7 @@ type User struct {
 	Username string `gorm:"type:varchar(20);not null " json:"username" validate:"required,min=4,max=12" label:"用户名"`
 	Password string `gorm:"type:varchar(500);not null" json:"password" validate:"required,min=6,max=120" label:"密码"`
 	Role     int    `gorm:"type:int;DEFAULT:2" json:"role" label:"角色码"`
+	Github   int    `gorm:"type:int" json:"github"`
 }
 
 type ClaimInfo struct {
@@ -57,6 +58,16 @@ func ScryptPw(password string) string {
 func GetUser(id int) (User, int) {
 	var user User
 	err := db.Limit(1).Where("ID = ?", id).Find(&user).Error
+	if err != nil {
+		return user, errormsg.ERROR
+	}
+	return user, errormsg.SUCCSE
+}
+
+// GetUser 查询用户
+func GetUserByGithub(github int) (User, int) {
+	var user User
+	err := db.Limit(1).Where("github = ?", github).Find(&user).Error
 	if err != nil {
 		return user, errormsg.ERROR
 	}

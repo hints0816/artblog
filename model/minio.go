@@ -22,7 +22,7 @@ var minioClient *minio.Client
 var minioErr error
 
 func InitMinio() {
-	endpoint := utils.QiniuSever
+	endpoint := utils.MinioServer
 	accessKeyID := utils.AccessKey
 	secretAccessKey := utils.SecretKey
 	useSSL := false
@@ -72,5 +72,5 @@ func UpLoadFile(file multipart.File, contentType string, fileSize int64) (string
 		return "", errormsg.ERROR
 	}
 	fmt.Println("Successfully uploaded bytes: ", uploadInfo)
-	return "http://" + utils.QiniuSever + "/blog/" + fileName, errormsg.SUCCSE
+	return "http://" + utils.MinioServer + "/blog/" + fileName, errormsg.SUCCSE
 }
