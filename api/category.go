@@ -42,3 +42,13 @@ func UpdateCategory(c *gin.Context) {
 		"message": errormsg.GetErrMsg(code),
 	})
 }
+
+func DeleteCategory(c *gin.Context) {
+	id, _ := strconv.Atoi(c.Param("id"))
+	code := model.DeleteCate(id)
+
+	c.JSON(http.StatusOK, gin.H{
+		"status":  code,
+		"message": errormsg.GetErrMsg(code),
+	})
+}
