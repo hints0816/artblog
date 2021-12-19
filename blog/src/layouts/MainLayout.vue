@@ -48,14 +48,7 @@
         </q-tabs>
         <q-space></q-space>
         <div class="q-gutter-sm row items-center no-wrap">
-          <iframe
-            src="https://ghbtns.com/github-btn.html?user=hints0816&repo=artblog&type=star&count=true&size=large"
-            frameborder="0"
-            scrolling="0"
-            width="170"
-            height="30"
-            title="GitHub"
-          ></iframe>
+          <q-btn @click="openGithub" dense round flat icon="ion-logo-github"/>
           <q-toggle
             v-model="darkValue"
             color="orange"
@@ -339,8 +332,8 @@ import {
   onMounted,
   watch
 } from 'vue';
-import { getProfileMe, editEmoji } from '../api/test/index';
-import { LocalStorage, Notify, Dark } from 'quasar';
+import { getProfileMe, editEmoji, logout } from '../api/test/index';
+import { LocalStorage, Notify, Dark, Cookies } from 'quasar';
 import { useRouter } from 'vue-router';
 
 export default defineComponent({
@@ -368,14 +361,15 @@ export default defineComponent({
       links1: [
         { icon: 'home', text: 'Home', to: '/' },
         { icon: 'whatshot', text: 'ArtList', to: '/imglist' },
-        {
-          icon: 'subscriptions',
-          text: 'Subscriptions',
-          child: [
-            { icon: 'subscriptions', text: 'Subscriptions', to: '/' },
-            { icon: 'whatshot', text: 'Trending', to: '/' },
-          ],
-        },
+        { icon: 'whatshot', text: 'Setting', to: '/setting/article' },
+        // {
+        //   icon: 'subscriptions',
+        //   text: 'Subscriptions',
+        //   child: [
+        //     { icon: 'subscriptions', text: 'Subscriptions', to: '/' },
+        //     { icon: 'whatshot', text: 'Trending', to: '/' },
+        //   ],
+        // },
       ],
       talk: [
         {
@@ -431,6 +425,9 @@ export default defineComponent({
       toRepositories(id: number): void {
         router.push(`/repository/${id}`)
       },
+      openGithub(): void {
+        window.open('https://github.com/hints0816/artblog','_blank')
+      },
       getEmo(index: number): void {
         const face = data.faceList[index] as string;
         data.text = data.text + face;
@@ -449,8 +446,7 @@ export default defineComponent({
           router.go(0)
           return Notify.create({
             message: 'Edit Successful',
-            color: 'positive',
-            icon: 'report_problem',
+            type: 'positive',
             position: 'top',
             timeout: 2000
           })
@@ -470,10 +466,13 @@ export default defineComponent({
         } else {
         }
       },
-      loginOut(): void {
-        LocalStorage.remove('token');
+      async loginOut(): Promise<any>  {
+        LocalStorage.remove('token')
         LocalStorage.set('logged_in', 'no');
-        window.location.href = '/';
+        let res = await logout() as any;
+        if(res.status == 302) {
+          window.location.href = '/';
+        }
       },
       send(): void {
         const params = {

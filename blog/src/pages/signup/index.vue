@@ -1,97 +1,108 @@
 <template>
   <q-layout>
     <q-header>
-      <q-toolbar>
+      <q-toolbar :class="$q.dark.isActive ? 'bg-dark' : 'bg-primary'">
         <q-toolbar-title shrink class="text-weight-bold">
-          <router-link to="/" style="color: #fff;">ArtBlog</router-link>
+          <router-link to="/" style="color: #fff">ArtBlog</router-link>
         </q-toolbar-title>
       </q-toolbar>
     </q-header>
-    <q-page-container class="bg-primary"> 
+    <q-page-container :class="$q.dark.isActive ? 'bg-dark' : 'bg-primary'">
       <div class="row justify-center">
         <q-page v-if="this.$route.path == '/signup'" padding>
-          <q-card flat class="bg-primary">
-            <q-card-section style="padding:5px" align="right">
+          <q-card flat :class="$q.dark.isActive ? 'bg-dark' : 'bg-primary'">
+            <q-card-section style="padding: 5px" align="right">
               <span class="text-blue-1">Already have an account? </span>
-              <router-link class="text-blue-1 text-weight-bold"
-                 to="/login">Sign in →</router-link>
+              <router-link class="text-blue-1 text-weight-bold" to="/login"
+                >Sign in →</router-link
+              >
             </q-card-section>
           </q-card>
-          <q-card style="width:380px">
+          <q-card flat style="width: 380px">
             <q-card-section>
-              <q-form
-                @submit="onSubmit"
-              >
-              <q-input outlined dense bg-color="grey-2" 
-                v-model="formdata.email" type="email" label="email"
-                lazy-rules
-                :rules="[val => !!val || 'email is required']">
-                <template v-slot:prepend>
-                  <q-icon name="mail" />
-                </template>
-              </q-input>
-                <q-btn class="full-width" style="padding-top: 0" label="sign up" type="submit" color="primary"/>
+              <q-form @submit="onSubmit">
+                <q-input
+                  outlined
+                  dense
+                  :bg-color="$q.dark.isActive ? 'dark' : 'grey-2'"
+                  v-model="formdata.email"
+                  type="email"
+                  label="email"
+                  lazy-rules
+                  :rules="[(val) => !!val || 'email is required']"
+                >
+                  <template v-slot:prepend>
+                    <q-icon name="mail" />
+                  </template>
+                </q-input>
+                <q-btn
+                  class="full-width"
+                  style="padding-top: 0"
+                  label="sign up"
+                  type="submit"
+                  color="primary"
+                />
               </q-form>
             </q-card-section>
           </q-card>
         </q-page>
-         <Confirm v-else :email="email" />
+        <Confirm v-else :email="email" />
       </div>
     </q-page-container>
   </q-layout>
 </template>
 
 <script lang="ts">
-import { Notify } from 'quasar'
-import { getCurrentInstance, reactive, toRefs } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { sendvalidator } from '../../api/test/index'
+import { Notify } from 'quasar';
+import { getCurrentInstance, reactive, toRefs } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { sendvalidator } from '../../api/test/index';
 import Confirm from './confirmed.vue';
 
 export default {
   name: 'Login',
   components: {
-    Confirm
+    Confirm,
   },
-  setup () {
-    const route = useRoute() as any
-    const router = useRouter() as any
+  setup() {
+    const route = useRoute() as any;
+    const router = useRouter() as any;
     let data = reactive({
       isPwd: true,
       onload: false,
       formdata: {
-        'email':''
+        email: '',
       },
-      email: ''
-    })
-    const {ctx} = getCurrentInstance() as any
+      email: '',
+    });
+    const { ctx } = getCurrentInstance() as any;
     const method = {
-      async onSubmit():Promise<any> {
-        let res  = await sendvalidator(data.formdata) as any
-        if (res.status != 200) 
+      async onSubmit(): Promise<any> {
+        let res = (await sendvalidator(data.formdata)) as any;
+        if (res.status != 200)
           return Notify.create({
             message: res.message,
             color: 'negative',
             icon: 'report_problem',
             position: 'top',
-            timeout: 2000
-          })
-        data.email = data.formdata.email
+            timeout: 2000,
+          });
+        data.email = data.formdata.email;
         router.push('/signup/confirm');
-      }
-    }
+      },
+    };
     return {
       ...toRefs(data),
-      ...method
-    }
-  }
-}
+      ...method,
+    };
+  },
+};
 </script>
 <style lang="scss" scoped>
-a{
-  text-decoration: none
+a {
+  text-decoration: none;
 }
-a:hover{
-  text-decoration: underline
+a:hover {
+  text-decoration: underline;
 }
 </style>

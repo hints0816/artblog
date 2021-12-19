@@ -50,7 +50,7 @@ import { Notify } from 'quasar';
 import { getCurrentInstance, reactive, toRefs } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { login } from '../../api/test/index';
-import { LocalStorage } from 'quasar';
+import { LocalStorage, Cookies } from 'quasar';
 export default {
   name: 'Login',
   components: {},
@@ -77,7 +77,7 @@ export default {
             position: 'top',
             timeout: 2000,
           });
-        LocalStorage.set('token', res.token);
+        Cookies.set('token', res.token);
         LocalStorage.set('logged_in', 'yes');
         data.onload = true;
         router.push('/');

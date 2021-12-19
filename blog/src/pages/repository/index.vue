@@ -163,7 +163,7 @@
                       flat
                       :label="emoji"
                     >
-                      <q-icon v-if="profile.emoji == ''" name="mood" />
+                      <q-icon v-if="emoji == ''" name="mood" />
                       <q-popup-edit
                         max-width="320px"
                         style="padding: 4px 8px"
@@ -238,7 +238,7 @@
             <q-tabs v-model="tab" inline-label class="q-my-md" align="left">
               <q-tab name="article" icon="mail" label="ArtList" />
               <!-- <q-tab name="Movie" icon="alarm" label="Alarms" /> -->
-              <q-tab name="setting" icon="movie" label="Setting" />
+              <!-- <q-tab name="setting" icon="movie" label="Setting" /> -->
             </q-tabs>
             <q-separator />
             <q-tab-panels v-model="tab" animated>
@@ -332,7 +332,7 @@ export default {
       cropperAvatarDialog: false,
       model: null,
       option: {
-        img: 'http://47.119.167.128:9999/blog/473562851655553024.png', // 原图文件
+        img: 'http://www.arthins.com:9999/blog/473562851655553024.png', // 原图文件
         size: 1,
         outputType: 'jpeg',
         info: true,
