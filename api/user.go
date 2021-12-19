@@ -3,12 +3,17 @@ package api
 import (
 	"encoding/json"
 	"fmt"
+	"hello/middleware"
 	"hello/model"
+	"hello/utils"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
 	"strconv"
+	"time"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 )
 
@@ -31,40 +36,86 @@ func GetUserInfo(c *gin.Context) {
 
 // GitHub OAuth App Callback
 func GithubCallback(c *gin.Context) {
-	client_id := "6c85823c1a121313be52"
-	client_secret := "82a8bd3beb1d432f0d5903aa5e47923be4d4a6c8"
+	client_id := utils.ClientId
+	client_secret := utils.ClientSecret
+	redirect_uri := utils.RedirectUri
 	code := c.Query("code")
 	state := c.Query("state")
 	fmt.Println(state)
-	resp, err := http.PostForm("https://github.com/login/oauth/access_token", url.Values{"client_id": {client_id}, "client_secret": {client_secret}, "code": {code}, "redirect_uri": {"http://47.119.167.128:3000/api/blog/github"}})
-	defer resp.Body.Close()
-	b, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		fmt.Println("get resp failed,err:%v\n", err)
+	accessResp, accessErr := http.
+		PostForm("https://github.com/login/oauth/access_token",
+			url.Values{
+				"client_id":     {client_id},
+				"client_secret": {client_secret},
+				"code":          {code},
+				"redirect_uri":  {redirect_uri},
+			})
+	if accessErr != nil {
+		log.Fatal(accessErr)
 		return
 	}
-	fmt.Println(string(b))
-	fmt.Println(err)
-	comma := string(b)
-	fmt.Println(comma[13:53])
-	req, err1 := http.NewRequest("GET", "https://api.github.com/user", nil)
-	fmt.Println(err1)
-	fmt.Println(req)
-	req.Header.Add("Authorization", "Bearer "+comma[13:53])
+	defer accessResp.Body.Close()
+	readBody, readBodyErr := ioutil.ReadAll(accessResp.Body)
+	if readBodyErr != nil {
+		log.Fatal(readBodyErr)
+		return
+	}
+	newUserResp, userErr := http.NewRequest("GET", "https://api.github.com/user", nil)
+	if userErr != nil {
+		log.Fatal(userErr)
+		return
+	}
+	githubToken := string(readBody)[13:53]
+	newUserResp.Header.Add("Authorization", "Bearer "+githubToken)
 	client := &http.Client{}
-	resp2, _ := client.Do(req)
-	b2, err3 := ioutil.ReadAll(resp2.Body)
-	userinfo := []byte(string(b2))
-	fmt.Println(resp2)
+	userResp, _ := client.Do(newUserResp)
+	readBody2, readBodyErr2 := ioutil.ReadAll(userResp.Body)
+	if readBodyErr2 != nil {
+		log.Fatal(readBodyErr2)
+		return
+	}
+	userinfo := []byte(string(readBody2))
 	var i interface{}
-	err4 := json.Unmarshal(userinfo, &i)
-	if err4 != nil {
-		fmt.Println(err4)
+	jsonErr := json.Unmarshal(userinfo, &i)
+	if jsonErr != nil {
+		fmt.Println(jsonErr)
 	}
 	m := i.(map[string]interface{})
-	login := m["login"].(string)
-	fmt.Println(err3)
-	c.SetCookie("key_cookie", login, 600, "/",
-		"http://localhost:8080", false, true)
-	c.Redirect(302, "http://localhost:8080")
+
+	github := int(m["id"].(float64))
+	githubUser, _ := model.GetUserByGithub(github)
+	var profileData model.Profile
+	// First Time Using Github
+	if githubUser.Github == 0 {
+		githubUser.Github = github
+		githubUser.Username = strconv.Itoa(int(m["id"].(float64)))
+		githubUser.Role = 1
+		model.CreateUser(&githubUser)
+
+		profileData.Name = m["login"].(string)
+		profileData.ID = int(githubUser.ID)
+		profileData.Avatar = m["avatar_url"].(string)
+		model.AddProfile(&profileData)
+	}
+
+	j := middleware.NewJWT()
+	claims := middleware.MyClaims{
+		Username: githubUser.Username,
+		Id:       githubUser.ID,
+		StandardClaims: jwt.StandardClaims{
+			NotBefore: time.Now().Unix() - 100,
+			ExpiresAt: time.Now().Unix() + 7200,
+			Issuer:    "GinBlog",
+		},
+	}
+
+	token, tokenErr := j.CreateToken(claims)
+	if tokenErr != nil {
+		fmt.Println(tokenErr)
+	}
+	c.SetCookie("remember_token", githubToken, 604800, "/",
+		"http://arthins", false, true)
+	c.SetCookie("token", token, 604800, "/",
+		"http://arthins", false, true)
+	c.Redirect(302, "http://www.arthins")
 }
