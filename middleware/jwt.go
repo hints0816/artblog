@@ -88,6 +88,10 @@ func JwtToken() gin.HandlerFunc {
 		var code int
 
 		tokenHeader := c.Request.Header.Get("Authorization")
+		cookie, err := c.Cookie("token")
+		if cookie != "" {
+			tokenHeader = "Bearer " + cookie
+		}
 		if tokenHeader == "" {
 			code = errormsg.ERROR_TOKEN_EXIST
 			c.JSON(http.StatusOK, gin.H{
