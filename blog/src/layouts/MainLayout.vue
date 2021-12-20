@@ -464,6 +464,7 @@ export default defineComponent({
           data.profile.email = res.data.email;
           LocalStorage.set('avatar', res.data.avatar);
         } else {
+          data.links1.splice(2,1)
         }
       },
       async loginOut(): Promise<any>  {

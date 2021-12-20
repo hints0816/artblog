@@ -89,6 +89,26 @@ func GetCommentList(user_id uint, id int, pageSize int, pageNum int) ([]Comment,
 	return commentList, count, floorCount, errormsg.SUCCSE
 }
 
+func GetCommentListAdmin(pageSize int, pageNum int) ([]Comment, int64, int) {
+	var commentList []Comment
+	var count int64
+
+	c := pool.Get()
+	defer c.Close()
+
+	db.Find(&Comment{}).Count(&count)
+
+	err := db.
+		Preload("FromProfile").
+		Preload("ToProfile").
+		Order("created_at DESC").Find(&commentList).Error
+
+	if err != nil {
+		return commentList, 0, errormsg.ERROR
+	}
+	return commentList, count, errormsg.SUCCSE
+}
+
 // AddComment 新增主评论
 func AddComment(comment *Comment) int {
 	err = db.Create(&comment).Error

@@ -11,13 +11,13 @@
                     <q-item-section>Article</q-item-section>
                   </q-item>
 
-                  <q-item clickable v-ripple :active="true"  :active-class="$q.dark.isActive?'bg-grey-9':'bg-grey-3'">
+                  <q-item clickable v-ripple to="/setting/category">
                     <q-item-section>
                       <q-item-label>Category</q-item-label>
                     </q-item-section>
                   </q-item>
 
-                  <q-item clickable v-ripple to="/setting/comment">
+                  <q-item clickable v-ripple :active="true" :active-class="$q.dark.isActive?'bg-grey-9':'bg-grey-3'">
                     <q-item-section>
                       <q-item-label>Comment</q-item-label>
                     </q-item-section>
@@ -30,7 +30,7 @@
         <div class="col-xs-12 col-md-9 q-col-gutter-x-lg" style="height: 100%;margin-left:0;padding-left:0;">
           <q-card style="padding-right: 24px;" flat>
               <q-tab-panel name="setting">
-                <Category/>
+                <CommentCard/>
               </q-tab-panel>
           </q-card>
         </div>
@@ -39,7 +39,7 @@
   </div>
 </template>
 <script lang="ts">
-import Category from '../../components/CategoryCard.vue';
+import CommentCard from '../../components/CommentCard.vue';
 import {
   ref,
   reactive,
@@ -49,7 +49,7 @@ import {
 
 export default {
   name: 'Post',
-  components: { Category },
+  components: { CommentCard },
   setup() {
     let data = reactive({
       alert: false,
