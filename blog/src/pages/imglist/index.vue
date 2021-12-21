@@ -1,198 +1,165 @@
 <template>
-  <div class="q-pa-md">
-    <div
-      class="fixed-full image-gallery__blinder bg-grey-8"
-      :class="
-        indexZoomed !== void 0 ? 'image-gallery__blinder--active' : void 0
-      "
-      @click="zoomImage()"
-    />
-
-    <div
-      class="row justify-center q-gutter-sm q-mx-auto scroll relative-position"
-      style="max-width: 80vw"
-    >
-      <q-img
-        v-for="(src, index) in images"
-        :key="index"
-        :ref="
-          (el) => {
-            thumbRef[index] = el;
-          }
-        "
-        class="image-gallery__image col-xs-12 col-sm-5 col-md-3"
-        :style="index === indexZoomed ? 'opacity: 0.8' : void 0"
-        :src="src"
-        @click="zoomImage(index)"
-      />
-    </div>
-
-    <q-card
-      ref="fullRef"
-      class="image-gallery__image image-gallery__image-full fixed-center"
-      :class="indexZoomed !== void 0 ? 'image-gallery__image-full--active' : void 0"
-      :style="index === indexZoomed ? 'opacity: 0' : void 0"
-    >
-      <q-card-section>
-        <q-img
-          v-touch-hold.mouse="handleHold"
-          :src="images[indexZoomed]"
-          @load="imgLoadedResolve"
-          @error="imgLoadedReject"
-        />
-      </q-card-section>
-
-      <q-card-section class="q-pt-none">
-        <q-input v-if="display" v-model="text" label="Label" dense>
-          <template v-slot:before>
-            <q-btn dense flat icon="mood" />
-          </template>
-        </q-input>
-      </q-card-section>
-    </q-card>
+  <div class="row justify-center">
+    <q-page padding class="col-xs-12 col-sm-12 col-md-8 col-lg-6">
+      <q-infinite-scroll @load="onLoad" :offset="250">
+        <div :class="outClass + ' row'">
+          <div
+            v-for="(src, index) in images"
+            :key="index"
+            :class="loadClass(index)"
+          >
+            <q-img v-if="!checkClass(index)" :src="src" />
+            <div v-else :class="inClass + ' column col-4'">
+            <div class="col-6">
+              <q-img
+                src="http://47.119.167.128:9999/blog/479772348744994816.jpg"
+              />
+            </div>
+            <div class="col-6">
+              <q-img
+                src="http://47.119.167.128:9999/blog/479772348744994816.jpg"
+              />
+            </div>
+          </div>
+          </div>
+          <div class="col-8">
+            <q-img
+              src="http://47.119.167.128:9999/blog/479772348744994816.jpg"
+            />
+          </div>
+          <div :class="inClass + ' column col-4'">
+            <div class="col-6">
+              <q-img
+                src="http://47.119.167.128:9999/blog/479772348744994816.jpg"
+              />
+            </div>
+            <div class="col-6">
+              <q-img
+                src="http://47.119.167.128:9999/blog/479772348744994816.jpg"
+              />
+            </div>
+          </div>
+          <div class="col-4">
+            <q-img
+              src="http://47.119.167.128:9999/blog/479772348744994816.jpg"
+            />
+          </div>
+          <div class="col-4">
+            <q-img
+              src="http://47.119.167.128:9999/blog/479772348744994816.jpg"
+            />
+          </div>
+          <div class="col-4">
+            <q-img
+              src="http://47.119.167.128:9999/blog/479772348744994816.jpg"
+            />
+          </div>
+          <div class="col-4">
+            <q-img
+              src="http://47.119.167.128:9999/blog/479772348744994816.jpg"
+            />
+          </div>
+          <div class="col-4">
+            <q-img
+              src="http://47.119.167.128:9999/blog/479772348744994816.jpg"
+            />
+          </div>
+          <div class="col-4">
+            <q-img
+              src="http://47.119.167.128:9999/blog/479772348744994816.jpg"
+            />
+          </div>
+          <div :class="inClass + ' column col-4'">
+            <div class="col-6">
+              <q-img
+                src="http://47.119.167.128:9999/blog/479772348744994816.jpg"
+              />
+            </div>
+            <div class="col-6">
+              <q-img
+                src="http://47.119.167.128:9999/blog/479772348744994816.jpg"
+              />
+            </div>
+          </div>
+          <div class="col-8">
+            <q-img
+              src="http://47.119.167.128:9999/blog/479772348744994816.jpg"
+            />
+          </div>
+        </div>
+      </q-infinite-scroll>
+    </q-page>
   </div>
 </template>
-<script>
-import { ref, onBeforeUpdate, reactive, toRefs } from 'vue';
-import { morph } from 'quasar';
+<script lang="ts">
+import { ref, reactive, toRefs, onMounted, getCurrentInstance } from 'vue';
+import { Screen } from 'quasar';
 
 export default {
   setup() {
+    const { ctx } = getCurrentInstance() as any;
     let data = reactive({
-      display: false,
-      text: '电脑信息',
+      outClass: Screen.lt.lg
+        ? 'q-col-gutter-' + Screen.name
+        : 'q-col-gutter-lg',
+      inClass: Screen.lt.lg
+        ? 'q-col-gutter-y-' + Screen.name
+        : 'q-col-gutter-y-lg',
     });
-    const thumbRef = ref([]);
-    const fullRef = ref(null);
-
-    const indexZoomed = ref(void 0);
     const images = ref(
       Array(24)
         .fill(null)
-        .map((_, i) => 'https://picsum.photos/id/1' + '/500/300')
+        .map((_, i) => 'http://47.119.167.128:9999/blog/479772348744994816.jpg')
     );
-    const imgLoaded = {
-      promise: Promise.resolve(),
-      resolve: () => {},
-      reject: () => {},
-    };
-
-    function imgLoadedResolve() {
-      imgLoaded.resolve();
-    }
-
-    function imgLoadedReject() {
-      imgLoaded.reject();
-    }
-
-    function zoomImage(index) {
-      const indexZoomedState = indexZoomed.value;
-      let cancel = void 0;
-
-      imgLoaded.reject();
-
-      const zoom = () => {
-        if (index !== void 0 && index !== indexZoomedState) {
-          imgLoaded.promise = new Promise((resolve, reject) => {
-            imgLoaded.resolve = () => {
-              imgLoaded.resolve = () => {};
-              imgLoaded.reject = () => {};
-
-              resolve();
-            };
-            imgLoaded.reject = () => {
-              imgLoaded.resolve = () => {};
-              imgLoaded.reject = () => {};
-
-              reject();
-            };
-          });
-
-          cancel = morph({
-            from: thumbRef.value[index].$el,
-            to: fullRef.value.$el,
-            onToggle: () => {
-              indexZoomed.value = index;
-            },
-            waitFor: imgLoaded.promise,
-            duration: 400,
-            hideFromClone: true,
-            onEnd: (end) => {
-              if (end === 'from' && indexZoomed.value === index) {
-                indexZoomed.value = void 0;
-              }
-            },
-          });
+    const method = {
+      checkNum(nums: number): boolean {
+        const r = /^\+?[0-9][0-9]*$/;
+        if (r.test(String(nums))) {
+          return true;
+        } else {
+          return false;
         }
-      };
-
-      if (
-        indexZoomedState !== void 0 &&
-        (cancel === void 0 || cancel() === false)
-      ) {
-        morph({
-          from: fullRef.value.$el,
-          to: thumbRef.value[indexZoomedState].$el,
-          onToggle: () => {
-            indexZoomed.value = void 0;
-          },
-          duration: 200,
-          keepToClone: true,
-          onEnd: zoom,
+      },
+      loadClass(nums: number): string {
+        if (method.checkNum(nums / 9)) {
+          return 'col-8';
+        } else if (
+          method.checkNum((nums - 1) / 9) ||
+          method.checkNum((nums - 2) / 9)
+        ) {
+          return data.inClass + ' column col-4';
+        } else if (method.checkNum((nums - 2) / 9)) {
+          return 'col-4';
+        }
+      },
+      checkClass(nums: number): boolean {
+        if (
+          method.checkNum((nums - 1) / 9) ||
+          method.checkNum((nums - 2) / 9)
+        ) {
+          return true;
+        } else {
+          return false;
+        }
+      },
+    };
+    onMounted(() => {
+      ctx.$nextTick(() => {
+        window.addEventListener('resize', () => {
+          if (Screen.lt.lg) {
+            (data.outClass = 'q-col-gutter-' + Screen.name),
+              (data.inClass = 'q-col-gutter-y-' + Screen.name);
+          }
         });
-      } else {
-        zoom();
-      }
-    }
-
-    // Make sure to reset the dynamic refs before each update.
-    onBeforeUpdate(() => {
-      thumbRef.value = [];
+      });
     });
-
     return {
       ...toRefs(data),
-      thumbRef,
-      fullRef,
-      indexZoomed,
       images,
-      zoomImage,
-      handleHold({ evt, ...newInfo }) {
-        data.display = true;
-      },
-
-      imgLoadedResolve,
-      imgLoadedReject,
+      ...method,
     };
   },
 };
 </script>
 <style lang="sass">
-.image-gallery
-  &__image
-    border-radius: 3%/5%
-    width: 150px
-    max-width: 20vw
-    cursor: pointer
-
-    &-full
-      width: 900px
-      max-width: 90vw
-      z-index: 2002
-      pointer-events: none
-
-      &--active
-        pointer-events: all
-  &__blinder
-    opacity: 0
-    z-index: 2000
-    pointer-events: none
-    transition: opacity 0.3s ease-in-out
-
-    &--active
-      opacity: 0.6
-      pointer-events: all
-
-      + div > .image-gallery__image
-        z-index: 2001
 </style>
