@@ -8,97 +8,218 @@
             :key="index"
             :class="loadClass(index)"
           >
-            <q-img v-if="!checkClass(index)" :src="src" />
-            <div v-else :class="inClass + ' column col-4'">
-            <div class="col-6">
-              <q-img
-                src="http://47.119.167.128:9999/blog/479772348744994816.jpg"
-              />
-            </div>
-            <div class="col-6">
-              <q-img
-                src="http://47.119.167.128:9999/blog/479772348744994816.jpg"
-              />
-            </div>
-          </div>
-          </div>
-          <div class="col-8">
-            <q-img
-              src="http://47.119.167.128:9999/blog/479772348744994816.jpg"
-            />
-          </div>
-          <div :class="inClass + ' column col-4'">
-            <div class="col-6">
-              <q-img
-                src="http://47.119.167.128:9999/blog/479772348744994816.jpg"
-              />
-            </div>
-            <div class="col-6">
-              <q-img
-                src="http://47.119.167.128:9999/blog/479772348744994816.jpg"
-              />
-            </div>
-          </div>
-          <div class="col-4">
-            <q-img
-              src="http://47.119.167.128:9999/blog/479772348744994816.jpg"
-            />
-          </div>
-          <div class="col-4">
-            <q-img
-              src="http://47.119.167.128:9999/blog/479772348744994816.jpg"
-            />
-          </div>
-          <div class="col-4">
-            <q-img
-              src="http://47.119.167.128:9999/blog/479772348744994816.jpg"
-            />
-          </div>
-          <div class="col-4">
-            <q-img
-              src="http://47.119.167.128:9999/blog/479772348744994816.jpg"
-            />
-          </div>
-          <div class="col-4">
-            <q-img
-              src="http://47.119.167.128:9999/blog/479772348744994816.jpg"
-            />
-          </div>
-          <div class="col-4">
-            <q-img
-              src="http://47.119.167.128:9999/blog/479772348744994816.jpg"
-            />
-          </div>
-          <div :class="inClass + ' column col-4'">
-            <div class="col-6">
-              <q-img
-                src="http://47.119.167.128:9999/blog/479772348744994816.jpg"
-              />
-            </div>
-            <div class="col-6">
-              <q-img
-                src="http://47.119.167.128:9999/blog/479772348744994816.jpg"
-              />
-            </div>
-          </div>
-          <div class="col-8">
-            <q-img
-              src="http://47.119.167.128:9999/blog/479772348744994816.jpg"
-            />
+            <template v-if="checkClass(index) == 0 || checkClass(index) == -1">
+              <q-img @click="alert = true" @mouseenter="alertNum = index" @mouseleave="alertNum = -1" :src="src">
+                <div align="center" v-if="alertNum == index" class="relative-position cursor-pointer indexz">
+                  <div class="absolute-center q-col-gutter-x-md" style="font-size: 2em">
+                  </div>
+                </div>
+              </q-img>
+            </template>
+            <template v-if="checkClass(index) == 1">
+              <div class="col-6">
+                <q-img @click="alert = true" @mouseenter="alertNum = index" @mouseleave="alertNum = -1" :src="images[index]">
+                  <div align="center" v-if="alertNum == index" class="relative-position cursor-pointer indexz">
+                    <div class="absolute-center q-col-gutter-x-md" style="font-size: 2em">
+                    </div>
+                  </div>
+                </q-img>
+              </div>
+              <div class="col-6">
+                <q-img @click="alert = true" @mouseenter="alertNum = index+1" @mouseleave="alertNum = -1" :src="images[index+1]">
+                  <div align="center" v-if="alertNum == index+1" class="relative-position cursor-pointer indexz">
+                    <div class="absolute-center q-col-gutter-x-md" style="font-size: 2em">
+                    </div>
+                  </div>
+                </q-img>
+              </div>
+            </template>
           </div>
         </div>
       </q-infinite-scroll>
+      <q-dialog class="maindia" style="background-color: rgba(0,0,0,0.6);" persistent v-model="alert">
+      <q-btn class="text-white absolute-top-right q-mr-lg q-mt-lg" icon="close" v-close-popup flat round dense/>
+      <q-btn class="text-white absolute-right" style="top: initial !important;bottom: initial !important;" icon="navigate_next" flat round dense/>
+      <q-btn class="text-white absolute-left" style="top: initial !important;bottom: initial !important;" icon="chevron_left" flat round dense/>
+      <q-card class="full-width" style="width: 700px; max-width: 80vw;height: 80% !important">
+        <q-card-section v-if="$q.screen.gt.sm" horizontal class="full-height">
+          <q-carousel
+            animated
+            v-model="slide"
+            transition-prev="slide-right"
+            transition-next="slide-left"
+            arrows
+            navigation
+            infinite
+            class="col-5 full-height"
+          >
+            <q-carousel-slide :name="1" img-src="https://cdn.quasar.dev/img/mountains.jpg" />
+            <q-carousel-slide :name="2" img-src="https://cdn.quasar.dev/img/parallax1.jpg" />
+            <q-carousel-slide :name="3" img-src="https://cdn.quasar.dev/img/parallax2.jpg" />
+            <q-carousel-slide :name="4" img-src="https://cdn.quasar.dev/img/quasar.jpg" />
+          </q-carousel>
+          <q-card-section style="padding: 0px;" class="full-width">
+            <q-item>
+              <q-item-section avatar>
+                <q-avatar>
+                  <img src="https://cdn.quasar.dev/img/boy-avatar.png">
+                </q-avatar>
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>Title</q-item-label>
+                <q-item-label caption>
+                  Subhead
+                </q-item-label>
+              </q-item-section>
+              <q-item-section side top>
+                <q-btn @click="morealert = true" class="gt-xs" size="12px" flat dense round icon="fas fa-ellipsis-h"/>
+              </q-item-section>
+            </q-item>
+             <q-separator />
+            <q-item>
+              <q-item-section>
+                <q-card-section style="max-height: 50vh" class="scroll hide-scrollbar">
+                  <p v-for="n in 15" :key="n">Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum repellendus sit voluptate voluptas eveniet porro. Rerum blanditiis perferendis totam, ea at omnis vel numquam exercitationem aut, natus minima, porro labore.</p>
+                </q-card-section>
+              </q-item-section>
+            </q-item>
+             <q-separator />
+            <q-card-actions style="padding: 0px;">
+              <q-input class="full-width q-px-sm" autogrow v-model="text" label="Comment" :dense="dense">
+                <template v-slot:before>
+                  <q-btn round flat icon="mood">
+                    <q-popup-edit
+                      max-width="158px"
+                      style="padding: 4px 8px"
+                      self="top start"
+                      cover="false"
+                    >
+                      <div class="q-gutter-sm" style="margin-top: 0px">
+                        <a
+                          href="javascript:void(0);"
+                          @click="getEmo(index)"
+                          style="text-decoration: none"
+                          v-for="(item, index) in faceList"
+                          :key="index"
+                          class="emotionItem"
+                          >{{ item }}</a
+                        >
+                      </div>
+                    </q-popup-edit>
+                  </q-btn>
+                </template>
+                <template v-slot:after>
+                    <q-btn push color="primary" @click="addComment(0)" label="Comment">
+                    </q-btn>
+                  </template>
+                </q-input>
+            </q-card-actions>
+          </q-card-section>
+        </q-card-section>
+        <q-card-section style="padding: 0px;" v-else class="full-width">
+          <q-card-section style="padding: 0px;" class="full-width">
+            <q-item>
+              <q-item-section avatar>
+                <q-avatar>
+                  <img src="https://cdn.quasar.dev/img/boy-avatar.png">
+                </q-avatar>
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>Title</q-item-label>
+                <q-item-label caption>
+                  Subhead
+                </q-item-label>
+              </q-item-section>
+              <q-item-section side top>
+                <q-btn @click="morealert = true" class="gt-xs" size="12px" flat dense round icon="fas fa-ellipsis-h"/>
+              </q-item-section>
+            </q-item>
+             <q-separator />
+             <q-img
+            class="col-12 full-height"
+            src="https://cdn.quasar.dev/img/parallax1.jpg"
+          />
+            <q-item>
+              <q-item-section>
+                <q-card-section style="max-height: 50vh" class="scroll hide-scrollbar">
+                  <p v-for="n in 15" :key="n">Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum repellendus sit voluptate voluptas eveniet porro. Rerum blanditiis perferendis totam, ea at omnis vel numquam exercitationem aut, natus minima, porro labore.</p>
+                </q-card-section>
+              </q-item-section>
+            </q-item>
+             <q-separator />
+            <q-card-actions style="padding: 0px;">
+              <q-input class="full-width q-px-sm" autogrow v-model="text" label="Comment" :dense="dense">
+                <template v-slot:before>
+                  <q-btn round flat icon="mood">
+                    <q-popup-edit
+                      max-width="158px"
+                      style="padding: 4px 8px"
+                      self="top start"
+                      cover="false"
+                    >
+                      <div class="q-gutter-sm" style="margin-top: 0px">
+                        <a
+                          href="javascript:void(0);"
+                          @click="getEmo(index)"
+                          style="text-decoration: none"
+                          v-for="(item, index) in faceList"
+                          :key="index"
+                          class="emotionItem"
+                          >{{ item }}</a
+                        >
+                      </div>
+                    </q-popup-edit>
+                  </q-btn>
+                </template>
+                <template v-slot:after>
+                    <q-btn push color="primary" @click="addComment(0)" label="Comment">
+                    </q-btn>
+                  </template>
+                </q-input>
+            </q-card-actions>
+          </q-card-section>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
+    <q-dialog v-model="morealert" class="moredia" transition-show="scale" transition-hide="scale">
+      <q-card style="width: 300px;">
+        <q-card-section style="padding: 0px;">
+          <q-list bordered separator>
+            <q-item clickable v-ripple>
+              <q-item-section>Single line item</q-item-section>
+            </q-item>
+            <q-item clickable v-ripple>
+              <q-item-section>
+                <q-item-label>Item with caption</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item clickable v-ripple>
+              <q-item-section>
+                <q-item-label overline>OVERLINE</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
     </q-page>
   </div>
 </template>
 <script lang="ts">
 import { ref, reactive, toRefs, onMounted, getCurrentInstance } from 'vue';
 import { Screen } from 'quasar';
+import emoji from '../../css/emoji.json';
 
 export default {
   setup() {
     const { ctx } = getCurrentInstance() as any;
     let data = reactive({
+      slide: 1,
+      alert: false,
+      morealert: false,
+      alertNum: -1,
+      text: '',
+      faceList: [],
       outClass: Screen.lt.lg
         ? 'q-col-gutter-' + Screen.name
         : 'q-col-gutter-lg',
@@ -107,7 +228,7 @@ export default {
         : 'q-col-gutter-y-lg',
     });
     const images = ref(
-      Array(24)
+      Array(25)
         .fill(null)
         .map((_, i) => 'http://47.119.167.128:9999/blog/479772348744994816.jpg')
     );
@@ -120,30 +241,65 @@ export default {
           return false;
         }
       },
+      getEmo(index: number): void {
+        console.log(images)
+        const face = data.faceList[index] as string;
+        data.text = data.text + face;
+      },
       loadClass(nums: number): string {
         if (method.checkNum(nums / 9)) {
-          return 'col-8';
-        } else if (
-          method.checkNum((nums - 1) / 9) ||
-          method.checkNum((nums - 2) / 9)
-        ) {
-          return data.inClass + ' column col-4';
+          if (method.checkNum(nums / 9 / 2)) {
+            return 'col-8';
+          } else {
+            return data.inClass + ' column col-4';
+          }
+        } else if (method.checkNum((nums - 1) / 9)) {
+          if (method.checkNum((nums - 1) / 9 / 2)) {
+            return data.inClass + ' column col-4';
+          } else {
+            return 'nopadding';
+          }
         } else if (method.checkNum((nums - 2) / 9)) {
+          if (method.checkNum((nums - 2) / 9 / 2)) {
+            return 'nopadding';
+          } else {
+            return 'col-8';
+          }
+        } else {
           return 'col-4';
         }
       },
-      checkClass(nums: number): boolean {
-        if (
-          method.checkNum((nums - 1) / 9) ||
-          method.checkNum((nums - 2) / 9)
-        ) {
-          return true;
+      // alertClass(nums: number): boolean {
+      //   return 0;
+      // },
+      checkClass(nums: number): number {
+        if (method.checkNum(nums / 9)) {
+          if (method.checkNum(nums / 9 / 2)) {
+            return 0;
+          } else {
+            return 1;
+          }
+        } else if (method.checkNum((nums - 1) / 9)) {
+          if (method.checkNum((nums - 1) / 9 / 2)) {
+            return 1;
+          } else {
+            return 2;
+          }
+        } else if (method.checkNum((nums - 2) / 9)) {
+          if (method.checkNum((nums - 2) / 9 / 2)) {
+            return 2;
+          } else {
+            return 0;
+          }
         } else {
-          return false;
+          return -1;
         }
       },
     };
     onMounted(() => {
+      emoji.forEach((element) => {
+        data.faceList.push(element.char);
+      });
       ctx.$nextTick(() => {
         window.addEventListener('resize', () => {
           if (Screen.lt.lg) {
@@ -162,4 +318,17 @@ export default {
 };
 </script>
 <style lang="sass">
+.nopadding
+  padding: 0px
+.indexz
+  position: fixed
+  top: 0
+  left: 0
+  bottom: 0
+  right: 0
+  width: 100%
+  height: 100%
+  background: rgba(0,0,0,0.8)
+.maindia .no-pointer-events
+  pointer-events: initial !important
 </style>

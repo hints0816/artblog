@@ -22,9 +22,6 @@ import Edit from '../components/EditCard.vue';
 import Category from '../components/CategoryCard.vue';
 import {
   listArticle,
-  getProfile,
-  uploadImage,
-  uploadAvatarImage,
 } from '../api/test/index';
 import {
   ref,
