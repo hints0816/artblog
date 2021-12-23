@@ -49,6 +49,66 @@
         <q-space></q-space>
         <div class="q-gutter-sm row items-center no-wrap">
           <q-btn @click="openGithub" dense round flat icon="ion-logo-github"/>
+          <q-btn @click="alertAdd = true" dense round flat icon="add_circle_outline"/>
+          <q-dialog class="maindia" style="background-color: rgba(0,0,0,0.6);" persistent v-model="alertAdd">
+            <q-btn @click="alertNext=false" class="text-white absolute-top-right q-mr-lg q-mt-lg" icon="close" v-close-popup flat round dense/>
+            <q-card class="full-width" style="min-width: 450px;min-height: 450px;max-width: 850px;max-height: 850px;height: 55vw !important;width: 55vw !important;">
+                <q-card-section style="padding: 0px;" class="full-width full-height">
+                  <q-item class="relative-position">
+                    <q-item-section align="center">
+                      <q-item-label>
+                        <q-toolbar-title><span class="text-weight-bold">Create Your New Picture</span></q-toolbar-title>
+                      </q-item-label>
+                    </q-item-section>
+                    <q-btn class="absolute-right"  @click="next1" style="top: initial !important;bottom: initial !important;" icon="navigate_next" round dense flat/>
+                  </q-item>
+                  <q-separator />
+                  <q-item style="padding: 0px;height: calc(100% - 49px);">
+                    <q-item-section>
+                      <q-card-section horizontal style="padding: 0px;" class="toolbar-upload full-height">
+                        <q-card-section style="padding: 0px;" :class="alertNext?'col-6':'col-12'">
+                          <q-uploader
+                            @added="addImageS"
+                            class="full-height"
+                            style="width:initial!important;max-height:initial!important;"
+                            hide-upload-btn=false
+                            flat
+                            bordered
+                          >
+                            <template v-slot:header="scope">
+                              <div class="no-wrap" align="center">
+                                <q-btn class="absolute-center vertical-middle	" v-if="scope.canAddFiles" type="a" icon="add_box" round dense flat>
+                                  <q-uploader-add-trigger />
+                                  <q-tooltip>Pick Files</q-tooltip>
+                                </q-btn>
+                              </div>
+                            </template>
+                          </q-uploader>
+                        </q-card-section>
+                        <q-card-section v-if="alertNext" style="padding: 0px;" class="col-6">
+                          <q-item>
+                            <q-item-section avatar>
+                              <q-avatar>
+                                <img src="https://cdn.quasar.dev/img/boy-avatar.png">
+                              </q-avatar>
+                            </q-item-section>
+                            <q-item-section>
+                              <q-item-label>Title</q-item-label>
+                              <q-item-label caption>
+                                Subhead
+                              </q-item-label>
+                            </q-item-section>
+                            <q-item-section side top>
+                              <q-btn @click="morealert = true" class="gt-xs" size="12px" flat dense round icon="fas fa-ellipsis-h"/>
+                            </q-item-section>
+                          </q-item>
+                        </q-card-section>
+                      </q-card-section>
+                    </q-item-section>
+                  </q-item>
+                </q-card-section>
+            </q-card>
+          </q-dialog>
           <q-toggle
             v-model="darkValue"
             color="orange"
@@ -346,6 +406,8 @@ export default defineComponent({
       darkValue:false,
     })
     let data = reactive({
+      alertNext: false,
+      alertAdd: false,
       alert: false,
       hex: 'rgb(99, 24, 105)',
       tab: 'Home',
@@ -422,6 +484,9 @@ export default defineComponent({
         data.position = position;
         data.dialog = true;
       },
+      addImageS(): void {
+
+      },
       toRepositories(id: number): void {
         router.push(`/repository/${id}`)
       },
@@ -431,6 +496,9 @@ export default defineComponent({
       getEmo(index: number): void {
         const face = data.faceList[index] as string;
         data.text = data.text + face;
+      },
+      next1(): void {
+        data.alertNext = true
       },
       setEmojiStatus(index: number): void {
         const face = data.faceList[index] as string;
@@ -510,16 +578,40 @@ export default defineComponent({
   },
 });
 </script>
-
-<style scoped>
-/* /deep/ .q-btn__content {
-  display: flex;
-  flex-direction: row;
-  width: 100px;
-} */
-</style>
-<style lang="scss" scoped>
-a {
-  text-decoration: none;
-}
+<style lang="sass">
+a 
+  text-decoration: none
+.toolbar-upload 
+  .q-uploader__header
+    background-color: initial !important 
+    height: 100%
+.toolbar-upload 
+  .q-uploader__header
+    .q-btn-item
+      z-index: 1000
+      color: #1976D2
+      font-size: 30px
+.toolbar-upload 
+  .q-uploader__file-header
+    background: initial !important
+.toolbar-upload 
+  .q-uploader__file-header-content
+    .q-uploader__title
+      display: none
+    .q-uploader__subtitle
+      display: none
+.toolbar-upload      
+  .q-uploader__list
+    padding: 0px
+    position: absolute
+    width: 100%
+    height: 100%
+.toolbar-upload          
+  .q-uploader__subtitle
+    display: none
+.toolbar-upload        
+  .q-uploader__file
+    height: 100%
+.maindia .no-pointer-events
+  pointer-events: initial !important
 </style>

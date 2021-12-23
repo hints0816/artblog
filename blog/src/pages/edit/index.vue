@@ -271,4 +271,17 @@ export default {
   }
 };
 </script>
+<style lang="sass">
+.q-uploader__file-header
+  background: initial !important
+.q-uploader__file-header-content
+  .q-uploader__title
+    display: none
+  .q-uploader__subtitle
+    display: none
+.q-uploader__list
+  padding: 0px
+.q-uploader__subtitle
+  display: none
+</style>
 
