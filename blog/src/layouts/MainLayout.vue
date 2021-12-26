@@ -51,16 +51,18 @@
           <q-btn @click="openGithub" dense round flat icon="ion-logo-github"/>
           <q-btn @click="alertAdd = true" dense round flat icon="add_circle_outline"/>
           <q-dialog class="maindia" style="background-color: rgba(0,0,0,0.6);" persistent v-model="alertAdd">
-            <q-btn @click="alertNext=false" class="text-white absolute-top-right q-mr-lg q-mt-lg" icon="close" v-close-popup flat round dense/>
-            <q-card class="full-width" style="min-width: 450px;min-height: 450px;max-width: 850px;max-height: 850px;height: 55vw !important;width: 55vw !important;">
-                <q-card-section style="padding: 0px;" class="full-width full-height">
+            <q-btn @click="closeUploader" class="text-white absolute-top-right q-mr-lg q-mt-lg" icon="close" v-close-popup flat round dense/>
+            <q-card class="container full-width" :style="$q.screen.gt.xs?bigStyle:smallStyle
+                          ">
+            <q-resize-observer @resize="onResize" />
+            <q-card-section style="padding: 0px;" class="full-width full-height">
                   <q-item class="relative-position">
                     <q-item-section align="center">
                       <q-item-label>
                         <q-toolbar-title><span class="text-weight-bold">Create Your New Picture</span></q-toolbar-title>
                       </q-item-label>
                     </q-item-section>
-                    <q-btn class="absolute-right"  @click="next1" style="top: initial !important;bottom: initial !important;" icon="navigate_next" round dense flat/>
+                    <q-btn class="absolute-right" v-if="imageFiles.length!=0" @click="next1" style="top: initial !important;bottom: initial !important;" icon="navigate_next" round dense flat/>
                   </q-item>
                   <q-separator />
                   <q-item style="padding: 0px;height: calc(100% - 49px);">
@@ -69,10 +71,12 @@
                         <q-card-section style="padding: 0px;" :class="alertNext?'col-6':'col-12'">
                           <q-uploader
                             @added="addImageS"
+                            @removed="removeImage"
                             class="full-height"
                             style="width:initial!important;max-height:initial!important;"
                             hide-upload-btn=false
                             flat
+                            multiple
                             bordered
                           >
                             <template v-slot:header="scope">
@@ -99,7 +103,16 @@
                               </q-item-label>
                             </q-item-section>
                             <q-item-section side top>
-                              <q-btn @click="morealert = true" class="gt-xs" size="12px" flat dense round icon="fas fa-ellipsis-h"/>
+                            </q-item-section>
+                          </q-item>
+                          <q-item>
+                            <q-item-section style="max-height: 50vh" class="scroll hide-scrollbar">
+                            <q-input
+                              class="full-width"
+                              v-model="text"
+                              filled
+                              autogrow
+                            />
                             </q-item-section>
                           </q-item>
                         </q-card-section>
@@ -395,6 +408,7 @@ import {
 import { getProfileMe, editEmoji, logout } from '../api/test/index';
 import { LocalStorage, Notify, Dark, Cookies } from 'quasar';
 import { useRouter } from 'vue-router';
+import { Screen } from 'quasar';
 
 export default defineComponent({
   name: 'MainLayout',
@@ -406,6 +420,9 @@ export default defineComponent({
       darkValue:false,
     })
     let data = reactive({
+      imageFiles: [],
+      smallStyle: 'min-width: 90%;min-height: 450px;max-width: 850px;max-height: 850px;height: 55vw !important;width: 55vw !important;',
+      bigStyle: 'min-width: 450px;min-height: 450px;max-width: 850px;max-height: 80%;height: 45vw !important;width: 30vw !important;',
       alertNext: false,
       alertAdd: false,
       alert: false,
@@ -484,8 +501,20 @@ export default defineComponent({
         data.position = position;
         data.dialog = true;
       },
-      addImageS(): void {
-
+      addImageS(files: Array<any>): void {
+        data.imageFiles = data.imageFiles.concat(files)
+        console.log(data.imageFiles)
+      },
+      removeImage(files: Array<any>): void {
+        data.imageFiles.splice(data.imageFiles.indexOf(files[0]),1)
+        console.log(data.imageFiles)
+        data.alertNext = false
+        data.bigStyle ='min-width: 450px;min-height: 450px;max-width: 850px;max-height: 80%;height: 45vw !important;width: 30vw !important;'
+      },
+      closeUploader(): void {
+        data.imageFiles = []
+        data.alertNext = false
+        data.bigStyle ='min-width: 450px;min-height: 450px;max-width: 850px;max-height: 80%;height: 45vw !important;width: 30vw !important;'
       },
       toRepositories(id: number): void {
         router.push(`/repository/${id}`)
@@ -499,6 +528,7 @@ export default defineComponent({
       },
       next1(): void {
         data.alertNext = true
+        data.bigStyle = 'min-width: 450px;min-height: 450px;max-width: 950px;max-height: 80%;height: 45vw !important;width: 70vw !important;'
       },
       setEmojiStatus(index: number): void {
         const face = data.faceList[index] as string;
@@ -566,7 +596,27 @@ export default defineComponent({
     watch(darkdata,(newVal,oldVal)=>{
       Dark.toggle()
     })
+     const style = ref({ width: '200px', height: '200px' })
+    const report = ref(null)
+
     return {
+      style,
+      report,
+
+      onResize (size) {
+        report.value = size
+        // {
+        //   width: 20 // width of container (in px)
+        //   height: 50 // height of container (in px)
+        // }
+      },
+
+      setRandomSize () {
+        style.value = {
+          width: String(Math.floor(100 + Math.random() * 200)) + 'px',
+          height: String(Math.floor(100 + Math.random() * 200)) + 'px'
+        }
+      },
       leftDrawerOpen,
       toggleLeftDrawer() {
         leftDrawerOpen.value = !leftDrawerOpen.value;
@@ -579,6 +629,8 @@ export default defineComponent({
 });
 </script>
 <style lang="sass">
+.container
+  transition: width .3s, height .3s
 a 
   text-decoration: none
 .toolbar-upload 
