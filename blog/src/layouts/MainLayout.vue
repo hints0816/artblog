@@ -81,7 +81,7 @@
                           >
                             <template v-slot:header="scope">
                               <div class="no-wrap" align="center">
-                                <q-btn class="absolute-center vertical-middle	" v-if="scope.canAddFiles" type="a" icon="add_box" round dense flat>
+                                <q-btn :style="imageFiles.length!=0?'top:-26px;left:22px':''" class="absolute-center vertical-middle	" v-if="scope.canAddFiles" type="a" icon="add_box" round dense flat>
                                   <q-uploader-add-trigger />
                                   <q-tooltip>Pick Files</q-tooltip>
                                 </q-btn>
@@ -106,13 +106,52 @@
                             </q-item-section>
                           </q-item>
                           <q-item>
-                            <q-item-section style="max-height: 50vh" class="scroll hide-scrollbar">
-                            <q-input
-                              class="full-width"
-                              v-model="text"
-                              filled
-                              autogrow
-                            />
+                            <q-item-section style="max-height: 45vh" class="scroll hide-scrollbar">
+                              <q-input
+                                style="height:200px"
+                                class="full-width"
+                                v-model="text"
+                                borderless 
+                                autogrow
+                              />
+                            </q-item-section>
+                           
+                          </q-item>
+                          <q-item>
+                              <q-btn round flat icon="mood">
+                                <q-popup-edit
+                                  max-width="158px"
+                                  style="padding: 4px 8px"
+                                  self="top start"
+                                  cover="false"
+                                >
+                                  <div class="q-gutter-sm" style="margin-top: 0px">
+                                    <a
+                                      href="javascript:void(0);"
+                                      @click="getEmo(index)"
+                                      style="text-decoration: none"
+                                      v-for="(item, index) in faceList"
+                                      :key="index"
+                                      class="emotionItem"
+                                      >{{ item }}</a
+                                    >
+                                  </div>
+                                </q-popup-edit>
+                              </q-btn>
+                          </q-item>
+                          <q-item>
+                            <q-item-section avatar>
+                              <q-avatar>
+                                <img src="https://cdn.quasar.dev/img/boy-avatar.png">
+                              </q-avatar>
+                            </q-item-section>
+                            <q-item-section>
+                              <q-item-label>Title</q-item-label>
+                              <q-item-label caption>
+                                Subhead
+                              </q-item-label>
+                            </q-item-section>
+                            <q-item-section side top>
                             </q-item-section>
                           </q-item>
                         </q-card-section>
@@ -629,6 +668,8 @@ export default defineComponent({
 });
 </script>
 <style lang="sass">
+.q-dialog__inner > div
+  border-radius: 14px
 .container
   transition: width .3s, height .3s
 a 
