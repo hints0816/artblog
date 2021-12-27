@@ -68,7 +68,8 @@
                   <q-item style="padding: 0px;height: calc(100% - 49px);">
                     <q-item-section>
                       <q-card-section horizontal style="padding: 0px;" class="toolbar-upload full-height">
-                        <q-card-section style="padding: 0px;" :class="alertNext?'col-6':'col-12'">
+                        <q-card-section id="imgCard" style="position: relative;padding: 0px;" :class="alertNext?'col-6':'col-12'">
+                          <q-chip v-if="alertTag" id="tagChip" clickable :style="{ 'z-index': 99,'position': 'absolute','top': chiptop+'px','left': chipleft+'px' }" dense v-touch-pan.prevent.mouse="moveFab" icon="event">Add to calendar</q-chip>
                           <q-uploader
                             @added="addImageS"
                             @removed="removeImage"
@@ -139,19 +140,9 @@
                                 </q-popup-edit>
                               </q-btn>
                           </q-item>
-                          <q-item>
-                            <q-item-section avatar>
-                              <q-avatar>
-                                <img src="https://cdn.quasar.dev/img/boy-avatar.png">
-                              </q-avatar>
-                            </q-item-section>
+                          <q-item style="position: absolute;bottom: 0px;">
                             <q-item-section>
-                              <q-item-label>Title</q-item-label>
-                              <q-item-label caption>
-                                Subhead
-                              </q-item-label>
-                            </q-item-section>
-                            <q-item-section side top>
+                              <q-btn @click="addTag" dense round flat icon="add_circle_outline"/>
                             </q-item-section>
                           </q-item>
                         </q-card-section>
@@ -447,7 +438,7 @@ import {
 import { getProfileMe, editEmoji, logout } from '../api/test/index';
 import { LocalStorage, Notify, Dark, Cookies } from 'quasar';
 import { useRouter } from 'vue-router';
-import { Screen } from 'quasar';
+import { dom } from 'quasar';
 
 export default defineComponent({
   name: 'MainLayout',
@@ -459,6 +450,9 @@ export default defineComponent({
       darkValue:false,
     })
     let data = reactive({
+      alertTag: false,
+      chiptop: 0,
+      chipleft: 0,
       imageFiles: [],
       smallStyle: 'min-width: 90%;min-height: 450px;max-width: 850px;max-height: 850px;height: 55vw !important;width: 55vw !important;',
       bigStyle: 'min-width: 450px;min-height: 450px;max-width: 850px;max-height: 80%;height: 45vw !important;width: 30vw !important;',
@@ -519,6 +513,40 @@ export default defineComponent({
     const router = useRouter() as any;
     let leftDrawerOpen = ref(false);
     const method = {
+      moveFab(ev) {
+        const h1 = dom.height(document.getElementById('tagChip'))
+        const w1 = dom.width(document.getElementById('tagChip'))
+        const h2 = dom.height(document.getElementById('imgCard'))
+        const w2 = dom.width(document.getElementById('imgCard'))
+        console.log(data.chiptop)
+        if(data.chiptop-(-ev.delta.y)>0){
+          data.chiptop = data.chiptop-(-ev.delta.y)
+        }else{
+          data.chiptop = 0
+        }
+        if(data.chipleft-(-ev.delta.x)>0){
+          data.chipleft = data.chipleft-(-ev.delta.x)
+        }else{
+          data.chipleft = 0
+        }
+        if(data.chiptop-(-ev.delta.y)<h2){
+          data.chiptop = data.chiptop-(-ev.delta.y)
+        }else{
+          data.chiptop = h2
+        }
+        if(data.chipleft-(-ev.delta.x)<w2){
+          data.chipleft = data.chipleft-(-ev.delta.x)
+        }else{
+          data.chipleft = w2
+        }
+      },
+      addTag() {
+        const h = dom.height(document.getElementById('imgCard'))
+        const w = dom.width(document.getElementById('imgCard'))
+        data.chiptop = data.chiptop-(-h/2)
+        data.chipleft = data.chipleft-(-w/2)
+        data.alertTag = true
+      },
       backToTop() {
         let timer: any = '';
         const gotoTop = () => {
@@ -635,26 +663,16 @@ export default defineComponent({
     watch(darkdata,(newVal,oldVal)=>{
       Dark.toggle()
     })
-     const style = ref({ width: '200px', height: '200px' })
     const report = ref(null)
 
     return {
-      style,
       report,
-
       onResize (size) {
         report.value = size
         // {
         //   width: 20 // width of container (in px)
         //   height: 50 // height of container (in px)
         // }
-      },
-
-      setRandomSize () {
-        style.value = {
-          width: String(Math.floor(100 + Math.random() * 200)) + 'px',
-          height: String(Math.floor(100 + Math.random() * 200)) + 'px'
-        }
       },
       leftDrawerOpen,
       toggleLeftDrawer() {
