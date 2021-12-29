@@ -69,7 +69,7 @@
                     <q-item-section>
                       <q-card-section horizontal style="padding: 0px;" class="toolbar-upload full-height">
                         <q-card-section id="imgCard" style="position: relative;padding: 0px;" :class="alertNext?'col-6':'col-12'">
-                          <q-chip v-if="alertTag" id="tagChip" clickable :style="{ 'z-index': 99,'position': 'absolute','top': chiptop+'px','left': chipleft+'px' }" dense v-touch-pan.prevent.mouse="moveFab" icon="event">Add to calendar</q-chip>
+                          <q-chip v-for="(item, index) in chipPositions" :key="index" id="tagChip" clickable :style="{ 'z-index': 99,'position': 'absolute','top': item.chiptop+'px','left': item.chipleft+'px' }" dense v-touch-pan.prevent.mouse="moveFab" icon="event">Add to calendar</q-chip>
                           <q-uploader
                             @added="addImageS"
                             @removed="removeImage"
@@ -451,6 +451,7 @@ export default defineComponent({
     })
     let data = reactive({
       alertTag: false,
+      chipPositions: [],
       chiptop: 0,
       chipleft: 0,
       imageFiles: [],
@@ -514,38 +515,36 @@ export default defineComponent({
     let leftDrawerOpen = ref(false);
     const method = {
       moveFab(ev) {
+        console.log(ev)
         const h1 = dom.height(document.getElementById('tagChip'))
         const w1 = dom.width(document.getElementById('tagChip'))
         const h2 = dom.height(document.getElementById('imgCard'))
         const w2 = dom.width(document.getElementById('imgCard'))
-        console.log(data.chiptop)
-        if(data.chiptop-(-ev.delta.y)>0){
-          data.chiptop = data.chiptop-(-ev.delta.y)
+        console.log(data.chipPositions[0].chiptop)
+        if(data.chipPositions[0].chiptop-(-ev.delta.y)>0){
+          if(data.chipPositions[0].chiptop-(-ev.delta.y)<(h2-h1-7)){
+            data.chipPositions[0].chiptop = data.chipPositions[0].chiptop-(-ev.delta.y)
+          }else{
+            data.chipPositions[0].chiptop = h2-h1-7
+          }
         }else{
-          data.chiptop = 0
+          data.chipPositions[0].chiptop = 0
         }
-        if(data.chipleft-(-ev.delta.x)>0){
-          data.chipleft = data.chipleft-(-ev.delta.x)
+        if(data.chipPositions[0].chipleft-(-ev.delta.x)>0){
+          if(data.chipPositions[0].chipleft-(-ev.delta.x)<(w2-w1-7)){
+            data.chipPositions[0].chipleft = data.chipPositions[0].chipleft-(-ev.delta.x)
+          }else{
+            data.chipPositions[0].chipleft = w2-w1-7
+          }
         }else{
-          data.chipleft = 0
-        }
-        if(data.chiptop-(-ev.delta.y)<h2){
-          data.chiptop = data.chiptop-(-ev.delta.y)
-        }else{
-          data.chiptop = h2
-        }
-        if(data.chipleft-(-ev.delta.x)<w2){
-          data.chipleft = data.chipleft-(-ev.delta.x)
-        }else{
-          data.chipleft = w2
+          data.chipPositions[0].chipleft = 0
         }
       },
       addTag() {
-        const h = dom.height(document.getElementById('imgCard'))
-        const w = dom.width(document.getElementById('imgCard'))
-        data.chiptop = data.chiptop-(-h/2)
-        data.chipleft = data.chipleft-(-w/2)
-        data.alertTag = true
+        data.chipPositions.push({
+          chiptop: 0,
+          chipleft: 0
+        })
       },
       backToTop() {
         let timer: any = '';
