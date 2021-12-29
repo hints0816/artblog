@@ -42,6 +42,10 @@ const routes: RouteRecordRaw[] = [
       {
         path: '/setting/category',
         component: () => import('pages/setting/category.vue'),
+      },
+      {
+        path: '/setting/comment',
+        component: () => import('pages/setting/comment.vue'),
       }
     ],
   },

@@ -35,6 +35,16 @@
           <q-td key="icon" :props="props">
             {{ props.row.icon }}
           </q-td>
+          <q-td key="icon" :props="props">
+            <q-chip
+              dense
+              :color="props.row.color"
+              :text-color="props.row.text_color"
+              :icon="props.row.icon"
+            >
+              {{ props.row.name }}
+            </q-chip>
+          </q-td>
           <q-td key="icon" class="q-gutter-xs" :props="props">
             <q-btn
               dense
@@ -125,6 +135,7 @@ const columns = [
     field: 'text_color',
   },
   { name: 'icon', align: 'center', label: 'icon', field: 'icon' },
+  { name: 'preview', align: 'center', label: 'preview', field: 'preview' },
   { name: 'operate', align: 'center', label: 'operate', field: 'operate' },
 ];
 export default {

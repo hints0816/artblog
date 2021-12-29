@@ -78,6 +78,30 @@ func GetCommentListFront(c *gin.Context) {
 
 }
 
+func GetCommentListFrontAdmin(c *gin.Context) {
+	pageSize, _ := strconv.Atoi(c.Query("pagesize"))
+	pageNum, _ := strconv.Atoi(c.Query("pagenum"))
+	switch {
+	case pageSize >= 100:
+		pageSize = 100
+	case pageSize <= 0:
+		pageSize = 10
+	}
+
+	if pageNum == 0 {
+		pageNum = 1
+	}
+	data, count, code := model.GetCommentListAdmin(pageSize, pageNum)
+
+	c.JSON(http.StatusOK, gin.H{
+		"status":  code,
+		"data":    data,
+		"total":   count,
+		"message": errormsg.GetErrMsg(code),
+	})
+
+}
+
 func SetCommentDigg(c *gin.Context) {
 	var digg model.Digg
 	usernamekey, _ := c.Get("username")

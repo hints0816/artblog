@@ -23,6 +23,7 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/rifflock/lfshook v0.0.0-20180920164130-b9218ef580f5
 	github.com/rogpeppe/go-internal v1.8.0 // indirect
+	github.com/russross/blackfriday v1.6.0
 	github.com/sirupsen/logrus v1.8.1
 	github.com/ugorji/go v1.1.7 // indirect
 	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519

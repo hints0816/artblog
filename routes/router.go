@@ -52,6 +52,8 @@ func InitRouter() {
 		auth.PUT("blog/category", api.UpdateCategory)
 		auth.DELETE("blog/category/:id", api.DeleteCategory)
 
+		auth.GET("blog/setting/comment", api.GetCommentListFrontAdmin)
+
 		auth.GET("blog/logout", api.LoginOut)
 	}
 
