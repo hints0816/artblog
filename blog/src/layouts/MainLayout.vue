@@ -68,8 +68,8 @@
                   <q-item style="padding: 0px;height: calc(100% - 49px);">
                     <q-item-section>
                       <q-card-section horizontal style="padding: 0px;" class="toolbar-upload full-height">
-                        <q-card-section id="imgCard" style="position: relative;padding: 0px;" :class="alertNext?'col-6':'col-12'">
-                          <q-chip v-for="(item, index) in chipPositions" :key="index" id="tagChip" clickable :style="{ 'z-index': 99,'position': 'absolute','top': item.chiptop+'px','left': item.chipleft+'px' }" dense v-touch-pan.prevent.mouse="moveFab" icon="event">Add to calendar</q-chip>
+                        <q-card-section id="imgCard" @click="addTag($event)" style="position: relative;padding: 0px;cursor:crosshair;" :class="alertNext?'col-6':'col-12'">
+                          <q-chip removable v-for="(item, index) in chipPositions" :key="index" :id="'tagChip'+index" clickable @remove="removeTag(index)" :style="{ 'z-index': 99,'position': 'absolute','top': item.chiptop+'px','left': item.chipleft+'px' }" dense @mousedown="moveFabIndex(index)" v-touch-pan.prevent.mouse="moveFab" icon="event">Add to calendar</q-chip>
                           <q-uploader
                             @added="addImageS"
                             @removed="removeImage"
@@ -142,7 +142,6 @@
                           </q-item>
                           <q-item style="position: absolute;bottom: 0px;">
                             <q-item-section>
-                              <q-btn @click="addTag" dense round flat icon="add_circle_outline"/>
                             </q-item-section>
                           </q-item>
                         </q-card-section>
@@ -450,6 +449,7 @@ export default defineComponent({
       darkValue:false,
     })
     let data = reactive({
+      moveIndex: 0,
       alertTag: false,
       chipPositions: [],
       chiptop: 0,
@@ -514,36 +514,42 @@ export default defineComponent({
     const router = useRouter() as any;
     let leftDrawerOpen = ref(false);
     const method = {
+      moveFabIndex(index: number) {
+        data.moveIndex = index
+      },
       moveFab(ev) {
-        console.log(ev)
-        const h1 = dom.height(document.getElementById('tagChip'))
-        const w1 = dom.width(document.getElementById('tagChip'))
+        console.log(data.moveIndex)
+        const h1 = dom.height(document.getElementById('tagChip'+data.moveIndex.toString()))
+        const w1 = dom.width(document.getElementById('tagChip'+data.moveIndex.toString()))
         const h2 = dom.height(document.getElementById('imgCard'))
         const w2 = dom.width(document.getElementById('imgCard'))
-        console.log(data.chipPositions[0].chiptop)
-        if(data.chipPositions[0].chiptop-(-ev.delta.y)>0){
-          if(data.chipPositions[0].chiptop-(-ev.delta.y)<(h2-h1-7)){
-            data.chipPositions[0].chiptop = data.chipPositions[0].chiptop-(-ev.delta.y)
+        // console.log(data.chipPositions[0].chiptop)
+        if(data.chipPositions[data.moveIndex].chiptop-(-ev.delta.y)>0){
+          if(data.chipPositions[data.moveIndex].chiptop-(-ev.delta.y)<(h2-h1-7)){
+            data.chipPositions[data.moveIndex].chiptop = data.chipPositions[data.moveIndex].chiptop-(-ev.delta.y)
           }else{
-            data.chipPositions[0].chiptop = h2-h1-7
+            data.chipPositions[data.moveIndex].chiptop = h2-h1-7
           }
         }else{
-          data.chipPositions[0].chiptop = 0
+          data.chipPositions[data.moveIndex].chiptop = 0
         }
-        if(data.chipPositions[0].chipleft-(-ev.delta.x)>0){
-          if(data.chipPositions[0].chipleft-(-ev.delta.x)<(w2-w1-7)){
-            data.chipPositions[0].chipleft = data.chipPositions[0].chipleft-(-ev.delta.x)
+        if(data.chipPositions[data.moveIndex].chipleft-(-ev.delta.x)>0){
+          if(data.chipPositions[data.moveIndex].chipleft-(-ev.delta.x)<(w2-w1-7)){
+            data.chipPositions[data.moveIndex].chipleft = data.chipPositions[data.moveIndex].chipleft-(-ev.delta.x)
           }else{
-            data.chipPositions[0].chipleft = w2-w1-7
+            data.chipPositions[data.moveIndex].chipleft = w2-w1-7
           }
         }else{
-          data.chipPositions[0].chipleft = 0
+          data.chipPositions[data.moveIndex].chipleft = 0
         }
       },
-      addTag() {
+      removeTag(index: number){
+        data.chipPositions.splice(index,1)
+      },
+      addTag(e) {
         data.chipPositions.push({
-          chiptop: 0,
-          chipleft: 0
+          chiptop: e.offsetY,
+          chipleft: e.offsetX
         })
       },
       backToTop() {
@@ -574,6 +580,7 @@ export default defineComponent({
       removeImage(files: Array<any>): void {
         data.imageFiles.splice(data.imageFiles.indexOf(files[0]),1)
         console.log(data.imageFiles)
+        data.chipPositions = []
         data.alertNext = false
         data.bigStyle ='min-width: 450px;min-height: 450px;max-width: 850px;max-height: 80%;height: 45vw !important;width: 30vw !important;'
       },
