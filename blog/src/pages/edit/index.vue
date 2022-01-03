@@ -240,6 +240,7 @@ export default {
       async handleUploadImage(event, insertImage, files):Promise<any> {
         let param = new FormData()
         param.append('file', files[0])
+        console.log(param)
         let res = await uploadImage(param) as any
         if(res.status == 200) {
           insertImage({

@@ -70,6 +70,8 @@ func InitRouter() {
 		router.POST("blog/signup", api.SignUpInClaim)
 		router.GET("login/checktoken", api.CheckCode)
 		router.GET("blog/github", api.GithubCallback)
+		router.GET("blog/artlist", api.ListImage)
+		router.POST("blog/postart", api.PostImg)
 	}
 
 	r.Run(":3000")
