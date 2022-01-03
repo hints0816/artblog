@@ -37,19 +37,17 @@ func ListImage(c *gin.Context) {
 func PostImg(c *gin.Context) {
 	var data model.Imgcontent
 
-	file, fileHeader, _ := c.Request.FormFile("file")
-	content := c.Request.FormValue("content")
-	fileSize := fileHeader.Size
-	contentType := fileHeader.Header.Get("Content-Type")
-	url, code := model.UpLoadFile(file, contentType, fileSize)
+	// file, fileHeader, _ := c.Request.FormFile("file")
+	// content := c.Request.FormValue("content")
+	// fileSize := fileHeader.Size
+	// contentType := fileHeader.Header.Get("Content-Type")
+	// url, code := model.UpLoadFile(file, contentType, fileSize)
 
-	data.Content = content
-	data.Imgurl = url
+	_ = c.ShouldBindJSON(&data)
 	code = model.PostArt(&data)
 
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,
-		"url":     url,
 		"message": errormsg.GetErrMsg(code),
 	})
 }

@@ -176,7 +176,7 @@
                           </template>
                         </q-uploader>
                         <vue-cropper
-                          v-if="option.img!=''"
+                          v-if="option.img!='' && !alertNext"
                           ref="cropper"
                           :img="option.img"
                           :outputSize="option.size"
@@ -188,6 +188,11 @@
                           autoCropWidth="400"
                           autoCropHeight="400"
                         ></vue-cropper>
+                        <q-img
+                          v-if="alertNext"
+                          :src="imgdisurl"
+                          :ratio="1"
+                        />
                       </q-card-section>
                       <q-dialog v-model="alertTag">
                         <q-card style="min-width: 350px">
@@ -735,9 +740,11 @@ export default defineComponent({
       dialog: false,
       persistent: false,
       position: 'top',
+      imgdisurl: ''
     });
     const router = useRouter() as any;
     let leftDrawerOpen = ref(false);
+    const cropper = ref(null);
     const method = {
       moveFabIndex(index: number) {
         data.moveIndex = index;
@@ -841,6 +848,7 @@ export default defineComponent({
       closeUploader(): void {
         data.imageFiles = [];
         data.alertNext = false;
+        data.option.img = '';
         data.bigStyle =
           'min-width: 450px;min-height: 450px;max-width: 850px;max-height: 80%;height: 45vw !important;width: 30vw !important;';
       },
@@ -855,6 +863,27 @@ export default defineComponent({
         data.text = data.text + face;
       },
       next1(): void {
+        let avatarfile = null;
+
+        cropper.value.getCropData(async (data1: any) => {
+          var arr = data1.split(','),
+            mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[1]),
+            n = bstr.length,
+            u8arr = new Uint8Array(n);
+          while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+          }
+          avatarfile = new File([u8arr], 'filename.jpeg', { type: mime });
+          let param = new FormData();
+          param.append('file', avatarfile);
+          let res = (await uploadImage(param)) as any;
+          console.log(res.url)
+          if (res.status == 200) {
+            data.imgdisurl = res.url
+          } else {
+          }
+        });
         data.alertNext = true;
         data.bigStyle =
           'min-width: 450px;min-height: 450px;max-width: 950px;max-height: 80%;height: 45vw !important;width: 70vw !important;';
@@ -880,9 +909,13 @@ export default defineComponent({
         }
       },
       async postArt(): Promise<any> {
-        let param = new FormData()
-        param.append('file', data.imageFiles[0])
-        param.append('content', data.arttext)
+        // let param = new FormData()
+        // param.append('file', data.imageFiles[0])
+        // param.append('content', data.arttext)
+        const param = {
+          imgurl: data.imgdisurl,
+          content: data.arttext,
+        };
         let res = await postArt(param) as any
         // if(res.status == 200) {
         // }
@@ -936,6 +969,7 @@ export default defineComponent({
     const report = ref(null);
 
     return {
+      cropper,
       report,
       onResize(size) {
         report.value = size;
