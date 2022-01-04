@@ -9,7 +9,7 @@
             :class="loadClass(index)"
           >
             <template v-if="checkClass(index) == 0 || checkClass(index) == -1">
-              <q-img @click="alert = true" @mouseenter="alertNum = index" @mouseleave="alertNum = -1" :src="src">
+              <q-img @click="alert = true" @mouseenter="alertNum = index" @mouseleave="alertNum = -1" :src="src.url">
                 <div align="center" v-if="alertNum == index" class="relative-position cursor-pointer indexz">
                   <div class="absolute-center q-col-gutter-x-md" style="font-size: 2em">
                   </div>
@@ -18,7 +18,7 @@
             </template>
             <template v-if="checkClass(index) == 1">
               <div class="col-6">
-                <q-img @click="alert = true" @mouseenter="alertNum = index" @mouseleave="alertNum = -1" :src="images[index]">
+                <q-img @click="alert = true" @mouseenter="alertNum = index" @mouseleave="alertNum = -1" :src="images[index].url">
                   <div align="center" v-if="alertNum == index" class="relative-position cursor-pointer indexz">
                     <div class="absolute-center q-col-gutter-x-md" style="font-size: 2em">
                     </div>
@@ -26,7 +26,7 @@
                 </q-img>
               </div>
               <div class="col-6">
-                <q-img @click="alert = true" @mouseenter="alertNum = index+1" @mouseleave="alertNum = -1" :src="images[index+1]">
+                <q-img @click="alert = true" @mouseenter="alertNum = index+1" @mouseleave="alertNum = -1" :src="images[index+1].url">
                   <div align="center" v-if="alertNum == index+1" class="relative-position cursor-pointer indexz">
                     <div class="absolute-center q-col-gutter-x-md" style="font-size: 2em">
                     </div>
@@ -298,7 +298,7 @@ export default {
         };
         let datas = (await listArtList(paramss)) as any;
         datas.data.forEach((element) => {
-          data.images.push(element.imgurl)
+          data.images.push({url:element.imgurl,id:element.ID})
         });
       }
     };

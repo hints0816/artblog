@@ -181,6 +181,7 @@
                           :img="option.img"
                           :outputSize="option.size"
                           :outputType="option.outputType"
+                          :full="option.full"
                           :info="option.info"
                           :canScale="option.canScale"
                           :autoCrop="option.autoCrop"
@@ -669,6 +670,7 @@ export default defineComponent({
         size: 1,
         outputType: 'jpeg',
         info: true,
+        full: true,  
         canScale: true,
         autoCrop: true,
         fixedBox: true,
