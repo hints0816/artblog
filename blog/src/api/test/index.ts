@@ -49,6 +49,10 @@ export const getArticle = async (id: number) => {
     return await api.get(`/api/blog/article/${id}`);
 };
 
+export const getImgContent = async (id: number) => {
+    return await api.get(`/api/blog/artimg/${id}`);
+};
+
 export const addArticle = async (articleParams: ArticleInfo) => {
     return await api.post('/api/blog/article', articleParams);
 };

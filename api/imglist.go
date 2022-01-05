@@ -51,3 +51,13 @@ func PostImg(c *gin.Context) {
 		"message": errormsg.GetErrMsg(code),
 	})
 }
+
+func GetImgInfo(c *gin.Context) {
+	id, _ := strconv.Atoi(c.Param("id"))
+	data, code := model.GetImgInfo(id)
+	c.JSON(http.StatusOK, gin.H{
+		"status":  code,
+		"data":    data,
+		"message": errormsg.GetErrMsg(code),
+	})
+}

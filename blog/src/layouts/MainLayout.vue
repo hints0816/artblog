@@ -917,6 +917,11 @@ export default defineComponent({
         const param = {
           imgurl: data.imgdisurl,
           content: data.arttext,
+          Imglist: [
+            {
+              img_url: data.imgdisurl
+            }
+          ]
         };
         let res = await postArt(param) as any
         // if(res.status == 200) {

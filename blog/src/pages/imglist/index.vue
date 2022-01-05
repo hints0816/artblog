@@ -9,7 +9,7 @@
             :class="loadClass(index)"
           >
             <template v-if="checkClass(index) == 0 || checkClass(index) == -1">
-              <q-img @click="alert = true" @mouseenter="alertNum = index" @mouseleave="alertNum = -1" :src="src.url">
+              <q-img @click="getDetail(src.id)" @mouseenter="alertNum = index" @mouseleave="alertNum = -1" :src="src.url">
                 <div align="center" v-if="alertNum == index" class="relative-position cursor-pointer indexz">
                   <div class="absolute-center q-col-gutter-x-md" style="font-size: 2em">
                   </div>
@@ -18,7 +18,7 @@
             </template>
             <template v-if="checkClass(index) == 1">
               <div class="col-6">
-                <q-img @click="alert = true" @mouseenter="alertNum = index" @mouseleave="alertNum = -1" :src="images[index].url">
+                <q-img @click="getDetail(images[index].id)" @mouseenter="alertNum = index" @mouseleave="alertNum = -1" :src="images[index].url">
                   <div align="center" v-if="alertNum == index" class="relative-position cursor-pointer indexz">
                     <div class="absolute-center q-col-gutter-x-md" style="font-size: 2em">
                     </div>
@@ -26,7 +26,7 @@
                 </q-img>
               </div>
               <div class="col-6">
-                <q-img @click="alert = true" @mouseenter="alertNum = index+1" @mouseleave="alertNum = -1" :src="images[index+1].url">
+                <q-img @click="getDetail(images[index+1].id)" @mouseenter="alertNum = index+1" @mouseleave="alertNum = -1" :src="images[index+1].url">
                   <div align="center" v-if="alertNum == index+1" class="relative-position cursor-pointer indexz">
                     <div class="absolute-center q-col-gutter-x-md" style="font-size: 2em">
                     </div>
@@ -45,18 +45,16 @@
         <q-card-section v-if="$q.screen.gt.sm" horizontal class="full-height">
           <q-carousel
             animated
-            v-model="slide"
+            v-model="imgDetail.slide"
             transition-prev="slide-right"
             transition-next="slide-left"
-            arrows
-            navigation
+            :arrows="imgDetail.Imglist.length>1"
+            :navigation="imgDetail.Imglist.length>1"
             infinite
             class="col-5 full-height"
           >
-            <q-carousel-slide :name="1" img-src="https://cdn.quasar.dev/img/mountains.jpg" />
-            <q-carousel-slide :name="2" img-src="https://cdn.quasar.dev/img/parallax1.jpg" />
-            <q-carousel-slide :name="3" img-src="https://cdn.quasar.dev/img/parallax2.jpg" />
-            <q-carousel-slide :name="4" img-src="https://cdn.quasar.dev/img/quasar.jpg" />
+            <q-carousel-slide  v-for="(data, index) in imgDetail.Imglist"
+            :key="index" :name="index+1" :img-src="data.img_url" />
           </q-carousel>
           <q-card-section style="padding: 0px;" class="full-width">
             <q-item>
@@ -79,12 +77,12 @@
             <q-item>
               <q-item-section>
                 <q-card-section style="max-height: 55vh" class="scroll hide-scrollbar">
-                  <p v-for="n in 15" :key="n">Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum repellendus sit voluptate voluptas eveniet porro. Rerum blanditiis perferendis totam, ea at omnis vel numquam exercitationem aut, natus minima, porro labore.</p>
+                  <p>{{imgDetail.content}}</p>
                 </q-card-section>
               </q-item-section>
             </q-item>
              <q-separator />
-            <q-card-actions style="position:absolute;bottom:0px;padding: 0px;">
+            <q-card-actions class="full-width" style="position:absolute;bottom:0px;padding: 0px;">
               <q-input class="full-width q-px-sm" autogrow v-model="text" label="Comment" :dense="dense">
                 <template v-slot:before>
                   <q-btn round flat icon="mood">
@@ -208,7 +206,7 @@
 <script lang="ts">
 import { ref, reactive, toRefs, onMounted, getCurrentInstance } from 'vue';
 import { Screen } from 'quasar';
-import { listArtList } from '../../api/test/index';
+import { listArtList, getImgContent } from '../../api/test/index';
 import emoji from '../../css/emoji.json';
 
 export default {
@@ -227,7 +225,8 @@ export default {
       inClass: Screen.lt.lg
         ? 'q-col-gutter-y-' + Screen.name
         : 'q-col-gutter-y-lg',
-      images: []
+      images: [],
+      imgDetail: null
     });
     const method = {
       checkNum(nums: number): boolean {
@@ -300,6 +299,12 @@ export default {
         datas.data.forEach((element) => {
           data.images.push({url:element.imgurl,id:element.ID})
         });
+      },
+      async getDetail(id: number):Promise<any> {
+        let res  = await getImgContent(id) as any
+        data.imgDetail = res.data
+        data.imgDetail.slide = 1
+        data.alert = true
       }
     };
     onMounted(async () => {

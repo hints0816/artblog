@@ -72,6 +72,7 @@ func InitRouter() {
 		router.GET("blog/github", api.GithubCallback)
 		router.GET("blog/artlist", api.ListImage)
 		router.POST("blog/postart", api.PostImg)
+		router.GET("blog/artimg/:id", api.GetImgInfo)
 	}
 
 	r.Run(":3000")
