@@ -117,5 +117,5 @@ func GithubCallback(c *gin.Context) {
 		"http://arthins", false, true)
 	c.SetCookie("token", token, 604800, "/",
 		"http://arthins", false, true)
-	c.Redirect(302, "http://www.arthins.com")
+	c.Redirect(302, "https://www.arthins.com")
 }

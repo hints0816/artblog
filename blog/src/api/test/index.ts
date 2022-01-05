@@ -29,6 +29,10 @@ export const listArticle = async (params: any) => {
     return await api.get('/api/blog/articlelist',{params:params});
 };
 
+export const listArtList = async (params: any) => {
+    return await api.get('/api/blog/artlist',{params:params});
+};
+
 export const listCategory = async (params: any) => {
     return await api.get('/api/blog/category',{params:params});
 };
@@ -97,4 +101,11 @@ export const logout = async () => {
 
 export const deleteCategory = async (id: number) => {
     return await api.delete(`/api/blog/category/${id}`);
+};
+
+export const postArt = async (params: any) => {
+    const config = {
+        headers: {'Content-Type': 'multipart/form-data'}
+    }
+    return await api.post('/api/blog/postart', params, config);
 };

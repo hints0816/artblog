@@ -48,114 +48,282 @@
         </q-tabs>
         <q-space></q-space>
         <div class="q-gutter-sm row items-center no-wrap">
-          <q-btn @click="openGithub" dense round flat icon="ion-logo-github"/>
-          <q-btn @click="alertAdd = true" dense round flat icon="add_circle_outline"/>
-          <q-dialog class="maindia" style="background-color: rgba(0,0,0,0.6);" persistent v-model="alertAdd">
-            <q-btn @click="closeUploader" class="text-white absolute-top-right q-mr-lg q-mt-lg" icon="close" v-close-popup flat round dense/>
-            <q-card class="container full-width" :style="$q.screen.gt.xs?bigStyle:smallStyle
-                          ">
-            <q-resize-observer @resize="onResize" />
-            <q-card-section style="padding: 0px;" class="full-width full-height">
-                  <q-item class="relative-position">
-                    <q-item-section align="center">
-                      <q-item-label>
-                        <q-toolbar-title><span class="text-weight-bold">Create Your New Picture</span></q-toolbar-title>
-                      </q-item-label>
-                    </q-item-section>
-                    <q-btn class="absolute-right" v-if="imageFiles.length!=0" @click="next1" style="top: initial !important;bottom: initial !important;" icon="navigate_next" round dense flat/>
-                  </q-item>
-                  <q-separator />
-                  <q-item style="padding: 0px;height: calc(100% - 49px);">
-                    <q-item-section>
-                      <q-card-section horizontal style="padding: 0px;" class="toolbar-upload full-height">
-                        <q-card-section id="imgCard" style="position: relative;padding: 0px;" :class="alertNext?'col-6':'col-12'">
-                          <q-chip v-if="alertTag" id="tagChip" clickable :style="{ 'z-index': 99,'position': 'absolute','top': chiptop+'px','left': chipleft+'px' }" dense v-touch-pan.prevent.mouse="moveFab" icon="event">Add to calendar</q-chip>
-                          <q-uploader
-                            @added="addImageS"
-                            @removed="removeImage"
-                            class="full-height"
-                            style="width:initial!important;max-height:initial!important;"
-                            hide-upload-btn=false
-                            flat
-                            multiple
-                            bordered
-                          >
-                            <template v-slot:header="scope">
-                              <div class="no-wrap" align="center">
-                                <q-btn :style="imageFiles.length!=0?'top:-26px;left:22px':''" class="absolute-center vertical-middle	" v-if="scope.canAddFiles" type="a" icon="add_box" round dense flat>
-                                  <q-uploader-add-trigger />
-                                  <q-tooltip>Pick Files</q-tooltip>
-                                </q-btn>
-                              </div>
-                            </template>
-                          </q-uploader>
-                        </q-card-section>
-                        <q-card-section v-if="alertNext" style="padding: 0px;" class="col-6">
-                          <q-item>
-                            <q-item-section avatar>
-                              <q-avatar>
-                                <img src="https://cdn.quasar.dev/img/boy-avatar.png">
-                              </q-avatar>
-                            </q-item-section>
-                            <q-item-section>
-                              <q-item-label>Title</q-item-label>
-                              <q-item-label caption>
-                                Subhead
-                              </q-item-label>
-                            </q-item-section>
-                            <q-item-section side top>
-                            </q-item-section>
-                          </q-item>
-                          <q-item>
-                            <q-item-section style="max-height: 45vh" class="scroll hide-scrollbar">
-                              <q-input
-                                style="height:200px"
-                                class="full-width"
-                                v-model="text"
-                                borderless 
-                                autogrow
-                              />
-                            </q-item-section>
-                           
-                          </q-item>
-                          <q-item>
-                              <q-btn round flat icon="mood">
-                                <q-popup-edit
-                                  max-width="158px"
-                                  style="padding: 4px 8px"
-                                  self="top start"
-                                  cover="false"
-                                >
-                                  <div class="q-gutter-sm" style="margin-top: 0px">
-                                    <a
-                                      href="javascript:void(0);"
-                                      @click="getEmo(index)"
-                                      style="text-decoration: none"
-                                      v-for="(item, index) in faceList"
-                                      :key="index"
-                                      class="emotionItem"
-                                      >{{ item }}</a
-                                    >
-                                  </div>
-                                </q-popup-edit>
+          <q-btn @click="openGithub" dense round flat icon="ion-logo-github" />
+          <q-btn
+            @click="alertAdd = true"
+            dense
+            round
+            flat
+            icon="add_circle_outline"
+          />
+          <q-dialog
+            class="maindia"
+            style="background-color: rgba(0, 0, 0, 0.6)"
+            persistent
+            v-model="alertAdd"
+          >
+            <q-btn
+              @click="closeUploader"
+              class="text-white absolute-top-right q-mr-lg q-mt-lg"
+              icon="close"
+              v-close-popup
+              flat
+              round
+              dense
+            />
+            <q-card
+              class="container full-width"
+              :style="$q.screen.gt.xs ? bigStyle : smallStyle"
+            >
+              <q-resize-observer @resize="onResize" />
+              <q-card-section
+                style="padding: 0px"
+                class="full-width full-height"
+              >
+                <q-item class="relative-position">
+                  <q-item-section align="center">
+                    <q-item-label>
+                      <q-toolbar-title
+                        ><span class="text-weight-bold"
+                          >Create Your New Picture</span
+                        ></q-toolbar-title
+                      >
+                    </q-item-label>
+                  </q-item-section>
+                  <q-btn
+                    class="absolute-right"
+                    v-if="imageFiles.length != 0 && !alertNext"
+                    @click="next1"
+                    style="top: initial !important; bottom: initial !important"
+                    icon="navigate_next"
+                    round
+                    dense
+                    flat
+                  />
+                </q-item>
+                <q-separator />
+                <q-item style="padding: 0px; height: calc(100% - 49px)">
+                  <q-item-section>
+                    <q-card-section
+                      horizontal
+                      style="padding: 0px"
+                      class="toolbar-upload full-height"
+                    >
+                      <q-card-section
+                        id="imgCard"
+                        @click="addTag($event)"
+                        :style="{
+                          position: 'relative',
+                          padding: '0px',
+                          cursor: alertNext ? 'crosshair' : 'default',
+                        }"
+                        :class="alertNext ? 'col-6' : 'col-12'"
+                      >
+                        <q-chip
+                          removable
+                          v-for="(item, index) in chipPositions"
+                          :key="index"
+                          :id="'tagChip' + index"
+                          clickable
+                          @remove="removeTag(index)"
+                          :style="{
+                            'z-index': 99,
+                            position: 'absolute',
+                            top: item.chiptop + 'px',
+                            left: item.chipleft + 'px',
+                          }"
+                          dense
+                          @mousedown="moveFabIndex(index)"
+                          v-touch-pan.prevent.mouse="moveFab"
+                          icon="event"
+                          >{{item.chipText}}</q-chip
+                        >
+                        <q-uploader
+                          @added="addImageS"
+                          @removed="removeImage"
+                          class="full-height"
+                          :style="{
+                            'width': 'initial !important',
+                            'max-height': 'initial !important',
+                            'display': option.img == ''?'':'none'
+                            }
+                          "
+                          hide-upload-btn="false"
+                          flat
+                          multiple
+                          bordered
+                        >
+                          <template v-slot:header="scope">
+                            <div class="no-wrap" align="center">
+                              <q-btn
+                                :style="
+                                  imageFiles.length != 0
+                                    ? 'top:-26px;left:22px'
+                                    : ''
+                                "
+                                class="absolute-center vertical-middle"
+                                v-if="scope.canAddFiles"
+                                type="a"
+                                icon="add_box"
+                                round
+                                dense
+                                flat
+                              >
+                                <q-uploader-add-trigger />
+                                <q-tooltip>Pick Files</q-tooltip>
                               </q-btn>
-                          </q-item>
-                          <q-item style="position: absolute;bottom: 0px;">
-                            <q-item-section>
-                              <q-btn @click="addTag" dense round flat icon="add_circle_outline"/>
-                            </q-item-section>
-                          </q-item>
-                        </q-card-section>
+                            </div>
+                          </template>
+                        </q-uploader>
+                        <vue-cropper
+                          v-if="option.img!='' && !alertNext"
+                          ref="cropper"
+                          :img="option.img"
+                          :outputSize="option.size"
+                          :outputType="option.outputType"
+                          :full="option.full"
+                          :info="option.info"
+                          :canScale="option.canScale"
+                          :autoCrop="option.autoCrop"
+                          :fixedBox="option.fixedBox"
+                          autoCropWidth="400"
+                          autoCropHeight="400"
+                        ></vue-cropper>
+                        <q-img
+                          v-if="alertNext"
+                          :src="imgdisurl"
+                          :ratio="1"
+                        />
                       </q-card-section>
-                    </q-item-section>
-                  </q-item>
-                </q-card-section>
+                      <q-dialog v-model="alertTag">
+                        <q-card style="min-width: 350px">
+                          <q-card-section>
+                            <div class="text-h6">Edit Tag</div>
+                          </q-card-section>
+                          <q-card-section class="q-pt-none">
+                            <q-input
+                              outlined
+                              v-model="tagText"
+                              label="Set Something at this Tag"
+                              dense
+                            >
+                              <template v-slot:before>
+                                <q-btn
+                                  style="color: rgba(0, 0, 0, 1)"
+                                  round
+                                  dense
+                                  flat
+                                  :label="profile.emoji"
+                                >
+                                  <q-icon
+                                    v-if="profile.emoji == ''"
+                                    name="mood"
+                                  />
+                                  <q-popup-edit
+                                    max-width="320px"
+                                    style="padding: 4px 8px"
+                                    self="top start"
+                                    cover="false"
+                                  >
+                                    <div
+                                      class="q-gutter-sm"
+                                      style="margin-top: 0px"
+                                    >
+                                      <a
+                                        href="javascript:void(0);"
+                                        @click="setEmojiStatus(index)"
+                                        style="text-decoration: none"
+                                        v-for="(item, index) in faceList"
+                                        :key="index"
+                                        class="emotionItem"
+                                        >{{ item }}</a
+                                      >
+                                    </div>
+                                  </q-popup-edit>
+                                </q-btn>
+                              </template>
+                            </q-input>
+                          </q-card-section>
+
+                          <q-card-actions align="right">
+                            <q-btn
+                              flat
+                              label="OK"
+                              @click="editTag()"
+                              color="primary"
+                              v-close-popup
+                            />
+                          </q-card-actions>
+                        </q-card>
+                      </q-dialog>
+                      <q-card-section
+                        v-if="alertNext"
+                        style="padding: 0px"
+                        class="col-6"
+                      >
+                        <q-item>
+                          <q-item-section avatar>
+                            <q-avatar>
+                              <img
+                                src="https://cdn.quasar.dev/img/boy-avatar.png"
+                              />
+                            </q-avatar>
+                          </q-item-section>
+                          <q-item-section>
+                            <q-item-label>Title</q-item-label>
+                            <q-item-label caption> Subhead </q-item-label>
+                          </q-item-section>
+                          <q-item-section side top> </q-item-section>
+                        </q-item>
+                        <q-item>
+                          <q-item-section
+                            style="max-height: 45vh"
+                            class="scroll hide-scrollbar"
+                          >
+                            <q-input
+                              style="height: 100%"
+                              class="full-width"
+                              v-model="arttext"
+                              borderless
+                              autogrow
+                            />
+                          </q-item-section>
+                        </q-item>
+                        <q-item class="full-width" style="position:absolute;bottom:0px;">
+                          <q-btn round flat icon="mood">
+                            <q-popup-edit
+                              max-width="158px"
+                              style="padding: 4px 8px"
+                              self="top start"
+                              cover="false"
+                            >
+                              <div class="q-gutter-sm" style="margin-top: 0px">
+                                <a
+                                  href="javascript:void(0);"
+                                  @click="getEmo(index)"
+                                  style="text-decoration: none"
+                                  v-for="(item, index) in faceList"
+                                  :key="index"
+                                  class="emotionItem"
+                                  >{{ item }}</a
+                                >
+                              </div>
+                            </q-popup-edit>
+                          </q-btn>
+                          <q-btn style="position: absolute; right:5px;" push color="primary" @click="postArt()" label="POST">
+                          </q-btn>
+                        </q-item>
+                        <q-item style="position: absolute; bottom: 0px">
+                          <q-item-section> </q-item-section>
+                        </q-item>
+                      </q-card-section>
+                    </q-card-section>
+                  </q-item-section>
+                </q-item>
+              </q-card-section>
             </q-card>
           </q-dialog>
-          <q-toggle
-            v-model="darkValue"
-            color="orange"
-          />
+          <q-toggle v-model="darkValue" color="orange" />
           <q-btn-dropdown v-if="$q.screen.gt.sm" stretch flat icon="color_lens">
             <q-list>
               <q-color v-model="hex" no-header class="my-picker" />
@@ -165,12 +333,22 @@
             <q-btn v-if="profile.name" dense flat no-wrap>
               <q-avatar color="white" text-color="white">
                 <q-badge color="red" floating>4</q-badge>
-                <img :src="profile.avatar == ''?'https://cdn.quasar.dev/logo-v2/svg/logo.svg':profile.avatar" />
+                <img
+                  :src="
+                    profile.avatar == ''
+                      ? 'https://cdn.quasar.dev/logo-v2/svg/logo.svg'
+                      : profile.avatar
+                  "
+                />
               </q-avatar>
               <q-icon name="arrow_drop_down" size="16px" />
               <q-menu auto-close>
                 <q-list style="min-width: 100px">
-                  <q-item clickable @click="toRepositories(profile.id)" class="GL__menu-link-signed-in">
+                  <q-item
+                    clickable
+                    @click="toRepositories(profile.id)"
+                    class="GL__menu-link-signed-in"
+                  >
                     <q-item-section>
                       <div>
                         Sign in as <strong> {{ profile.name }}</strong>
@@ -184,9 +362,18 @@
                         outline
                         @click="alert = true"
                         color="primary"
-                        :label="profile.emoji == ''?'Set status':profile.emoji+profile.emoji_text"
+                        :label="
+                          profile.emoji == ''
+                            ? 'Set status'
+                            : profile.emoji + profile.emoji_text
+                        "
                       >
-                        <q-icon v-if="profile.emoji == ''" name="tag_faces" color="blue-9" size="18px" />
+                        <q-icon
+                          v-if="profile.emoji == ''"
+                          name="tag_faces"
+                          color="blue-9"
+                          size="18px"
+                        />
                       </q-btn>
                     </q-item-section>
                   </q-item>
@@ -238,7 +425,12 @@
       <q-scroll-area style="height: calc(100% - 150px); margin-top: 150px">
         <q-list padding>
           <div v-for="link in links1" :key="link.text">
-            <q-item v-if="link.child == undefined" :to="link.to" v-ripple clickable>
+            <q-item
+              v-if="link.child == undefined"
+              :to="link.to"
+              v-ripple
+              clickable
+            >
               <q-item-section avatar>
                 <q-icon color="grey" :name="link.icon" />
               </q-item-section>
@@ -252,11 +444,7 @@
               :icon="link.icon"
               :label="link.text"
             >
-             <q-item
-                :header-inset-level="1"
-                icon="receipt"
-                label="Receipts"
-              >
+              <q-item :header-inset-level="1" icon="receipt" label="Receipts">
               </q-item>
             </q-expansion-item>
           </div>
@@ -265,13 +453,23 @@
       <q-img
         class="absolute-top"
         contain
-        :src="profile.img == ''?'https://cdn.quasar.dev/img/material.png':profile.img"
+        :src="
+          profile.img == ''
+            ? 'https://cdn.quasar.dev/img/material.png'
+            : profile.img
+        "
         style="height: 150px"
       >
         <div v-if="profile.name" class="absolute-bottom bg-transparent">
           <q-btn round @click="toRepositories(profile.id)">
             <q-avatar color="white">
-              <img :src="profile.avatar == ''?'https://cdn.quasar.dev/logo-v2/svg/logo.svg':profile.avatar" />
+              <img
+                :src="
+                  profile.avatar == ''
+                    ? 'https://cdn.quasar.dev/logo-v2/svg/logo.svg'
+                    : profile.avatar
+                "
+              />
             </q-avatar>
           </q-btn>
           <div class="text-weight-bold">{{ profile.name }}</div>
@@ -387,10 +585,21 @@
             <div class="text-h6">Edit status</div>
           </q-card-section>
           <q-card-section class="q-pt-none">
-             <q-input outlined v-model="profile.emoji_text" label="What's happening?" dense>
+            <q-input
+              outlined
+              v-model="profile.emoji_text"
+              label="What's happening?"
+              dense
+            >
               <template v-slot:before>
-                <q-btn style="color:rgba(0, 0, 0, 1);"  round dense flat :label="profile.emoji">
-                  <q-icon v-if="profile.emoji == ''" name="mood"/>
+                <q-btn
+                  style="color: rgba(0, 0, 0, 1)"
+                  round
+                  dense
+                  flat
+                  :label="profile.emoji"
+                >
+                  <q-icon v-if="profile.emoji == ''" name="mood" />
                   <q-popup-edit
                     max-width="320px"
                     style="padding: 4px 8px"
@@ -415,7 +624,13 @@
           </q-card-section>
 
           <q-card-actions align="right">
-            <q-btn flat label="OK" @click="editStatus()" color="primary" v-close-popup />
+            <q-btn
+              flat
+              label="OK"
+              @click="editStatus()"
+              color="primary"
+              v-close-popup
+            />
           </q-card-actions>
         </q-card>
       </q-dialog>
@@ -433,9 +648,9 @@ import {
   reactive,
   toRefs,
   onMounted,
-  watch
+  watch,
 } from 'vue';
-import { getProfileMe, editEmoji, logout } from '../api/test/index';
+import { getProfileMe, editEmoji, logout, postArt, uploadImage } from '../api/test/index';
 import { LocalStorage, Notify, Dark, Cookies } from 'quasar';
 import { useRouter } from 'vue-router';
 import { dom } from 'quasar';
@@ -447,15 +662,32 @@ export default defineComponent({
 
   setup() {
     let darkdata = reactive({
-      darkValue:false,
-    })
+      darkValue: false,
+    });
     let data = reactive({
+      option: {
+        img: '', // 原图文件
+        size: 1,
+        outputType: 'jpeg',
+        info: true,
+        full: true,  
+        canScale: true,
+        autoCrop: true,
+        fixedBox: true,
+      },
+      tagText: '',
+      tagEvent: null,
+      moveIndex: 0,
+      alertTagEdit: false,
       alertTag: false,
+      chipPositions: [],
       chiptop: 0,
       chipleft: 0,
       imageFiles: [],
-      smallStyle: 'min-width: 90%;min-height: 450px;max-width: 850px;max-height: 850px;height: 55vw !important;width: 55vw !important;',
-      bigStyle: 'min-width: 450px;min-height: 450px;max-width: 850px;max-height: 80%;height: 45vw !important;width: 30vw !important;',
+      smallStyle:
+        'min-width: 90%;min-height: 450px;max-width: 850px;max-height: 850px;height: 55vw !important;width: 55vw !important;',
+      bigStyle:
+        'min-width: 450px;min-height: 450px;max-width: 850px;max-height: 80%;height: 45vw !important;width: 30vw !important;',
       alertNext: false,
       alertAdd: false,
       alert: false,
@@ -468,8 +700,9 @@ export default defineComponent({
         img: '',
         id: 0,
         emoji: '',
-        emoji_text: ''
+        emoji_text: '',
       },
+      arttext: '',
       links1: [
         { icon: 'home', text: 'Home', to: '/' },
         { icon: 'whatshot', text: 'ArtList', to: '/imglist' },
@@ -509,43 +742,72 @@ export default defineComponent({
       dialog: false,
       persistent: false,
       position: 'top',
+      imgdisurl: ''
     });
     const router = useRouter() as any;
     let leftDrawerOpen = ref(false);
+    const cropper = ref(null);
     const method = {
+      moveFabIndex(index: number) {
+        data.moveIndex = index;
+      },
       moveFab(ev) {
-        const h1 = dom.height(document.getElementById('tagChip'))
-        const w1 = dom.width(document.getElementById('tagChip'))
-        const h2 = dom.height(document.getElementById('imgCard'))
-        const w2 = dom.width(document.getElementById('imgCard'))
-        console.log(data.chiptop)
-        if(data.chiptop-(-ev.delta.y)>0){
-          data.chiptop = data.chiptop-(-ev.delta.y)
-        }else{
-          data.chiptop = 0
+        console.log(data.moveIndex);
+        const h1 = dom.height(
+          document.getElementById('tagChip' + data.moveIndex.toString())
+        );
+        const w1 = dom.width(
+          document.getElementById('tagChip' + data.moveIndex.toString())
+        );
+        const h2 = dom.height(document.getElementById('imgCard'));
+        const w2 = dom.width(document.getElementById('imgCard'));
+        // console.log(data.chipPositions[0].chiptop)
+        if (data.chipPositions[data.moveIndex].chiptop - -ev.delta.y > 0) {
+          if (
+            data.chipPositions[data.moveIndex].chiptop - -ev.delta.y <
+            h2 - h1 - 7
+          ) {
+            data.chipPositions[data.moveIndex].chiptop =
+              data.chipPositions[data.moveIndex].chiptop - -ev.delta.y;
+          } else {
+            data.chipPositions[data.moveIndex].chiptop = h2 - h1 - 7;
+          }
+        } else {
+          data.chipPositions[data.moveIndex].chiptop = 0;
         }
-        if(data.chipleft-(-ev.delta.x)>0){
-          data.chipleft = data.chipleft-(-ev.delta.x)
-        }else{
-          data.chipleft = 0
-        }
-        if(data.chiptop-(-ev.delta.y)<h2){
-          data.chiptop = data.chiptop-(-ev.delta.y)
-        }else{
-          data.chiptop = h2
-        }
-        if(data.chipleft-(-ev.delta.x)<w2){
-          data.chipleft = data.chipleft-(-ev.delta.x)
-        }else{
-          data.chipleft = w2
+        if (data.chipPositions[data.moveIndex].chipleft - -ev.delta.x > 0) {
+          if (
+            data.chipPositions[data.moveIndex].chipleft - -ev.delta.x <
+            w2 - w1 - 7
+          ) {
+            data.chipPositions[data.moveIndex].chipleft =
+              data.chipPositions[data.moveIndex].chipleft - -ev.delta.x;
+          } else {
+            data.chipPositions[data.moveIndex].chipleft = w2 - w1 - 7;
+          }
+        } else {
+          data.chipPositions[data.moveIndex].chipleft = 0;
         }
       },
-      addTag() {
-        const h = dom.height(document.getElementById('imgCard'))
-        const w = dom.width(document.getElementById('imgCard'))
-        data.chiptop = data.chiptop-(-h/2)
-        data.chipleft = data.chipleft-(-w/2)
-        data.alertTag = true
+      removeTag(index: number) {
+        data.chipPositions.splice(index, 1);
+      },
+      addTag(e) {
+        if (data.alertNext) {
+          data.alertTag = true;
+          data.chipleft = e.offsetX;
+          data.chiptop = e.offsetY;
+        }
+      },
+      editTag() {
+        if (data.alertNext) {
+          data.chipPositions.push({
+            chiptop: data.chiptop,
+            chipleft: data.chipleft,
+            chipText: data.tagText
+          });
+          data.tagText = ''
+        }
       },
       backToTop() {
         let timer: any = '';
@@ -569,33 +831,64 @@ export default defineComponent({
         data.dialog = true;
       },
       addImageS(files: Array<any>): void {
-        data.imageFiles = data.imageFiles.concat(files)
-        console.log(data.imageFiles)
+        data.imageFiles = data.imageFiles.concat(files);
+        data.option.img = data.imageFiles[0].__img.src;
+        // let param = new FormData();
+        // param.append('file', files[0]);
+        // let res = (await uploadImage(param)) as any;
+        // if (res.status == 200) {
+        // }
       },
       removeImage(files: Array<any>): void {
-        data.imageFiles.splice(data.imageFiles.indexOf(files[0]),1)
-        console.log(data.imageFiles)
-        data.alertNext = false
-        data.bigStyle ='min-width: 450px;min-height: 450px;max-width: 850px;max-height: 80%;height: 45vw !important;width: 30vw !important;'
+        data.imageFiles.splice(data.imageFiles.indexOf(files[0]), 1);
+        console.log(data.imageFiles);
+        data.chipPositions = [];
+        data.alertNext = false;
+        data.bigStyle =
+          'min-width: 450px;min-height: 450px;max-width: 850px;max-height: 80%;height: 45vw !important;width: 30vw !important;';
       },
       closeUploader(): void {
-        data.imageFiles = []
-        data.alertNext = false
-        data.bigStyle ='min-width: 450px;min-height: 450px;max-width: 850px;max-height: 80%;height: 45vw !important;width: 30vw !important;'
+        data.imageFiles = [];
+        data.alertNext = false;
+        data.option.img = '';
+        data.bigStyle =
+          'min-width: 450px;min-height: 450px;max-width: 850px;max-height: 80%;height: 45vw !important;width: 30vw !important;';
       },
       toRepositories(id: number): void {
-        router.push(`/repository/${id}`)
+        router.push(`/repository/${id}`);
       },
       openGithub(): void {
-        window.open('https://github.com/hints0816/artblog','_blank')
+        window.open('https://github.com/hints0816/artblog', '_blank');
       },
       getEmo(index: number): void {
         const face = data.faceList[index] as string;
         data.text = data.text + face;
       },
       next1(): void {
-        data.alertNext = true
-        data.bigStyle = 'min-width: 450px;min-height: 450px;max-width: 950px;max-height: 80%;height: 45vw !important;width: 70vw !important;'
+        let avatarfile = null;
+
+        cropper.value.getCropData(async (data1: any) => {
+          var arr = data1.split(','),
+            mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[1]),
+            n = bstr.length,
+            u8arr = new Uint8Array(n);
+          while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+          }
+          avatarfile = new File([u8arr], 'filename.jpeg', { type: mime });
+          let param = new FormData();
+          param.append('file', avatarfile);
+          let res = (await uploadImage(param)) as any;
+          console.log(res.url)
+          if (res.status == 200) {
+            data.imgdisurl = res.url
+          } else {
+          }
+        });
+        data.alertNext = true;
+        data.bigStyle =
+          'min-width: 450px;min-height: 450px;max-width: 950px;max-height: 80%;height: 45vw !important;width: 70vw !important;';
       },
       setEmojiStatus(index: number): void {
         const face = data.faceList[index] as string;
@@ -604,18 +897,30 @@ export default defineComponent({
       async editStatus(): Promise<any> {
         const params = {
           emoji: data.profile.emoji,
-          emoji_text: data.profile.emoji_text
+          emoji_text: data.profile.emoji_text,
         };
-        let res = await editEmoji(params) as any;
+        let res = (await editEmoji(params)) as any;
         if (res.status == 200) {
-          router.go(0)
+          router.go(0);
           return Notify.create({
             message: 'Edit Successful',
             type: 'positive',
             position: 'top',
-            timeout: 2000
-          })
+            timeout: 2000,
+          });
         }
+      },
+      async postArt(): Promise<any> {
+        // let param = new FormData()
+        // param.append('file', data.imageFiles[0])
+        // param.append('content', data.arttext)
+        const param = {
+          imgurl: data.imgdisurl,
+          content: data.arttext,
+        };
+        let res = await postArt(param) as any
+        // if(res.status == 200) {
+        // }
       },
       async getProfileMe(): Promise<any> {
         let res = (await getProfileMe()) as any;
@@ -629,14 +934,14 @@ export default defineComponent({
           data.profile.email = res.data.email;
           LocalStorage.set('avatar', res.data.avatar);
         } else {
-          data.links1.splice(2,1)
+          data.links1.splice(2, 1);
         }
       },
-      async loginOut(): Promise<any>  {
-        LocalStorage.remove('token')
+      async loginOut(): Promise<any> {
+        LocalStorage.remove('token');
         LocalStorage.set('logged_in', 'no');
-        let res = await logout() as any;
-        if(res.status == 302) {
+        let res = (await logout()) as any;
+        if (res.status == 302) {
           window.location.href = '/';
         }
       },
@@ -660,15 +965,16 @@ export default defineComponent({
         data.faceList.push(element.char);
       });
     });
-    watch(darkdata,(newVal,oldVal)=>{
-      Dark.toggle()
-    })
-    const report = ref(null)
+    watch(darkdata, (newVal, oldVal) => {
+      Dark.toggle();
+    });
+    const report = ref(null);
 
     return {
+      cropper,
       report,
-      onResize (size) {
-        report.value = size
+      onResize(size) {
+        report.value = size;
         // {
         //   width: 20 // width of container (in px)
         //   height: 50 // height of container (in px)
@@ -690,37 +996,38 @@ export default defineComponent({
   border-radius: 14px
 .container
   transition: width .3s, height .3s
-a 
+a
   text-decoration: none
-.toolbar-upload 
+.toolbar-upload
   .q-uploader__header
-    background-color: initial !important 
+    background-color: initial !important
     height: 100%
-.toolbar-upload 
+.toolbar-upload
   .q-uploader__header
     .q-btn-item
       z-index: 1000
       color: #1976D2
       font-size: 30px
-.toolbar-upload 
+.toolbar-upload
   .q-uploader__file-header
     background: initial !important
-.toolbar-upload 
+.toolbar-upload
   .q-uploader__file-header-content
     .q-uploader__title
       display: none
     .q-uploader__subtitle
       display: none
-.toolbar-upload      
+.toolbar-upload
   .q-uploader__list
     padding: 0px
     position: absolute
     width: 100%
     height: 100%
-.toolbar-upload          
+    display: none
+.toolbar-upload200
   .q-uploader__subtitle
     display: none
-.toolbar-upload        
+.toolbar-upload
   .q-uploader__file
     height: 100%
 .maindia .no-pointer-events
