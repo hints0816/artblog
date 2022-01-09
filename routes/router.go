@@ -38,11 +38,15 @@ func InitRouter() {
 		auth.GET("blog/getme", api.GetMe)
 		auth.POST("blog/article", api.AddArticle)
 		auth.GET("blog/comment/list/:id", api.GetCommentListFront)
+		auth.GET("blog/imgcomment/list/:id", api.GetImgCommentList)
 		auth.POST("blog/comment/digg", api.SetCommentDigg)
 		auth.POST("blog/comment/undigg", api.SetCommentUnDigg)
 
 		auth.GET("blog/me/articlelist", api.ListArticleRepository)
+		auth.POST("blog/postart", api.PostImg)
 		auth.POST("blog/comment", api.AddComment)
+		auth.POST("blog/imgcomment", api.AddImgComment)
+
 		auth.DELETE("blog/article/:id", api.DelArticle)
 		auth.POST("blog/avatar/upload", api.UploadAvatarImage)
 		auth.POST("blog/emoji", api.EditEmoji)
@@ -71,7 +75,7 @@ func InitRouter() {
 		router.GET("login/checktoken", api.CheckCode)
 		router.GET("blog/github", api.GithubCallback)
 		router.GET("blog/artlist", api.ListImage)
-		router.POST("blog/postart", api.PostImg)
+
 		router.GET("blog/artimg/:id", api.GetImgInfo)
 	}
 

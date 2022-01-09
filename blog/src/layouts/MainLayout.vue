@@ -91,6 +91,16 @@
                     </q-item-label>
                   </q-item-section>
                   <q-btn
+                    v-if="alertNext"
+                    class="absolute-left"
+                    @click="back"
+                    style="top: initial !important; bottom: initial !important"
+                    icon="arrow_back"
+                    round
+                    dense
+                    flat
+                  />
+                  <q-btn
                     class="absolute-right"
                     v-if="imageFiles.length != 0 && !alertNext"
                     @click="next1"
@@ -176,8 +186,9 @@
                           </template>
                         </q-uploader>
                         <vue-cropper
-                          v-if="option.img!='' && !alertNext"
                           ref="cropper"
+                          v-if="option.img!='' && !alertNext" 
+                          :key="cropperkey" 
                           :img="option.img"
                           :outputSize="option.size"
                           :outputType="option.outputType"
@@ -186,8 +197,8 @@
                           :canScale="option.canScale"
                           :autoCrop="option.autoCrop"
                           :fixedBox="option.fixedBox"
-                          autoCropWidth="400"
-                          autoCropHeight="400"
+                          autoCropWidth="300"
+                          autoCropHeight="300"
                         ></vue-cropper>
                         <q-img
                           v-if="alertNext"
@@ -265,12 +276,12 @@
                           <q-item-section avatar>
                             <q-avatar>
                               <img
-                                src="https://cdn.quasar.dev/img/boy-avatar.png"
+                                :src="profile.avatar"
                               />
                             </q-avatar>
                           </q-item-section>
                           <q-item-section>
-                            <q-item-label>Title</q-item-label>
+                            <q-item-label>{{ profile.name }}</q-item-label>
                             <q-item-label caption> Subhead </q-item-label>
                           </q-item-section>
                           <q-item-section side top> </q-item-section>
@@ -732,6 +743,7 @@ export default defineComponent({
           send: 'send',
         },
       ],
+      cropperkey: 1,
       faceList: [],
       text: '',
       icon: false,
@@ -864,6 +876,11 @@ export default defineComponent({
         const face = data.faceList[index] as string;
         data.text = data.text + face;
       },
+      back(): void {
+        data.bigStyle = 'min-width: 450px;min-height: 450px;max-width: 850px;max-height: 80%;height: 45vw !important;width: 30vw !important;';
+        data.cropperkey = 2;
+        data.alertNext = false;
+      },
       next1(): void {
         let avatarfile = null;
 
@@ -924,8 +941,9 @@ export default defineComponent({
           ]
         };
         let res = await postArt(param) as any
-        // if(res.status == 200) {
-        // }
+        if(res.status == 200) {
+          router.go(0);
+        }
       },
       async getProfileMe(): Promise<any> {
         let res = (await getProfileMe()) as any;

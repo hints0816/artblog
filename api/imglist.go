@@ -1,6 +1,7 @@
 package api
 
 import (
+	"hello/middleware"
 	"hello/model"
 	"hello/utils/errormsg"
 	"net/http"
@@ -43,7 +44,10 @@ func PostImg(c *gin.Context) {
 	// contentType := fileHeader.Header.Get("Content-Type")
 	// url, code := model.UpLoadFile(file, contentType, fileSize)
 
+	usernamekey, _ := c.Get("username")
+	userinfo, _ := usernamekey.(*middleware.MyClaims)
 	_ = c.ShouldBindJSON(&data)
+	data.UserID = userinfo.Id
 	code = model.PostArt(&data)
 
 	c.JSON(http.StatusOK, gin.H{

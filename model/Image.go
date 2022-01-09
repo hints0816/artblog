@@ -12,6 +12,8 @@ type Imgcontent struct {
 	Imglist []*Imglist `gorm:"foreignkey:ContentId;references:ID"`
 	Content string     `gorm:"type:varchar(255)" json:"content"`
 	Imgurl  string     `gorm:"type:varchar(255)" json:"imgurl"`
+	UserID  uint       `gorm:"type:bigint;not null" json:"user_id"`
+	Profile Profile    `gorm:"foreignkey:UserID"`
 }
 
 type Imglist struct {
@@ -48,6 +50,6 @@ func PostArt(data *Imgcontent) int {
 
 func GetImgInfo(id int) (Imgcontent, int) {
 	var imgcontent Imgcontent
-	db.Preload("Imglist").Where("id =?", id).First(&imgcontent)
+	db.Preload("Profile").Preload("Imglist").Where("id =?", id).First(&imgcontent)
 	return imgcontent, errormsg.SUCCSE
 }
