@@ -8,6 +8,8 @@ import (
 	"hello/utils/errormsg"
 	"hello/utils/fileUtils"
 	"hello/utils/uuid"
+	"image"
+	"image/png"
 	"io/ioutil"
 	"log"
 	"strconv"
@@ -68,6 +70,27 @@ func UpLoadFile(file multipart.File, contentType string, fileSize int64) (string
 	fileName := strconv.FormatInt(uuid, 10) + "." + fileType
 	fmt.Println(minioClient.ListBuckets(context.Background()))
 	uploadInfo, err := minioClient.PutObject(context.Background(), "blog", fileName, uploadfile, fileSize, minio.PutObjectOptions{ContentType: contentType})
+	if err != nil {
+		return "", errormsg.ERROR
+	}
+	fmt.Println("Successfully uploaded bytes: ", uploadInfo)
+	return "http://" + utils.MinioServer + "/blog/" + fileName, errormsg.SUCCSE
+}
+
+func UpLoadFileImg(img image.Image) (string, int) {
+	emptyBuff := bytes.NewBuffer(nil)
+	png.Encode(emptyBuff, img)
+	fSrc := emptyBuff.Bytes()
+	buf := bytes.NewBuffer(fSrc)
+	uploadfile := ioutil.NopCloser(buf)
+	fileSize := int64(len(fSrc))
+	defer uploadfile.Close()
+
+	fileType := fileUtils.GetFileType(fSrc[:10])
+	uuid := uuid.GetSnowFlakeID()
+	fileName := strconv.FormatInt(uuid, 10) + "." + fileType
+	fmt.Println(minioClient.ListBuckets(context.Background()))
+	uploadInfo, err := minioClient.PutObject(context.Background(), "blog", fileName, uploadfile, fileSize, minio.PutObjectOptions{ContentType: "image/png"})
 	if err != nil {
 		return "", errormsg.ERROR
 	}
