@@ -1,6 +1,6 @@
 import { boot } from 'quasar/wrappers';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { LocalStorage, Loading, QSpinnerGrid } from 'quasar'; 
+import { LocalStorage, Loading, QSpinnerGrid } from 'quasar';
 
 
 declare module '@vue/runtime-core' {
@@ -16,8 +16,8 @@ declare module '@vue/runtime-core' {
 // "export default () => {}" function below (which runs individually
 // for each client)
 const api = axios.create({
-  // baseURL: 'http://www.arthins.com:3000',
-  baseURL: 'http://localhost:3000',
+  baseURL: 'http://www.arthins.com:3000',
+  // baseURL: 'http://localhost:3000',
   withCredentials: true,
 });
 // 请求拦截import { config } from 'process';

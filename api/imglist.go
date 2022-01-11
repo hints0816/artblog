@@ -50,10 +50,10 @@ func PostImg(c *gin.Context) {
 	userinfo, _ := usernamekey.(*middleware.MyClaims)
 	_ = c.ShouldBindJSON(&data)
 	data.UserID = userinfo.Id
-	code = model.PostArt(&data)
 	image := img.ResizeImg(data.Imgurl)
 	url, _ := model.UpLoadFileImg(image)
-	fmt.Println(url)
+	data.Imgurl = url
+	code = model.PostArt(&data)
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,
 		"message": errormsg.GetErrMsg(code),
