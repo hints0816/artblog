@@ -9,8 +9,17 @@ import (
 
 type Imgcontent struct {
 	gorm.Model
-	Content string `gorm:"type:varchar(255)" json:"content"`
-	Imgurl  string `gorm:"type:varchar(255)" json:"imgurl"`
+	Imglist []*Imglist `gorm:"foreignkey:ContentId;references:ID"`
+	Content string     `gorm:"type:varchar(255)" json:"content"`
+	Imgurl  string     `gorm:"type:varchar(255)" json:"imgurl"`
+	UserID  uint       `gorm:"type:bigint;not null" json:"user_id"`
+	Profile Profile    `gorm:"foreignkey:UserID"`
+}
+
+type Imglist struct {
+	ID        uint   `gorm:"primary_key;auto_increment" json:"id"`
+	ImgUrl    string `gorm:"type:varchar(255)" json:"img_url"`
+	ContentId uint   `gorm:"type:int" json:"content_id"`
 }
 
 func ListImage(pageSize int, pageNum int) ([]Imgcontent, int, int64) {
@@ -37,4 +46,10 @@ func PostArt(data *Imgcontent) int {
 		return errormsg.ERROR // 500
 	}
 	return errormsg.SUCCSE
+}
+
+func GetImgInfo(id int) (Imgcontent, int) {
+	var imgcontent Imgcontent
+	db.Preload("Profile").Preload("Imglist").Where("id =?", id).First(&imgcontent)
+	return imgcontent, errormsg.SUCCSE
 }

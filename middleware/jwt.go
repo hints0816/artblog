@@ -73,7 +73,7 @@ func (j *JWT) ParserToken(tokenString string) (*MyClaims, error) {
 }
 
 func apiFilter(url string) bool {
-	apis := [...]string{"/api/blog/comment/list", "/api/blog/articlelist"}
+	apis := [...]string{"/api/blog/imgcomment/list", "/api/blog/comment/list", "/api/blog/articlelist"}
 	for _, x := range apis {
 		if strings.HasPrefix(url, x) {
 			return true

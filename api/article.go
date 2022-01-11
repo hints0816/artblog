@@ -157,6 +157,7 @@ func GetArtInfo(c *gin.Context) {
 
 func UploadArtImage(c *gin.Context) {
 	file, fileHeader, _ := c.Request.FormFile("file")
+
 	fileSize := fileHeader.Size
 	contentType := fileHeader.Header.Get("Content-Type")
 	url, code := model.UpLoadFile(file, contentType, fileSize)

@@ -49,6 +49,10 @@ export const getArticle = async (id: number) => {
     return await api.get(`/api/blog/article/${id}`);
 };
 
+export const getImgContent = async (id: number) => {
+    return await api.get(`/api/blog/artimg/${id}`);
+};
+
 export const addArticle = async (articleParams: ArticleInfo) => {
     return await api.post('/api/blog/article', articleParams);
 };
@@ -57,8 +61,16 @@ export const listComment = async (id: number, params: any) => {
     return await api.get(`/api/blog/comment/list/${id}`,{params:params});
 };
 
+export const listImgComment = async (id: number, params: any) => {
+    return await api.get(`/api/blog/imgcomment/list/${id}`,{params:params});
+};
+
 export const addComment = async (params: any) => {
     return await api.post('/api/blog/comment',params);
+};
+
+export const addImgComment = async (params: any) => {
+    return await api.post('/api/blog/imgcomment',params);
 };
 
 export const digg = async (params: any) => {
