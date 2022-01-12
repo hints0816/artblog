@@ -1,7 +1,7 @@
 <template>
   <div class="row justify-center">
     <q-page padding class="col-xs-12 col-sm-12 col-md-8 col-lg-6">
-      <q-infinite-scroll @load="onLoad" :offset="250">
+      <q-infinite-scroll @load="onLoad" :offset="200">
         <div :class="outClass + ' row'">
           <div
             v-for="(src, index) in images"
@@ -36,6 +36,11 @@
             </template>
           </div>
         </div>
+         <template v-slot:loading>
+          <div class="row justify-center q-my-md">
+            <q-spinner-dots color="primary" size="40px" />
+          </div>
+        </template>
       </q-infinite-scroll>
       <q-dialog class="maindia" style="background-color: rgba(0,0,0,0.6);" persistent v-model="alert">
       <q-btn class="text-white absolute-top-right q-mr-lg q-mt-lg" icon="close" v-close-popup flat round dense/>
@@ -254,7 +259,9 @@ export default {
       images: [],
       imgDetail: null,
       comments: [],
-      imgSort: []
+      imgSort: [],
+      pagesize: 18,
+      total: 18,
     });
     const method = {
       checkNum(nums: number): boolean {
@@ -263,6 +270,25 @@ export default {
           return true;
         } else {
           return false;
+        }
+      },
+      async onLoad(index, done): Promise<any> {
+        if (data.total > data.pagesize) {
+          data.pagesize += 10;
+          const paramss = {
+            pagenum: 1,
+            pagesize: data.pagesize
+          };
+          let datas = (await listArtList(paramss)) as any;
+          setTimeout(() => {
+            datas.data.forEach((element: any) => {
+              data.images.push({url:element.imgurl,id:element.ID})
+              data.imgSort.push(element.ID);
+            });
+            done();
+          }, 2000);
+        } else {
+          done();
         }
       },
       getEmo(index: number): void {
@@ -321,7 +347,7 @@ export default {
       async listArt():Promise<any> {
         const paramss = {
           pagenum: 1,
-          pagesize: 20,
+          pagesize: data.pagesize,
         };
         let datas = (await listArtList(paramss)) as any;
         datas.data.forEach((element: any) => {

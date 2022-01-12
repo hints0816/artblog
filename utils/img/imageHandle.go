@@ -11,7 +11,6 @@ func ResizeImg(url string) image.Image {
 	resp, _ := http.Get(url)
 	defer resp.Body.Close()
 	m, _ := imaging.Decode(resp.Body)
-	dstImage128 := imaging.Resize(m, 200, 200, imaging.Lanczos)
-	imaging.Save(dstImage128, "d:/2.png")
+	dstImage128 := imaging.Thumbnail(m, 600, 600, imaging.CatmullRom)
 	return dstImage128
 }
