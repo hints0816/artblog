@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"hello/middleware"
 	"hello/model"
 	"hello/utils/errormsg"

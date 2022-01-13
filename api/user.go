@@ -51,18 +51,18 @@ func GithubCallback(c *gin.Context) {
 				"redirect_uri":  {redirect_uri},
 			})
 	if accessErr != nil {
-		log.Fatal(accessErr)
+		// log.Fatal(accessErr)
 		return
 	}
 	defer accessResp.Body.Close()
 	readBody, readBodyErr := ioutil.ReadAll(accessResp.Body)
 	if readBodyErr != nil {
-		log.Fatal(readBodyErr)
+		// log.Fatal(readBodyErr)
 		return
 	}
 	newUserResp, userErr := http.NewRequest("GET", "https://api.github.com/user", nil)
 	if userErr != nil {
-		log.Fatal(userErr)
+		// log.Fatal(userErr)
 		return
 	}
 	githubToken := string(readBody)[13:53]
@@ -71,7 +71,7 @@ func GithubCallback(c *gin.Context) {
 	userResp, _ := client.Do(newUserResp)
 	readBody2, readBodyErr2 := ioutil.ReadAll(userResp.Body)
 	if readBodyErr2 != nil {
-		log.Fatal(readBodyErr2)
+		// log.Fatal(readBodyErr2)
 		return
 	}
 	userinfo := []byte(string(readBody2))
@@ -117,5 +117,5 @@ func GithubCallback(c *gin.Context) {
 		"http://arthins", false, true)
 	c.SetCookie("token", token, 604800, "/",
 		"http://arthins", false, true)
-	c.Redirect(302, "https://www.arthins.com")
+	c.Redirect(302, "http://www.arthins.com")
 }
