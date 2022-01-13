@@ -50,6 +50,7 @@
         <div class="q-gutter-sm row items-center no-wrap">
           <q-btn @click="openGithub" dense round flat icon="ion-logo-github" />
           <q-btn
+            v-if="profile.name"
             @click="alertAdd = true"
             dense
             round
@@ -139,14 +140,15 @@
                           :style="{
                             'z-index': 99,
                             position: 'absolute',
-                            top: item.chiptop + 'px',
-                            left: item.chipleft + 'px',
+                            top: item.top + 'px',
+                            left: item.left + 'px',
                           }"
+                          v-on:click.stop
                           dense
                           @mousedown="moveFabIndex(index)"
                           v-touch-pan.prevent.mouse="moveFab"
                           icon="event"
-                          >{{item.chipText}}</q-chip
+                          >{{item.tag}}</q-chip
                         >
                         <q-uploader
                           @added="addImageS"
@@ -201,6 +203,7 @@
                           autoCropHeight="300"
                         ></vue-cropper>
                         <q-img
+                          id="uploadimg"
                           v-if="alertNext"
                           :src="imgdisurl"
                           :ratio="1"
@@ -774,31 +777,31 @@ export default defineComponent({
         const h2 = dom.height(document.getElementById('imgCard'));
         const w2 = dom.width(document.getElementById('imgCard'));
         // console.log(data.chipPositions[0].chiptop)
-        if (data.chipPositions[data.moveIndex].chiptop - -ev.delta.y > 0) {
+        if (data.chipPositions[data.moveIndex].top - -ev.delta.y > 0) {
           if (
-            data.chipPositions[data.moveIndex].chiptop - -ev.delta.y <
+            data.chipPositions[data.moveIndex].top - -ev.delta.y <
             h2 - h1 - 7
           ) {
-            data.chipPositions[data.moveIndex].chiptop =
-              data.chipPositions[data.moveIndex].chiptop - -ev.delta.y;
+            data.chipPositions[data.moveIndex].top =
+              data.chipPositions[data.moveIndex].top - -ev.delta.y;
           } else {
-            data.chipPositions[data.moveIndex].chiptop = h2 - h1 - 7;
+            data.chipPositions[data.moveIndex].top = h2 - h1 - 7;
           }
         } else {
-          data.chipPositions[data.moveIndex].chiptop = 0;
+          data.chipPositions[data.moveIndex].top = 0;
         }
-        if (data.chipPositions[data.moveIndex].chipleft - -ev.delta.x > 0) {
+        if (data.chipPositions[data.moveIndex].left - -ev.delta.x > 0) {
           if (
-            data.chipPositions[data.moveIndex].chipleft - -ev.delta.x <
+            data.chipPositions[data.moveIndex].left - -ev.delta.x <
             w2 - w1 - 7
           ) {
-            data.chipPositions[data.moveIndex].chipleft =
-              data.chipPositions[data.moveIndex].chipleft - -ev.delta.x;
+            data.chipPositions[data.moveIndex].left =
+              data.chipPositions[data.moveIndex].left - -ev.delta.x;
           } else {
-            data.chipPositions[data.moveIndex].chipleft = w2 - w1 - 7;
+            data.chipPositions[data.moveIndex].left = w2 - w1 - 7;
           }
         } else {
-          data.chipPositions[data.moveIndex].chipleft = 0;
+          data.chipPositions[data.moveIndex].left = 0;
         }
       },
       removeTag(index: number) {
@@ -814,9 +817,9 @@ export default defineComponent({
       editTag() {
         if (data.alertNext) {
           data.chipPositions.push({
-            chiptop: data.chiptop,
-            chipleft: data.chipleft,
-            chipText: data.tagText
+            top: data.chiptop,
+            left: data.chipleft,
+            tag: data.tagText
           });
           data.tagText = ''
         }
@@ -863,6 +866,7 @@ export default defineComponent({
         data.imageFiles = [];
         data.alertNext = false;
         data.option.img = '';
+        data.chipPositions = [];
         data.bigStyle =
           'min-width: 450px;min-height: 450px;max-width: 850px;max-height: 80%;height: 45vw !important;width: 30vw !important;';
       },
@@ -880,6 +884,7 @@ export default defineComponent({
         data.bigStyle = 'min-width: 450px;min-height: 450px;max-width: 850px;max-height: 80%;height: 45vw !important;width: 30vw !important;';
         data.cropperkey = 2;
         data.alertNext = false;
+        data.chipPositions = [];
       },
       next1(): void {
         let avatarfile = null;
@@ -931,12 +936,19 @@ export default defineComponent({
         // let param = new FormData()
         // param.append('file', data.imageFiles[0])
         // param.append('content', data.arttext)
+        const height = dom.height(document.getElementById('uploadimg'));
+        const width = dom.width(document.getElementById('uploadimg'));
+        data.chipPositions.forEach((element: any) => {
+          element.top =  Number(element.top/height).toFixed(4);
+          element.left = Number(element.left/width).toFixed(4);
+        });
         const param = {
           imgurl: data.imgdisurl,
           content: data.arttext,
           Imglist: [
             {
-              img_url: data.imgdisurl
+              img_url: data.imgdisurl,
+              Imgtag: data.chipPositions
             }
           ]
         };

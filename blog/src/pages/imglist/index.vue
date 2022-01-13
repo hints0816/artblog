@@ -127,7 +127,20 @@
                 :key="index"
                 :name="index + 1"
                 :img-src="data.img_url"
-              />
+              >
+                <q-chip
+                  v-for="(item, index2) in data.Imgtag"
+                  :key="index2"
+                  :style="{
+                    'z-index': 99,
+                    position: 'absolute',
+                    top: item.top + 'px',
+                    left: item.left + 'px',
+                  }"
+                  dense
+                  >{{item.tag}}</q-chip
+                >
+              </q-carousel-slide>
             </q-carousel>
             <q-card-section style="padding: 0px" class="full-width">
               <q-item>
@@ -283,7 +296,8 @@
                   :key="index"
                   :name="index + 1"
                   :img-src="data.img_url"
-                />
+                >
+                </q-carousel-slide>
               </q-carousel>
               <q-item>
                 <q-item-section>
@@ -424,7 +438,7 @@ export default {
         }
       },
       async onLoad(index, done): Promise<any> {
-        if (data.total > data.pagesize) {
+        if (data.total > data.pagesize*data.pagenum) {
           // data.pagesize += 10;
           data.pagenum += 1;
           const paramss = {

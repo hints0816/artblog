@@ -4,6 +4,7 @@ import (
 	"hello/utils/errormsg"
 	"log"
 
+	"github.com/shopspring/decimal"
 	"gorm.io/gorm"
 )
 
@@ -17,9 +18,17 @@ type Imgcontent struct {
 }
 
 type Imglist struct {
-	ID        uint   `gorm:"primary_key;auto_increment" json:"id"`
-	ImgUrl    string `gorm:"type:varchar(255)" json:"img_url"`
-	ContentId uint   `gorm:"type:int" json:"content_id"`
+	ID        uint      `gorm:"primary_key;auto_increment" json:"id"`
+	ImgUrl    string    `gorm:"type:varchar(255)" json:"img_url"`
+	ContentId uint      `gorm:"type:int" json:"content_id"`
+	Imgtag    []*Imgtag `gorm:"foreignkey:ID;references:ID"`
+}
+
+type Imgtag struct {
+	ID   int             `gorm:"type:int" json:"id"`
+	Top  decimal.Decimal `gorm:"type:float64" json:"top"`
+	Left decimal.Decimal `gorm:"type:float64" json:"left"`
+	Tag  string          `gorm:"type:varchar(255)" json:"tag"`
 }
 
 func ListImage(pageSize int, pageNum int) ([]Imgcontent, int, int64) {
@@ -50,6 +59,6 @@ func PostArt(data *Imgcontent) int {
 
 func GetImgInfo(id int) (Imgcontent, int) {
 	var imgcontent Imgcontent
-	db.Preload("Profile").Preload("Imglist").Where("id =?", id).First(&imgcontent)
+	db.Preload("Imglist.Imgtag").Preload("Imglist").Preload("Profile").Where("id =?", id).First(&imgcontent)
 	return imgcontent, errormsg.SUCCSE
 }

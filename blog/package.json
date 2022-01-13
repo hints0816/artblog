@@ -2,7 +2,7 @@
   "name": "blog",
   "version": "0.0.1",
   "description": "A Quasar Framework app",
-  "productName": "Quasar App",
+  "productName": "arthints",
   "author": "hints0816 <1152536969@qq.com>",
   "private": true,
   "scripts": {

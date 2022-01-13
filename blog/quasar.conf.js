@@ -160,8 +160,8 @@ module.exports = configure(function (ctx) {
       },
 
       manifest: {
-        name: 'Quasar App',
-        short_name: 'Quasar App',
+        name: 'arthints',
+        short_name: 'arthints',
         description: 'A Quasar Framework app',
         display: 'standalone',
         orientation: 'portrait',
