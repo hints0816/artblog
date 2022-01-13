@@ -7,7 +7,6 @@ import (
 	"hello/model"
 	"hello/utils"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"net/url"
 	"strconv"
