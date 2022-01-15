@@ -46,6 +46,10 @@ const routes: RouteRecordRaw[] = [
       {
         path: '/setting/comment',
         component: () => import('pages/setting/comment.vue'),
+      },
+      {
+        path: '/setting/artimg',
+        component: () => import('pages/setting/artimg.vue'),
       }
     ],
   },

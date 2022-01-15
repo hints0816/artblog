@@ -1,6 +1,6 @@
 <template>
   <q-layout>
-    <q-header>
+    <q-header style="position:fixed;">
       <q-toolbar :style="{ 'background-color': hex }">
         <q-btn
           v-if="!$q.screen.gt.sm"
@@ -55,7 +55,7 @@
             dense
             round
             flat
-            icon="add_circle_outline"
+            icon="library_add"
           />
           <q-dialog
             class="maindia"
@@ -132,6 +132,8 @@
                       >
                         <q-chip
                           removable
+                          square 
+                          class="chiptag bg-dark text-white"
                           v-for="(item, index) in chipPositions"
                           :key="index"
                           :id="'tagChip' + index"
@@ -144,10 +146,8 @@
                             left: item.left + 'px',
                           }"
                           v-on:click.stop
-                          dense
                           @mousedown="moveFabIndex(index)"
                           v-touch-pan.prevent.mouse="moveFab"
-                          icon="event"
                           >{{item.tag}}</q-chip
                         >
                         <q-uploader
@@ -519,11 +519,11 @@
       :offset="[18, 18]"
     >
       <q-fab icon="unfold_more" color="cyan-9" direction="up">
-        <q-fab-action icon="comment" color="cyan-9" @click="open('right')" />
+        <!-- <q-fab-action icon="comment" color="cyan-9" @click="open('right')" /> -->
         <q-fab-action
           icon="home"
           color="cyan-9"
-          @click="$router.push('/12321')"
+          @click="$router.push('/')"
         />
         <q-fab-action
           icon="keyboard_arrow_up"
@@ -705,7 +705,7 @@ export default defineComponent({
       alertNext: false,
       alertAdd: false,
       alert: false,
-      hex: 'rgb(99, 24, 105)',
+      hex: 'rgb(28, 56, 87)',
       tab: 'Home',
       profile: {
         name: '',
@@ -1067,4 +1067,6 @@ a
     height: 100%
 .maindia .no-pointer-events
   pointer-events: initial !important
+.chiptag .q-chip__icon
+  color: white
 </style>

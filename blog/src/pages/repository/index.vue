@@ -57,7 +57,7 @@
                 outline
                 v-if="edit"
                 @click="openEditProfile = true"
-                class="text-purple full-width"
+                class="text-cyan-9 full-width"
                 label="Edit profile"
               />
             </q-card-actions>
@@ -133,7 +133,7 @@
                 </template>
               </q-input>
               <div class="q-gutter-sm">
-                <q-btn outline dense class="text-purple" @click="updateProfile" label="Save" />
+                <q-btn outline dense class="text-cyan-9" @click="updateProfile" label="Save" />
                 <q-btn
                   outline
                   dense
@@ -236,11 +236,10 @@
         <div class="col-xs-12 col-md-9 q-col-gutter-x-lg" style="height: 100%;margin-left:0;padding-left:0;">
           <q-card style="padding-right: 24px;" flat>
             <q-tabs v-model="tab" inline-label class="q-my-md" align="left">
-              <q-tab name="article" icon="mail" label="ArtList" />
-              <!-- <q-tab name="Movie" icon="alarm" label="Alarms" /> -->
-              <!-- <q-tab name="setting" icon="movie" label="Setting" /> -->
+              <q-tab name="article" icon="feed" label="ArtList" />
+              <q-tab name="comment" icon="chat" label="Comment" />
+              <q-tab name="artImage" icon="collections" label="ArtImage" />
             </q-tabs>
-            <q-separator />
             <q-tab-panels v-model="tab" animated>
               <q-tab-panel name="article">
                 <q-card-actions class="row q-col-gutter-x-xs justify-between">
@@ -260,20 +259,18 @@
                     style="width: 130px"
                     label="Outlined"
                   />
-                  <q-btn outline to="/edit" class="text-purple q-mx-xs">
-                    <div class="row items-center no-wrap">
-                      <q-icon left name="book" />
-                      <div class="text-center">New</div>
-                    </div>
+                  <q-btn flat to="/edit" icon="post_add" class="text-cyan-9 q-mx-xs">
                   </q-btn>
                 </q-card-actions>
-                <q-separator />
                 <q-card-section>
                   <Edit @reloadart="listart" :postList="postList" :edit="edit" />
                 </q-card-section>
               </q-tab-panel>
-              <q-tab-panel name="setting">
+              <q-tab-panel name="comment">
                 <Category/>
+              </q-tab-panel>
+              <q-tab-panel name="artImage">
+                <ArtImgCard/>
               </q-tab-panel>
             </q-tab-panels>
           </q-card>
@@ -287,6 +284,7 @@ import emoji from '../../css/emoji.json';
 import { updateProfile, editEmoji } from '../../api/test/index';
 import Edit from '../../components/EditCard.vue';
 import Category from '../../components/CategoryCard.vue';
+import ArtImgCard from '../../components/ArtImgCard.vue';
 import {
   listArticle,
   getProfile,
@@ -305,7 +303,7 @@ import { Notify } from 'quasar';
 
 export default {
   name: 'Post',
-  components: { Edit, Category },
+  components: { Edit, Category, ArtImgCard },
   setup() {
     let data = reactive({
       alert: false,

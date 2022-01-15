@@ -7,14 +7,16 @@
             <q-card-actions align="center">
               <div class="useravatar full-width">
                  <q-list>
-                  <q-item clickable v-ripple :active="true" :active-class="$q.dark.isActive?'bg-grey-9':'bg-grey-3'">
+                  <q-item clickable v-ripple to="/setting/article">
                     <q-item-section avatar>
                       <q-icon name="feed" />
                     </q-item-section>
-                    <q-item-section class="text-weight-bold">Article</q-item-section>
+                    <q-item-section>
+                      <q-item-label class="text-weight-bold">Article</q-item-label>
+                    </q-item-section>
                   </q-item>
 
-                  <q-item clickable v-ripple to="/setting/category">
+                  <q-item clickable v-ripple :active-class="$q.dark.isActive?'bg-grey-9':'bg-grey-3'">
                     <q-item-section avatar>
                       <q-icon name="category" />
                     </q-item-section>
@@ -32,7 +34,7 @@
                     </q-item-section>
                   </q-item>
 
-                  <q-item clickable v-ripple to="/setting/artimg">
+                  <q-item clickable :active="true" v-ripple to="/setting/artimg">
                     <q-item-section avatar>
                       <q-icon name="collections" />
                     </q-item-section>
@@ -46,31 +48,8 @@
           </q-card>
         </div>
         <div class="col-xs-12 col-md-9 q-col-gutter-x-lg" style="height: 100%;margin-left:0;padding-left:0;">
-          <q-card style="padding-right: 24px;" flat>
-                <q-card-actions class="row q-col-gutter-x-xs justify-between">
-                  <q-input
-                    class="col-grow col-xs-12 col-sm-8"
-                    dense
-                    outlined
-                    v-model="text"
-                    label="Outlined"
-                  />
-                  <q-select
-                    dense
-                    outlined
-                    v-model="model"
-                    class="col-grow"
-                    :options="['Google', 'Facebook']"
-                    style="width: 130px"
-                    label="Outlined"
-                  />
-                  <q-btn flat to="/edit" icon="post_add" class="text-cyan-9 q-mx-xs">
-                  </q-btn>
-                </q-card-actions>
-                <q-separator />
-                <q-card-section>
-                  <Edit @reloadart="listart" :postList="postList" :edit="edit" />
-                </q-card-section>
+          <q-card style="padding-right:24px;" flat>
+            <ArtImgCard/>
           </q-card>
         </div>
       </div>
@@ -78,21 +57,17 @@
   </div>
 </template>
 <script lang="ts">
-import Edit from '../../components/EditCard.vue';
+import ArtImgCard from '../../components/ArtImgCard.vue';
 import {
-  listArticle,
-} from '../../api/test/index';
-import {
+  ref,
   reactive,
   toRefs,
   onBeforeMount,
 } from 'vue';
-import { date } from 'quasar';
-import { useRoute } from 'vue-router';
 
 export default {
   name: 'Post',
-  components: { Edit },
+  components: { ArtImgCard },
   setup() {
     let data = reactive({
       alert: false,
@@ -101,32 +76,10 @@ export default {
       pagesize: 10,
       total: 10,
       edit: false,
-      postList: [],
     });
-    const route = useRoute() as any;
     const method = {
-      async listart(): Promise<any> {
-        const paramss = {
-          pagenum: 1,
-          pagesize: data.pagesize,
-          user_id: route.params.id,
-        };
-        let datas = (await listArticle(paramss)) as any;
-        datas.data.forEach((element) => {
-          let timeStamp = new Date(element.UpdatedAt);
-          let formattedString = date.formatDate(
-            timeStamp,
-            'YYYY-MM-DD HH:mm:ss'
-          );
-          element.UpdatedAt = formattedString;
-        });
-        data.postList = datas.data;
-        data.total = datas.total;
-        data.edit = datas.edit;
-      }
     };
     onBeforeMount(async () => {
-      await method.listart();
     });
     return {
       ...toRefs(data),

@@ -6,20 +6,40 @@
           <q-card style="background-color:transparent;" flat class="my-card">
             <q-card-actions align="center">
               <div class="useravatar full-width">
-                 <q-list bordered separator>
+                 <q-list>
                   <q-item clickable v-ripple to="/setting/article">
-                    <q-item-section>Article</q-item-section>
+                    <q-item-section avatar>
+                      <q-icon name="feed" />
+                    </q-item-section>
+                    <q-item-section>
+                      <q-item-label class="text-weight-bold">Article</q-item-label>
+                    </q-item-section>
                   </q-item>
 
                   <q-item clickable v-ripple to="/setting/category">
+                    <q-item-section avatar>
+                      <q-icon name="category" />
+                    </q-item-section>
                     <q-item-section>
-                      <q-item-label>Category</q-item-label>
+                      <q-item-label class="text-weight-bold">Category</q-item-label>
                     </q-item-section>
                   </q-item>
 
                   <q-item clickable v-ripple :active="true" :active-class="$q.dark.isActive?'bg-grey-9':'bg-grey-3'">
+                    <q-item-section avatar>
+                      <q-icon name="chat" />
+                    </q-item-section>
                     <q-item-section>
-                      <q-item-label>Comment</q-item-label>
+                      <q-item-label class="text-weight-bold">Comment</q-item-label>
+                    </q-item-section>
+                  </q-item>
+
+                  <q-item clickable v-ripple to="/setting/artimg">
+                    <q-item-section avatar>
+                      <q-icon name="collections" />
+                    </q-item-section>
+                    <q-item-section>
+                      <q-item-label class="text-weight-bold">ArtImage</q-item-label>
                     </q-item-section>
                   </q-item>
                 </q-list>

@@ -68,3 +68,12 @@ func GetImgInfo(c *gin.Context) {
 		"message": errormsg.GetErrMsg(code),
 	})
 }
+
+func DelImgInfo(c *gin.Context) {
+	id, _ := strconv.Atoi(c.Param("id"))
+	code := model.DelImg(uint(id))
+	c.JSON(http.StatusOK, gin.H{
+		"status":  code,
+		"message": errormsg.GetErrMsg(code),
+	})
+}

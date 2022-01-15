@@ -1,7 +1,7 @@
 <template>
   <div class="row justify-center">
-    <q-page padding class="col-xs-12 col-sm-10 col-md-8">
-      <q-infinite-scroll @load="onLoad" :offset="250">
+    <q-page padding class="row col-xs-12 col-sm-10 col-md-8">
+      <q-infinite-scroll class="col-12" @load="onLoad" :offset="250">
         <q-list padding>
           <Item @reloadart="reloadArt" :postList="postList" />
         </q-list>

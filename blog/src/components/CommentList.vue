@@ -7,9 +7,9 @@
         </q-avatar>
       </template>
       <template v-slot:after>
-        <q-btn push color="primary" icon="mood">
+        <q-btn flat round color="primary" icon="mood">
           <q-popup-edit
-            max-width="158px"
+            max-width="250px"
             style="padding: 4px 8px"
             self="top start"
             cover="false"
@@ -18,7 +18,7 @@
               <a
                 href="javascript:void(0);"
                 @click="getEmo(index)"
-                style="text-decoration: none"
+                style="font-size: 22px;texttext-decoration: none"
                 v-for="(item, index) in faceList"
                 :key="index"
                 class="emotionItem"
@@ -27,7 +27,7 @@
             </div>
           </q-popup-edit>
         </q-btn>
-        <q-btn push color="primary" @click="addComment(0)" label="Comment">
+        <q-btn flat color="primary" class="text-weight-bolder" @click="addComment(0)" label="comment">
           <!-- <q-popup-proxy :breakpoint="1024">
                 <a href="javascript:void(0);" v-for="(item,index) in faceList" :key="index" class="emotionItem">{{item}}</a>
             </q-popup-proxy> -->
@@ -115,9 +115,9 @@
               :dense="dense"
             >
               <template v-slot:after>
-                <q-btn push color="primary" icon="mood">
+                <q-btn flat round color="primary" icon="mood">
                   <q-popup-edit
-                    max-width="158px"
+                    max-width="250px"
                     style="padding: 4px 8px"
                     self="top start"
                     cover="false"
@@ -126,7 +126,7 @@
                       <a
                         href="javascript:void(0);"
                         @click="getEmo1(index)"
-                        style="text-decoration: none"
+                        style="font-size: 22px;text-decoration: none"
                         v-for="(item, index) in faceList"
                         :key="index"
                         class="emotionItem"
@@ -136,7 +136,8 @@
                   </q-popup-edit>
                 </q-btn>
                 <q-btn
-                  push
+                  flat
+                  class="text-weight-bolder"
                   color="primary"
                   @click="addComment(comment.ID)"
                   label="Comment"
@@ -211,9 +212,9 @@
                 :dense="dense"
               >
                 <template v-slot:after>
-                  <q-btn push color="primary" icon="mood">
+                  <q-btn flat round color="primary" icon="mood">
                     <q-popup-edit
-                      max-width="158px"
+                      max-width="250px"
                       style="padding: 4px 8px"
                       self="top start"
                       cover="false"
@@ -222,7 +223,7 @@
                         <a
                           href="javascript:void(0);"
                           @click="getEmo1(index)"
-                          style="text-decoration: none"
+                          style="font-size: 22px;text-decoration: none"
                           v-for="(item, index) in faceList"
                           :key="index"
                           class="emotionItem"
@@ -232,8 +233,9 @@
                     </q-popup-edit>
                   </q-btn>
                   <q-btn
-                    push
+                    flat
                     color="primary"
+                    class="text-weight-bolder"
                     @click="addComment(rev.ID)"
                     label="Comment"
                   >

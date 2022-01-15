@@ -1,25 +1,12 @@
 <template>
   <div>
-    <q-tabs v-model="tab" inline-label class="q-my-md" align="left">
-      <q-tab name="article" icon="mail" label="ArtList" />
-      <q-tab name="setting" icon="movie" label="Setting" />
-    </q-tabs>
-    <q-separator />
-    <q-tab-panels v-model="tab" animated>
-      <q-tab-panel name="article">
-        <q-card-section>
-          <Edit @reloadart="listart" :postList="postList" :edit="edit" />
-        </q-card-section>
-      </q-tab-panel>
-      <q-tab-panel name="setting">
-        <Category />
-      </q-tab-panel>
-    </q-tab-panels>
+    <q-card-section>
+      <Edit @reloadart="listart" :postList="postList" :edit="edit" />
+    </q-card-section>
   </div>
 </template>
 <script lang="ts">
 import Edit from '../components/EditCard.vue';
-import Category from '../components/CategoryCard.vue';
 import {
   listArticle,
 } from '../api/test/index';
@@ -31,11 +18,10 @@ import {
 } from 'vue';
 import { date } from 'quasar';
 import { useRoute, useRouter } from 'vue-router';
-import { Notify } from 'quasar';
 
 export default {
   name: 'Post',
-  components: { Edit, Category },
+  components: { Edit },
   setup() {
     let data = reactive({
       alert: false,

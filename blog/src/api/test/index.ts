@@ -85,6 +85,10 @@ export const delArticle = async (id: number) => {
     return await api.delete(`/api/blog/article/${id}`);
 };
 
+export const delImg = async (id: number) => {
+    return await api.delete(`/api/blog/artimg/${id}`);
+};
+
 export const uploadImage = async (params: any) => {
     const config = {
         headers: {'Content-Type': 'multipart/form-data'}

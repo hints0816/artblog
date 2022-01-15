@@ -1,14 +1,12 @@
 <template>
-  <div class="row justify-center">
-    <q-page padding class="col-xs-12 col-sm-12 col-md-8 col-lg-6">
-      <q-infinite-scroll @load="onLoad" :offset="200">
+  <q-infinite-scroll @load="onLoad" :offset="200">
         <div :class="outClass + ' row'">
           <div
             v-for="(src, index) in images"
             :key="index"
             :class="loadClass(index)"
           >
-            <template v-if="checkClass(index) == 0 || checkClass(index) == -1">
+            <template v-if="checkClass(index) == -1">
               <q-img
                 @click="getDetail(src.id)"
                 @mouseenter="alertNum = index"
@@ -26,47 +24,6 @@
                   ></div>
                 </div>
               </q-img>
-            </template>
-            <template v-if="checkClass(index) == 1">
-              <div class="col-6">
-                <q-img
-                  @click="getDetail(images[index].id)"
-                  @mouseenter="alertNum = index"
-                  @mouseleave="alertNum = -1"
-                  :src="images[index].url"
-                >
-                  <div
-                    align="center"
-                    v-if="alertNum == index"
-                    class="relative-position cursor-pointer indexz"
-                  >
-                    <div
-                      class="absolute-center q-col-gutter-x-md"
-                      style="font-size: 2em"
-                    ></div>
-                  </div>
-                </q-img>
-              </div>
-              <div class="col-6">
-                <q-img
-                  v-if="images[index + 1] != undefined"
-                  @click="getDetail(images[index + 1].id)"
-                  @mouseenter="alertNum = index + 1"
-                  @mouseleave="alertNum = -1"
-                  :src="images[index + 1].url"
-                >
-                  <div
-                    align="center"
-                    v-if="alertNum == index + 1"
-                    class="relative-position cursor-pointer indexz"
-                  >
-                    <div
-                      class="absolute-center q-col-gutter-x-md"
-                      style="font-size: 2em"
-                    ></div>
-                  </div>
-                </q-img>
-              </div>
             </template>
           </div>
         </div>
@@ -168,12 +125,12 @@
                   <q-item-label>{{ imgDetail.Profile.name }}</q-item-label>
                 </q-item-section>
                 <q-item-section side>
-                  <q-btn @click="morealert = true" class="gt-xs" size="12px" flat dense round icon="fas fa-ellipsis-h"/>
+                  <q-btn @click="deleteImg(imgDetail.ID)" class="text-red" flat dense round icon="delete_outline"/>
                 </q-item-section>
               </q-item>
               <q-separator />
               <q-item
-                style="position: absolute; top: 56px; width: 100%; bottom: 112px"
+                style="position: absolute; top: 56px; width: 100%; bottom: 56px"
               >
                 <q-item-section
                   style="max-height: 55vh; position: relative"
@@ -208,11 +165,11 @@
                           data.content
                         }}</q-item-label>
                       </q-item-section>
-                      <q-item-section side>
+                      <q-item-section side top>
                         <q-item-label class="text-caption">{{
                           data.CreatedAt
                         }}</q-item-label>
-                        <q-btn @click="morealert = true" class="gt-xs" size="12px" flat dense round icon="fas fa-ellipsis-h"/>
+                        <!-- <q-btn @click="morealert = true" class="gt-xs" size="12px" flat dense round icon="fas fa-ellipsis-h"/> -->
                       </q-item-section>
                     </q-item>
                   </q-card-section>
@@ -222,10 +179,6 @@
                 class="full-width"
                 style="position: absolute; bottom: 0px; padding: 0px"
               >
-              <q-item class="q-gutter-sm">
-                <q-btn flat round icon="favorite_border" />
-                <q-btn flat round icon="turned_in_not" />
-              </q-item>
                 <q-separator />
                 <q-input
                   style="height: 56px"
@@ -238,7 +191,7 @@
                   <template v-slot:before>
                     <q-btn round flat icon="mood">
                       <q-popup-edit
-                        max-width="270px"
+                        max-width="158px"
                         style="padding: 4px 8px"
                         self="top start"
                         cover="false"
@@ -247,7 +200,7 @@
                           <a
                             href="javascript:void(0);"
                             @click="getEmo(index)"
-                            style="font-size: 20px;text-decoration: none"
+                            style="text-decoration: none"
                             v-for="(item, index) in faceList"
                             :key="index"
                             class="emotionItem"
@@ -259,8 +212,7 @@
                   </template>
                   <template v-slot:after>
                     <q-btn
-                      flat
-                      class="text-weight-bolder"
+                      push
                       color="primary"
                       @click="addImgComment(0)"
                       label="Comment"
@@ -340,7 +292,7 @@
                   <template v-slot:before>
                     <q-btn round flat icon="mood">
                       <q-popup-edit
-                        max-width="270px"
+                        max-width="158px"
                         style="padding: 4px 8px"
                         self="top start"
                         cover="false"
@@ -349,7 +301,7 @@
                           <a
                             href="javascript:void(0);"
                             @click="getEmo(index)"
-                            style="font-size: 20px;text-decoration: none"
+                            style="text-decoration: none"
                             v-for="(item, index) in faceList"
                             :key="index"
                             class="emotionItem"
@@ -361,8 +313,7 @@
                   </template>
                   <template v-slot:after>
                     <q-btn
-                      flat
-                      class="text-weight-bolder"
+                      push
                       color="primary"
                       @click="addImgComment(0)"
                       label="Comment"
@@ -402,141 +353,48 @@
         </q-card>
       </q-dialog>
       </q-infinite-scroll>
-    </q-page>
-  </div>
 </template>
 <script lang="ts">
-import { ref, reactive, toRefs, onMounted, getCurrentInstance } from 'vue';
-import { Screen, date, Notify } from 'quasar';
-import { useRouter } from 'vue-router';
 import {
   listArtList,
   getImgContent,
   listImgComment,
-  addImgComment,
-} from '../../api/test/index';
-import emoji from '../../css/emoji.json';
+  delImg
+} from '../api/test/index';
+import {
+  ref,
+  reactive,
+  toRefs,
+  onBeforeMount,
+} from 'vue';
+import { Screen, date, Notify } from 'quasar';
+import { getCurrentInstance } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
 export default {
+  name: 'Post',
   setup() {
-    const { ctx } = getCurrentInstance() as any;
-    const router = useRouter() as any;
     let data = reactive({
-      slide: 1,
-      alert: false,
-      morealert: false,
       alertNum: -1,
-      text: '',
-      childtext: '',
-      faceList: [],
+      images: [],
+      alert: false,
+      imgSort: [],
+      comments: [],
+      imgDetail: null,
+      pagesize: 18,
+      pagenum: 1,
+      total: 18,
       outClass: Screen.lt.lg
         ? 'q-col-gutter-' + Screen.name
         : 'q-col-gutter-lg',
       inClass: Screen.lt.lg
         ? 'q-col-gutter-y-' + Screen.name
         : 'q-col-gutter-y-lg',
-      images: [],
-      imgDetail: null,
-      comments: [],
-      imgSort: [],
-      pagesize: 18,
-      pagenum: 1,
-      total: 18,
     });
+    const route = useRoute() as any;
+    const router = useRouter() as any;
+    const { ctx } = getCurrentInstance() as any;
     const method = {
-      checkNum(nums: number): boolean {
-        const r = /^\+?[0-9][0-9]*$/;
-        if (r.test(String(nums))) {
-          return true;
-        } else {
-          return false;
-        }
-      },
-      async onLoad(index, done): Promise<any> {
-        if (data.total > data.pagesize*data.pagenum) {
-          // data.pagesize += 10;
-          data.pagenum += 1;
-          const paramss = {
-            pagenum: data.pagenum,
-            pagesize: data.pagesize,
-          };
-          let datas = (await listArtList(paramss)) as any;
-          setTimeout(() => {
-            datas.data.forEach((element: any) => {
-              data.images.push({ url: element.imgurl, id: element.ID });
-              data.imgSort.push(element.ID);
-            });
-            done();
-          }, 2000);
-        } else {
-          done();
-        }
-      },
-      getEmo(index: number): void {
-        const face = data.faceList[index] as string;
-        data.text = data.text + face;
-      },
-      loadClass(nums: number): string {
-        if (method.checkNum(nums / 9)) {
-          if (method.checkNum(nums / 9 / 2)) {
-            return 'col-8';
-          } else {
-            return data.inClass + ' column col-4';
-          }
-        } else if (method.checkNum((nums - 1) / 9)) {
-          if (method.checkNum((nums - 1) / 9 / 2)) {
-            return data.inClass + ' column col-4';
-          } else {
-            return 'nopadding';
-          }
-        } else if (method.checkNum((nums - 2) / 9)) {
-          if (method.checkNum((nums - 2) / 9 / 2)) {
-            return 'nopadding';
-          } else {
-            return 'col-8';
-          }
-        } else {
-          return 'col-4';
-        }
-      },
-      // alertClass(nums: number): boolean {
-      //   return 0;
-      // },
-      checkClass(nums: number): number {
-        if (method.checkNum(nums / 9)) {
-          if (method.checkNum(nums / 9 / 2)) {
-            return 0;
-          } else {
-            return 1;
-          }
-        } else if (method.checkNum((nums - 1) / 9)) {
-          if (method.checkNum((nums - 1) / 9 / 2)) {
-            return 1;
-          } else {
-            return 2;
-          }
-        } else if (method.checkNum((nums - 2) / 9)) {
-          if (method.checkNum((nums - 2) / 9 / 2)) {
-            return 2;
-          } else {
-            return 0;
-          }
-        } else {
-          return -1;
-        }
-      },
-      async listArt(): Promise<any> {
-        const paramss = {
-          pagenum: 1,
-          pagesize: data.pagesize,
-        };
-        let res = (await listArtList(paramss)) as any;
-        res.data.forEach((element: any) => {
-          data.images.push({ url: element.imgurl, id: element.ID });
-          data.imgSort.push(element.ID);
-        });
-        data.total = res.total
-      },
       async getDetail(id: number): Promise<any> {
         let res = (await getImgContent(id)) as any;
         data.imgDetail = res.data;
@@ -544,8 +402,20 @@ export default {
         await method.getImgComment();
         data.alert = true;
       },
-      toRepositories(id: number): void {
-        router.push(`/repository/${id}`);
+      deleteImg(id: number): void {
+        Notify.create({
+          message: 'Are you absolutely sure?',
+          color: 'negative',
+          icon: 'report_problem',
+          position: 'top',
+          actions: [
+            { label: 'yes', color: 'white', handler: async () => { 
+              let res = (await delImg(id)) as any;
+              if(res.status == 200) {
+              }
+            }}
+          ]
+        })
       },
       async getImgComment(): Promise<any> {
         const params = {
@@ -579,74 +449,55 @@ export default {
             return item;
           });
       },
-      async addImgComment(id: number): Promise<any> {
-        let params = {
-          img_id: (data.imgDetail.ID * 1000) / 1000,
-          content: data.text,
-          comment_id: 0,
-        };
-        if (id != 0) {
-          params.content = data.childtext;
-          params.comment_id = id;
+      async onLoad(index, done): Promise<any> {
+        if (data.total > data.pagesize*data.pagenum) {
+          // data.pagesize += 10;
+          data.pagenum += 1;
+          const params = {
+            pagenum: data.pagenum,
+            pagesize: data.pagesize,
+          };
+          let datas = (await listArtList(params)) as any;
+          setTimeout(() => {
+            datas.data.forEach((element: any) => {
+              data.images.push({ url: element.imgurl, id: element.ID });
+              data.imgSort.push(element.ID);
+            });
+            done();
+          }, 2000);
         } else {
-          delete params.comment_id;
-        }
-        if (params.content == '') {
-          Notify.create({
-            message: "comment can't be empty",
-            color: 'negative',
-            icon: 'report_problem',
-            position: 'top',
-            timeout: 2000,
-          });
-          return;
-        }
-        let res = (await addImgComment(params)) as any;
-        console.log(res);
-        if (res.status == 200) {
-          data.text = '';
-          data.childtext = '';
-          await method.getImgComment();
+          done();
         }
       },
-      async nextimg(): Promise<any> {
-        const imgindex = data.imgSort.indexOf(data.imgDetail.ID);
-        if (imgindex == data.imgSort.length - 1) {
-          return Notify.create({
-            message: 'no next img',
-            color: 'negative',
-            icon: 'report_problem',
-            position: 'top',
-            timeout: 2000,
-          });
-        }
-        let res = (await getImgContent(data.imgSort[imgindex + 1])) as any;
-        data.imgDetail = res.data;
-        data.imgDetail.slide = 1;
-        await method.getImgComment();
+      checkClass(nums: number): number {
+        return -1;
       },
-      async backimg(): Promise<any> {
-        const imgindex = data.imgSort.indexOf(data.imgDetail.ID);
-        if (imgindex == 0) {
-          return Notify.create({
-            message: 'no back img',
-            color: 'negative',
-            icon: 'report_problem',
-            position: 'top',
-            timeout: 2000,
-          });
+      checkNum(nums: number): boolean {
+        const r = /^\+?[0-9][0-9]*$/;
+        if (r.test(String(nums))) {
+          return true;
+        } else {
+          return false;
         }
-        let res = (await getImgContent(data.imgSort[imgindex - 1])) as any;
-        data.imgDetail = res.data;
-        data.imgDetail.slide = 1;
-        await method.getImgComment();
+      },
+      loadClass(nums: number): string {
+        return 'col-4';
+      },
+      async listArt(): Promise<any> {
+        const paramss = {
+          pagenum: 1,
+          pagesize: data.pagesize,
+        };
+        let res = (await listArtList(paramss)) as any;
+        res.data.forEach((element: any) => {
+          data.images.push({ url: element.imgurl, id: element.ID });
+          data.imgSort.push(element.ID);
+        });
+        data.total = res.total
       },
     };
-    onMounted(async () => {
+    onBeforeMount(async () => {
       await method.listArt();
-      emoji.forEach((element) => {
-        data.faceList.push(element.char);
-      });
       ctx.$nextTick(() => {
         window.addEventListener('resize', () => {
           if (Screen.lt.lg) {
@@ -675,6 +526,4 @@ export default {
   width: 100%
   height: 100%
   background: rgba(0,0,0,0.8)
-.maindia .no-pointer-events
-  pointer-events: initial !important
 </style>

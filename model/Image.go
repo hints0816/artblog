@@ -62,3 +62,13 @@ func GetImgInfo(id int) (Imgcontent, int) {
 	db.Preload("Imglist.Imgtag").Preload("Imglist").Preload("Profile").Where("id =?", id).First(&imgcontent)
 	return imgcontent, errormsg.SUCCSE
 }
+
+func DelImg(id uint) int {
+	var imgcontent Imgcontent
+	imgcontent.ID = id
+	err = db.Preload("Imglist").Delete(&imgcontent).Error
+	if err != nil {
+		return errormsg.ERROR
+	}
+	return errormsg.SUCCSE
+}
