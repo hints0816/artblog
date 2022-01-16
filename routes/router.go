@@ -49,6 +49,8 @@ func InitRouter() {
 		auth.POST("blog/imgcomment", api.AddImgComment)
 
 		auth.DELETE("blog/article/:id", api.DelArticle)
+		auth.DELETE("blog/comment/:id", api.DelComment)
+
 		auth.POST("blog/avatar/upload", api.UploadAvatarImage)
 		auth.POST("blog/emoji", api.EditEmoji)
 		auth.GET("blog/articlelist", api.ListArticle)

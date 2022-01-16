@@ -22,6 +22,7 @@ type Comment struct {
 	ToProfile    Profile   `gorm:"foreignkey:TouserId;references:ID"`
 	CommentId    uint      `gorm:"-" json:"comment_id"`
 	Avatar       string    `gorm:"-"`
+	Title        string    `gorm:"-"`
 	CommentChild []Comment `gorm:"-"`
 }
 
@@ -89,19 +90,26 @@ func GetCommentList(user_id uint, id int, pageSize int, pageNum int) ([]Comment,
 	return commentList, count, floorCount, errormsg.SUCCSE
 }
 
-func GetCommentListAdmin(pageSize int, pageNum int) ([]Comment, int64, int) {
+func GetCommentListAdmin(user_id int, pageSize int, pageNum int) ([]Comment, int64, int) {
 	var commentList []Comment
 	var count int64
 
 	c := pool.Get()
 	defer c.Close()
 
-	db.Find(&Comment{}).Count(&count)
+	db.Where("user_id = ?", user_id).Or("touser_id = ?", user_id).Find(&Comment{}).Count(&count)
 
 	err := db.
 		Preload("FromProfile").
 		Preload("ToProfile").
-		Order("created_at DESC").Find(&commentList).Error
+		Order("created_at DESC").Where("user_id = ?", user_id).Or("touser_id = ?", user_id).Find(&commentList).Error
+
+	for childKey, _ := range commentList {
+		var art Article
+		articleId := commentList[childKey].ArticleId
+		db.Where("id =?", articleId).Find(&art)
+		commentList[childKey].Title = art.Title
+	}
 
 	if err != nil {
 		return commentList, 0, errormsg.ERROR
@@ -112,6 +120,17 @@ func GetCommentListAdmin(pageSize int, pageNum int) ([]Comment, int64, int) {
 // AddComment 新增主评论
 func AddComment(comment *Comment) int {
 	err = db.Create(&comment).Error
+	if err != nil {
+		return errormsg.ERROR
+	}
+	return errormsg.SUCCSE
+}
+
+// AddComment 新增主评论
+func DelComment(id uint) int {
+	var comment Comment
+	comment.ID = id
+	err = db.Delete(&comment).Error
 	if err != nil {
 		return errormsg.ERROR
 	}

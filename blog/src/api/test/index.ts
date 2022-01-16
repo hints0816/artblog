@@ -61,6 +61,10 @@ export const listComment = async (id: number, params: any) => {
     return await api.get(`/api/blog/comment/list/${id}`,{params:params});
 };
 
+export const listSettingComment = async (params: any) => {
+    return await api.get('/api/blog/setting/comment',{params:params});
+};
+
 export const listImgComment = async (id: number, params: any) => {
     return await api.get(`/api/blog/imgcomment/list/${id}`,{params:params});
 };
@@ -83,6 +87,10 @@ export const undigg = async (params: any) => {
 
 export const delArticle = async (id: number) => {
     return await api.delete(`/api/blog/article/${id}`);
+};
+
+export const delComment = async (id: number) => {
+    return await api.delete(`/api/blog/comment/${id}`);
 };
 
 export const delImg = async (id: number) => {
@@ -125,3 +133,4 @@ export const postArt = async (params: any) => {
     }
     return await api.post('/api/blog/postart', params, config);
 };
+

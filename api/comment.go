@@ -10,6 +10,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func DelComment(c *gin.Context) {
+	id, _ := strconv.Atoi(c.Param("id"))
+	code := model.DelComment(uint(id))
+	c.JSON(http.StatusOK, gin.H{
+		"status":  code,
+		"message": errormsg.GetErrMsg(code),
+	})
+}
+
 func AddComment(c *gin.Context) {
 	var comment model.Comment
 
@@ -81,6 +90,8 @@ func GetCommentListFront(c *gin.Context) {
 func GetCommentListFrontAdmin(c *gin.Context) {
 	pageSize, _ := strconv.Atoi(c.Query("pagesize"))
 	pageNum, _ := strconv.Atoi(c.Query("pagenum"))
+	var usid int
+
 	switch {
 	case pageSize >= 100:
 		pageSize = 100
@@ -91,7 +102,17 @@ func GetCommentListFrontAdmin(c *gin.Context) {
 	if pageNum == 0 {
 		pageNum = 1
 	}
-	data, count, code := model.GetCommentListAdmin(pageSize, pageNum)
+
+	usernamekey, _ := c.Get("username")
+	userinfo, _ := usernamekey.(*middleware.MyClaims)
+
+	if userinfo == nil {
+		usid = -1
+	} else {
+		usid = int(userinfo.Id)
+	}
+
+	data, count, code := model.GetCommentListAdmin(usid, pageSize, pageNum)
 
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,
