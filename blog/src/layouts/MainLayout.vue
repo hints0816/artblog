@@ -246,7 +246,7 @@
                                     >
                                       <a
                                         href="javascript:void(0);"
-                                        @click="setEmojiStatus(index)"
+                                        @click="setTagEmoji(index)"
                                         style="text-decoration: none"
                                         v-for="(item, index) in faceList"
                                         :key="index"
@@ -306,7 +306,8 @@
                         <q-item class="full-width" style="position:absolute;bottom:0px;">
                           <q-btn round flat icon="mood">
                             <q-popup-edit
-                              max-width="158px"
+                              max-height="160px"
+                              max-width="220px"
                               style="padding: 4px 8px"
                               self="top start"
                               cover="false"
@@ -314,8 +315,8 @@
                               <div class="q-gutter-sm" style="margin-top: 0px">
                                 <a
                                   href="javascript:void(0);"
-                                  @click="getEmo(index)"
-                                  style="text-decoration: none"
+                                  @click="setArtTextEmoji(index)"
+                                  style="font-size: 22px;text-decoration: none"
                                   v-for="(item, index) in faceList"
                                   :key="index"
                                   class="emotionItem"
@@ -917,6 +918,14 @@ export default defineComponent({
       setEmojiStatus(index: number): void {
         const face = data.faceList[index] as string;
         data.profile.emoji = face;
+      },
+      setTagEmoji(index: number): void {
+        const face = data.faceList[index] as string;
+        data.tagText = data.tagText + face;
+      },
+      setArtTextEmoji(index: number): void {
+        const face = data.faceList[index] as string;
+        data.arttext = data.arttext + face;
       },
       async editStatus(): Promise<any> {
         const params = {

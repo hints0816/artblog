@@ -3,6 +3,7 @@ module hello
 go 1.15
 
 require (
+	github.com/boombuler/barcode v1.0.1
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/disintegration/imaging v1.6.2
@@ -27,6 +28,7 @@ require (
 	github.com/russross/blackfriday v1.6.0
 	github.com/shopspring/decimal v1.3.1
 	github.com/sirupsen/logrus v1.8.1
+	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e
 	github.com/ugorji/go v1.1.7 // indirect
 	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519
 	golang.org/x/image v0.0.0-20211028202545-6944b10bf410 // indirect

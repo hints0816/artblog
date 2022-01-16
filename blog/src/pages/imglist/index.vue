@@ -224,9 +224,16 @@
                 class="full-width"
                 style="position: absolute; bottom: 0px; padding: 0px"
               >
-              <q-item class="q-gutter-sm">
-                <q-btn flat round icon="favorite_border" />
-                <q-btn flat round icon="turned_in_not" />
+              <q-item class="q-gutter-sm full-width" style="padding: 0px;">
+                <q-item-section>
+                  <q-item-label>
+                    <q-btn flat round icon="favorite_border" />
+                    <q-btn flat round icon="turned_in_not" />
+                  </q-item-label>
+                </q-item-section>
+                <q-item-section side>
+                  {{ imgDetail.CreatedAt }}
+                </q-item-section>
               </q-item>
                 <q-separator />
                 <q-input
@@ -543,6 +550,12 @@ export default {
       async getDetail(id: number): Promise<any> {
         let res = (await getImgContent(id)) as any;
         data.imgDetail = res.data;
+        let timeStamp = new Date(data.imgDetail.CreatedAt);
+        let formattedString = date.formatDate(
+          timeStamp,
+          'YYYY-MM-DD HH:mm:ss'
+        );
+        data.imgDetail.CreatedAt = formattedString;
         data.imgDetail.slide = 1;
         await method.getImgComment();
         data.alert = true;
