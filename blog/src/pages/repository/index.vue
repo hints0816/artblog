@@ -267,7 +267,7 @@
                 </q-card-section>
               </q-tab-panel>
               <q-tab-panel name="comment">
-                <Category/>
+                <CommentCard/>
               </q-tab-panel>
               <q-tab-panel name="artImage">
                 <ArtImgCard/>
@@ -283,7 +283,7 @@
 import emoji from '../../css/emoji.json';
 import { updateProfile, editEmoji } from '../../api/test/index';
 import Edit from '../../components/EditCard.vue';
-import Category from '../../components/CategoryCard.vue';
+import CommentCard from '../../components/CommentCard.vue';
 import ArtImgCard from '../../components/ArtImgCard.vue';
 import {
   listArticle,
@@ -303,7 +303,7 @@ import { Notify } from 'quasar';
 
 export default {
   name: 'Post',
-  components: { Edit, Category, ArtImgCard },
+  components: { Edit, CommentCard, ArtImgCard },
   setup() {
     let data = reactive({
       alert: false,

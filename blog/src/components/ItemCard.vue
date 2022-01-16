@@ -42,7 +42,7 @@
             {{ label.Category.name }}
           </q-chip>
           <q-btn style="position: absolute;bottom: 0px" class="gt-xs" size="12px" flat dense round icon="fas fa-ellipsis-h">
-            <q-popup-edit
+            <!-- <q-popup-edit
               max-width="158px"
               self="top start"
               cover="false"
@@ -63,7 +63,7 @@
                   </q-item-section>
                 </q-item>
               </q-list>
-          </q-popup-edit>
+            </q-popup-edit> -->
           </q-btn>
         </q-item-section>
       </q-item>

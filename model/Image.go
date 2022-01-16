@@ -10,11 +10,12 @@ import (
 
 type Imgcontent struct {
 	gorm.Model
-	Imglist []*Imglist `gorm:"foreignkey:ContentId;references:ID"`
-	Content string     `gorm:"type:varchar(255)" json:"content"`
-	Imgurl  string     `gorm:"type:varchar(255)" json:"imgurl"`
-	UserID  uint       `gorm:"type:bigint;not null" json:"user_id"`
-	Profile Profile    `gorm:"foreignkey:UserID"`
+	Imglist   []*Imglist `gorm:"foreignkey:ContentId;references:ID"`
+	Content   string     `gorm:"type:varchar(255)" json:"content"`
+	Imgurl    string     `gorm:"type:varchar(255)" json:"imgurl"`
+	UserID    uint       `gorm:"type:bigint;not null" json:"user_id"`
+	IsComment uint       `gorm:"type:int;not null" json:"is_comment"`
+	Profile   Profile    `gorm:"foreignkey:UserID"`
 }
 
 type Imglist struct {

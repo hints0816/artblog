@@ -135,19 +135,21 @@
                 :ratio="1"
                 spinner-color="white"
               >
-              <q-chip
-                  v-for="(item, index2) in data.Imgtag"
-                  :key="index2"
-                  class="chiptag bg-dark text-white"
-                  :style="{
-                    'z-index': 99,
-                    position: 'absolute',
-                    top: item.top*100 + '%',
-                    left: item.left*100 + '%',
-                  }"
-                  dense
-                  >{{item.tag}}</q-chip
-                >
+              <template v-if="showImgTag">
+                <q-chip
+                    v-for="(item, index2) in data.Imgtag"
+                    :key="index2"
+                    class="chiptag bg-dark text-white"
+                    :style="{
+                      'z-index': 99,
+                      position: 'absolute',
+                      top: item.top*100 + '%',
+                      left: item.left*100 + '%',
+                    }"
+                    dense
+                    >{{item.tag}}</q-chip
+                  >
+              </template>
               </q-img> 
               </q-carousel-slide>
             </q-carousel>
@@ -228,9 +230,9 @@
               </q-item>
                 <q-separator />
                 <q-input
+                  v-if="imgDetail.is_comment == 0"
                   style="height: 56px"
                   class="scroll hide-scrollbar full-width q-px-sm"
-                  autogrow
                   v-model="text"
                   label="Comment"
                   :dense="dense"
@@ -439,6 +441,7 @@ export default {
       imgDetail: null,
       comments: [],
       imgSort: [],
+      showImgTag: false,
       pagesize: 18,
       pagenum: 1,
       total: 18,
@@ -641,6 +644,13 @@ export default {
         data.imgDetail.slide = 1;
         await method.getImgComment();
       },
+      showTag(): void {
+        if(data.showImgTag) {
+          data.showImgTag = false;
+        } else {
+          data.showImgTag = true;
+        }
+      }
     };
     onMounted(async () => {
       await method.listArt();

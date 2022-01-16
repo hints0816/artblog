@@ -101,6 +101,7 @@
                     dense
                     flat
                   />
+                  <q-btn v-if="alertNext" flat class="text-weight-bolder" style="position: absolute; right:5px;" color="primary" @click="postArt()" label="POST"/>
                   <q-btn
                     class="absolute-right"
                     v-if="imageFiles.length != 0 && !alertNext"
@@ -285,7 +286,6 @@
                           </q-item-section>
                           <q-item-section>
                             <q-item-label>{{ profile.name }}</q-item-label>
-                            <q-item-label caption> Subhead </q-item-label>
                           </q-item-section>
                           <q-item-section side top> </q-item-section>
                         </q-item>
@@ -324,8 +324,10 @@
                               </div>
                             </q-popup-edit>
                           </q-btn>
-                          <q-btn style="position: absolute; right:5px;" push color="primary" @click="postArt()" label="POST">
-                          </q-btn>
+                          <q-toggle v-model="isComment" color="orange" />
+                          <q-item-section>
+                            关闭评论功能
+                          </q-item-section>
                         </q-item>
                         <q-item style="position: absolute; bottom: 0px">
                           <q-item-section> </q-item-section>
@@ -346,7 +348,6 @@
           <div v-if="$q.screen.gt.sm">
             <q-btn v-if="profile.name" dense flat no-wrap>
               <q-avatar color="white" text-color="white">
-                <q-badge color="red" floating>4</q-badge>
                 <img
                   :src="
                     profile.avatar == ''
@@ -689,6 +690,7 @@ export default defineComponent({
         autoCrop: true,
         fixedBox: true,
       },
+      isComment: false,
       tagText: '',
       tagEvent: null,
       moveIndex: 0,
@@ -945,6 +947,7 @@ export default defineComponent({
         const param = {
           imgurl: data.imgdisurl,
           content: data.arttext,
+          is_comment: data.isComment?1:0,
           Imglist: [
             {
               img_url: data.imgdisurl,
