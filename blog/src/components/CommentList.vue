@@ -265,7 +265,8 @@
 import emoji from '../css/emoji.json';
 import { reactive, toRefs, onMounted } from 'vue';
 import { LocalStorage, Notify, date } from 'quasar';
-import { listComment, addComment, digg, undigg } from '../api/test/index';
+import { addComment, digg, undigg } from '../api/test/index';
+import { listComment } from '../api/comment/index';
 import { useRoute, useRouter } from 'vue-router';
 export default {
   name: 'Comment',

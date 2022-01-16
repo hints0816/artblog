@@ -35,7 +35,7 @@
 import {
   listSettingComment,
   delComment
-} from '../api/test/index';
+} from '../api/comment/index';
 import {
   ref,
   reactive,
