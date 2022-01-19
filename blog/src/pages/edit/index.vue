@@ -226,7 +226,6 @@ export default {
       },
       async commentss(id: number):Promise<any> {
         let datas  = await getArticle(id) as any
-        console.log(datas)
         if (datas != undefined) {
           data.content_status = datas.data.status
           data.content_id = datas.data.ID
@@ -240,7 +239,6 @@ export default {
       async handleUploadImage(event, insertImage, files):Promise<any> {
         let param = new FormData()
         param.append('file', files[0])
-        console.log(param)
         let res = await uploadImage(param) as any
         if(res.status == 200) {
           insertImage({

@@ -188,13 +188,11 @@ export default {
     const { ctx } = getCurrentInstance() as any;
     const method = {
       pick(value: any): void {
-        console.log(value);
         data.cropperAvatarDialog = true;
       },
       upload(): void {
         ctx.$refs.cropper.getCropData(data => {
           // do something
-          console.log(data)  
         })
       },
     };

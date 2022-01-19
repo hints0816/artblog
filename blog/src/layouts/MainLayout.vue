@@ -770,7 +770,6 @@ export default defineComponent({
         data.moveIndex = index;
       },
       moveFab(ev) {
-        console.log(data.moveIndex);
         const h1 = dom.height(
           document.getElementById('tagChip' + data.moveIndex.toString())
         );
@@ -779,7 +778,6 @@ export default defineComponent({
         );
         const h2 = dom.height(document.getElementById('imgCard'));
         const w2 = dom.width(document.getElementById('imgCard'));
-        // console.log(data.chipPositions[0].chiptop)
         if (data.chipPositions[data.moveIndex].top - -ev.delta.y > 0) {
           if (
             data.chipPositions[data.moveIndex].top - -ev.delta.y <
@@ -859,7 +857,6 @@ export default defineComponent({
       },
       removeImage(files: Array<any>): void {
         data.imageFiles.splice(data.imageFiles.indexOf(files[0]), 1);
-        console.log(data.imageFiles);
         data.chipPositions = [];
         data.alertNext = false;
         data.bigStyle =
@@ -905,7 +902,6 @@ export default defineComponent({
           let param = new FormData();
           param.append('file', avatarfile);
           let res = (await uploadImage(param)) as any;
-          console.log(res.url)
           if (res.status == 200) {
             data.imgdisurl = res.url
           } else {

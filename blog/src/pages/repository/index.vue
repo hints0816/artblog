@@ -369,7 +369,6 @@ export default {
         data.edit = datas.edit;
       },
       mouseover():void {
-        console.log(1)
       },
       async pick(value: any): Promise<void> {
           let param = new FormData();

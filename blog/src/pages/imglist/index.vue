@@ -618,7 +618,6 @@ export default {
           return;
         }
         let res = (await addImgComment(params)) as any;
-        console.log(res);
         if (res.status == 200) {
           data.text = '';
           data.childtext = '';
