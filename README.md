@@ -8,6 +8,9 @@
 demo in using:
 http://www.arthins.com
 
+username: admin
+password: 123456
+
 
 <img src="img/QQ截图20211213003453.png" alt="QQ截图20211213003453" style="zoom: 80%;" />
 <img src="img/QQ截图20211213003520.png" alt="QQ截图20211213003520" style="zoom: 80%;" />
