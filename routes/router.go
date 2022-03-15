@@ -42,6 +42,9 @@ func InitRouter() {
 		auth.POST("blog/comment/digg", api.SetCommentDigg)
 		auth.POST("blog/comment/undigg", api.SetCommentUnDigg)
 
+		auth.POST("blog/img/digg", api.SetFavorite)
+		auth.POST("blog/img/undigg", api.SetUnFavorite)
+
 		auth.GET("blog/me/articlelist", api.ListArticleRepository)
 		auth.POST("blog/postart", api.PostImg)
 		auth.DELETE("blog/artimg/:id", api.DelImgInfo)
@@ -54,6 +57,7 @@ func InitRouter() {
 		auth.POST("blog/avatar/upload", api.UploadAvatarImage)
 		auth.POST("blog/emoji", api.EditEmoji)
 		auth.GET("blog/articlelist", api.ListArticle)
+		auth.GET("blog/artimg/:id", api.GetImgInfo)
 
 		auth.PUT("blog/profile", api.UpdateProfile)
 		auth.PUT("blog/category", api.UpdateCategory)
@@ -79,7 +83,6 @@ func InitRouter() {
 		router.GET("blog/github", api.GithubCallback)
 		router.GET("blog/artlist", api.ListImage)
 
-		router.GET("blog/artimg/:id", api.GetImgInfo)
 	}
 
 	r.Run(":3000")

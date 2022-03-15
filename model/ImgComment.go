@@ -24,6 +24,11 @@ type Imgcomment struct {
 	CommentChild []Imgcomment `gorm:"-"`
 }
 
+type ImgFavorite struct {
+	ID        uint
+	ContentId uint
+}
+
 func GetImgCommentList(user_id uint, id int, pageSize int, pageNum int) ([]Imgcomment, int64, int64, int) {
 	var imgCommentList []Imgcomment
 	var count int64

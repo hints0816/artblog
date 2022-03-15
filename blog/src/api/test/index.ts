@@ -85,6 +85,14 @@ export const undigg = async (params: any) => {
     return await api.post('/api/blog/comment/undigg',params);
 };
 
+export const imgdigg = async (params: any) => {
+    return await api.post('/api/blog/img/digg',params);
+};
+
+export const imgundigg = async (params: any) => {
+    return await api.post('/api/blog/img/undigg',params);
+};
+
 export const delArticle = async (id: number) => {
     return await api.delete(`/api/blog/article/${id}`);
 };

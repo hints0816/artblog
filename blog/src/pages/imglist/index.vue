@@ -227,7 +227,9 @@
               <q-item class="q-gutter-sm full-width" style="padding: 0px;">
                 <q-item-section>
                   <q-item-label>
-                    <q-btn flat round icon="favorite_border" />
+                    <q-btn 
+                    :color="imgDetail.Digg == 1? 'red' : '#3c3c3c'"
+                    @click="favorite()" flat round icon="favorite_border" />
                     <q-btn flat round icon="turned_in_not" />
                   </q-item-label>
                 </q-item-section>
@@ -423,6 +425,8 @@ import {
   getImgContent,
   listImgComment,
   addImgComment,
+  imgdigg,
+  imgundigg
 } from '../../api/test/index';
 import emoji from '../../css/emoji.json';
 
@@ -452,6 +456,7 @@ export default {
       pagesize: 18,
       pagenum: 1,
       total: 18,
+      digg: false
     });
     const method = {
       checkNum(nums: number): boolean {
@@ -562,6 +567,22 @@ export default {
       },
       toRepositories(id: number): void {
         router.push(`/repository/${id}`);
+      },
+      async favorite(): Promise<any> {
+        const params = {
+          ContentId: (data.imgDetail.ID * 1000) / 1000,
+        };
+        if (data.imgDetail.Digg == 0) {
+          let res = (await imgdigg(params)) as any;
+          if (res.status == 200) {
+            data.imgDetail.Digg = 1;
+          }
+        } else {
+          let res = (await imgundigg(params)) as any;
+          if (res.status == 200) {
+            data.imgDetail.Digg = 0;
+          }
+        }
       },
       async getImgComment(): Promise<any> {
         const params = {

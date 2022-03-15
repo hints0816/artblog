@@ -2,6 +2,7 @@ package model
 
 import (
 	"hello/utils/errormsg"
+	"strconv"
 
 	"github.com/garyburd/redigo/redis"
 
@@ -53,9 +54,9 @@ func GetCommentList(user_id uint, id int, pageSize int, pageNum int) ([]Comment,
 			Preload("FromProfile").
 			Preload("ToProfile").
 			Order("created_at DESC").Where("article_id = ?", id).Where("status = ?", 1).Where("parent_id = ?", value.ID).Find(&commentChildList)
-		num, _ := redis.Int(c.Do("bitcount", commentList[key].ID))
+		num, _ := redis.Int(c.Do("bitcount", "comment_like:"+string(strconv.Itoa(int(commentList[key].ID)))))
 
-		diggNum, _ := redis.Int(c.Do("getbit", commentList[key].ID, user_id))
+		diggNum, _ := redis.Int(c.Do("getbit", "comment_like:"+string(strconv.Itoa(int(commentList[key].ID))), user_id))
 		var diggArr Digg
 		if diggNum == 1 {
 			diggArr.CommentId = commentList[key].ID
@@ -67,9 +68,9 @@ func GetCommentList(user_id uint, id int, pageSize int, pageNum int) ([]Comment,
 		commentList[key].Digg = int8(num)
 
 		for childKey, _ := range commentChildList {
-			childNum, _ := redis.Int(c.Do("bitcount", commentChildList[childKey].ID))
+			childNum, _ := redis.Int(c.Do("bitcount", "comment_like:"+string(strconv.Itoa(int(commentChildList[childKey].ID)))))
 
-			diggChildNum, _ := redis.Int(c.Do("getbit", commentChildList[childKey].ID, user_id))
+			diggChildNum, _ := redis.Int(c.Do("getbit", "comment_like:"+string(strconv.Itoa(int(commentChildList[childKey].ID))), user_id))
 			var diggChildArr Digg
 			if diggChildNum == 1 {
 				diggChildArr.CommentId = commentChildList[childKey].ID
@@ -140,8 +141,8 @@ func DelComment(id uint) int {
 func SetDigg(digg *Digg) int {
 	c := pool.Get()
 	defer c.Close()
-	_, err := c.Do("setbit", digg.CommentId, digg.ID, 1)
-
+	_, err := c.Do("setbit", "comment_like:"+string(strconv.Itoa(int(digg.CommentId))), digg.ID, 1)
+	// 使用redis代替mysql
 	// err = db.Create(&digg).Error
 	// var comment Comment
 	// db.Model(&comment).Where("id = ?", digg.CommentId).UpdateColumn("digg", gorm.Expr("digg + ?", 1))
@@ -154,7 +155,8 @@ func SetDigg(digg *Digg) int {
 func SetUnDigg(digg *Digg) int {
 	c := pool.Get()
 	defer c.Close()
-	_, err := c.Do("setbit", digg.CommentId, digg.ID, 0)
+	_, err := c.Do("setbit", "comment_like:"+string(strconv.Itoa(int(digg.CommentId))), digg.ID, 0)
+	// 使用redis代替mysql
 	// var comment Comment
 	// db.Model(&comment).Where("id = ?", digg.CommentId).UpdateColumn("digg", gorm.Expr("digg - ?", 1))
 	if err != nil {

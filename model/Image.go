@@ -3,7 +3,9 @@ package model
 import (
 	"hello/utils/errormsg"
 	"log"
+	"strconv"
 
+	"github.com/garyburd/redigo/redis"
 	"github.com/shopspring/decimal"
 	"gorm.io/gorm"
 )
@@ -16,6 +18,7 @@ type Imgcontent struct {
 	UserID    uint       `gorm:"type:bigint;not null" json:"user_id"`
 	IsComment uint       `gorm:"type:int;not null" json:"is_comment"`
 	Profile   Profile    `gorm:"foreignkey:UserID"`
+	Digg      uint       `gorm:"-"`
 }
 
 type Imglist struct {
@@ -72,4 +75,31 @@ func DelImg(id uint) int {
 		return errormsg.ERROR
 	}
 	return errormsg.SUCCSE
+}
+
+func SetImgFavorite(imgFavorite *ImgFavorite) int {
+	c := pool.Get()
+	defer c.Close()
+	_, err := c.Do("setbit", "img_like:"+string(strconv.Itoa(int(imgFavorite.ContentId))), imgFavorite.ID, 1)
+	if err != nil {
+		return errormsg.ERROR
+	}
+	return errormsg.SUCCSE
+}
+
+func SetUnImgFavorite(imgFavorite *ImgFavorite) int {
+	c := pool.Get()
+	defer c.Close()
+	_, err := c.Do("setbit", "img_like:"+string(strconv.Itoa(int(imgFavorite.ContentId))), imgFavorite.ID, 0)
+	if err != nil {
+		return errormsg.ERROR
+	}
+	return errormsg.SUCCSE
+}
+
+func GetImFavorite(imgFavorite *ImgFavorite) int {
+	c := pool.Get()
+	defer c.Close()
+	diggNum, _ := redis.Int(c.Do("getbit", "img_like:"+string(strconv.Itoa(int(imgFavorite.ContentId))), imgFavorite.ID))
+	return diggNum
 }
