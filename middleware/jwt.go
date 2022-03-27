@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"container/list"
 	"errors"
 	"hello/utils"
 	"hello/utils/errormsg"
@@ -72,10 +73,15 @@ func (j *JWT) ParserToken(tokenString string) (*MyClaims, error) {
 	return nil, TokenInvalid
 }
 
-func apiFilter(url string) bool {
-	apis := [...]string{"/api/blog/imgcomment/list", "/api/blog/comment/list", "/api/blog/articlelist"}
-	for _, x := range apis {
-		if strings.HasPrefix(url, x) {
+func apiFilter(request *http.Request) bool {
+	apiList := list.New()
+	apiList.PushBack(map[string]string{"method": "GET", "url": "/api/blog/imgcomment/list"})
+	apiList.PushBack(map[string]string{"method": "GET", "url": "/api/blog/comment/list"})
+	apiList.PushBack(map[string]string{"method": "GET", "url": "/api/blog/articlelist"})
+	apiList.PushBack(map[string]string{"method": "GET", "url": "/api/blog/artimg/"})
+	for e := apiList.Front(); e != nil; e = e.Next() {
+		apimap := e.Value.(map[string]string)
+		if strings.HasPrefix(request.RequestURI, apimap["url"]) && strings.HasPrefix(request.Method, apimap["method"]) {
 			return true
 		}
 	}
@@ -89,9 +95,10 @@ func JwtToken() gin.HandlerFunc {
 
 		tokenHeader := c.Request.Header.Get("Authorization")
 		cookie, err := c.Cookie("token")
-		if cookie != "" {
+		if cookie != "" && cookie != "null" {
 			tokenHeader = "Bearer " + cookie
 		}
+
 		if tokenHeader == "" {
 			code = errormsg.ERROR_TOKEN_EXIST
 			c.JSON(http.StatusOK, gin.H{
@@ -128,7 +135,7 @@ func JwtToken() gin.HandlerFunc {
 
 		claims, err := j.ParserToken(checkToken[1])
 		if err != nil {
-			if apiFilter(c.Request.RequestURI) {
+			if apiFilter(c.Request) {
 				return
 			} else {
 				if err == TokenExpired {

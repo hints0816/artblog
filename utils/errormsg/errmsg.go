@@ -19,6 +19,8 @@ const (
 	// code= 3000... 分类模块的错误
 	ERROR_CATENAME_USED  = 3001
 	ERROR_CATE_NOT_EXIST = 3002
+
+	ERROR_NOT_LOGIN = 4001
 )
 
 var codeMsg = map[int]string{

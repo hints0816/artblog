@@ -119,7 +119,7 @@ export default {
         if(route.query.login_redirect == 'claim') {
           router.push('/')
         } else {
-          router.go(-1)
+          router.push('/')
         }
       },
       toGithub():void {
