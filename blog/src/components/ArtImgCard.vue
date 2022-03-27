@@ -412,6 +412,7 @@ export default {
             { label: 'yes', color: 'white', handler: async () => { 
               let res = (await delImg(id)) as any;
               if(res.status == 200) {
+                return router.go(0)
               }
             }}
           ]
