@@ -1,7 +1,7 @@
 import { boot } from 'quasar/wrappers';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { LocalStorage, Loading, QSpinnerGrid } from 'quasar';
-
+import { LocalStorage, Loading, QSpinnerGrid, Notify } from 'quasar';
+import Router from '../router';
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
@@ -38,7 +38,20 @@ api.interceptors.response.use(
     if (response.status === 200) {
       if (response.data.status === 500 && response.data.message === 'token授权已过期,请重新登录') {
         LocalStorage.set('logged_in','no')
-      }
+      } else if (response.config.url !== "/api/blog/getme" && response.data.status === 500 && response.data.message === 'Token不正确,请重新登录') {
+        LocalStorage.set('logged_in','no')
+        Notify.create({
+          message: 'Please Login ArtBlog?',
+          color: 'negative',
+          icon: 'report_problem',
+          position: 'top',
+          actions: [
+            { label: 'yes', color: 'white', handler: () => {
+              return Router.push('/login')
+            }}
+          ]
+        })
+      } 
       return response.data;
     } else {
       return Promise.reject(response);
