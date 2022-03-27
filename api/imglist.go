@@ -60,15 +60,18 @@ func PostImg(c *gin.Context) {
 }
 
 func GetImgInfo(c *gin.Context) {
+
 	usernamekey, _ := c.Get("username")
 	userinfo, _ := usernamekey.(*middleware.MyClaims)
 	id, _ := strconv.Atoi(c.Param("id"))
-	var imgFavorite model.ImgFavorite
-	imgFavorite.ContentId = uint(id)
-	imgFavorite.ID = userinfo.Id
-	digg := model.GetImFavorite(&imgFavorite)
 	data, code := model.GetImgInfo(id)
-	data.Digg = uint(digg)
+	if userinfo != nil {
+		var imgFavorite model.ImgFavorite
+		imgFavorite.ContentId = uint(id)
+		imgFavorite.ID = userinfo.Id
+		digg := model.GetImFavorite(&imgFavorite)
+		data.Digg = uint(digg)
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,
 		"data":    data,
