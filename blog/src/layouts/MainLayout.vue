@@ -206,7 +206,7 @@
                         <q-img
                           id="uploadimg"
                           v-if="alertNext"
-                          :src="imgdisurl"
+                          :src="imgBase64"
                           :ratio="1"
                         />
                       </q-card-section>
@@ -760,7 +760,8 @@ export default defineComponent({
       dialog: false,
       persistent: false,
       position: 'top',
-      imgdisurl: ''
+      imgdisurl: '',
+      imgBase64: ''
     });
     const router = useRouter() as any;
     let leftDrawerOpen = ref(false);
@@ -888,7 +889,6 @@ export default defineComponent({
       },
       next1(): void {
         let avatarfile = null;
-
         cropper.value.getCropData(async (data1: any) => {
           var arr = data1.split(','),
             mime = arr[0].match(/:(.*?);/)[1],
@@ -898,11 +898,13 @@ export default defineComponent({
           while (n--) {
             u8arr[n] = bstr.charCodeAt(n);
           }
+
           avatarfile = new File([u8arr], 'filename.jpeg', { type: mime });
           let param = new FormData();
           param.append('file', avatarfile);
           let res = (await uploadImage(param)) as any;
           if (res.status == 200) {
+            data.imgBase64 = data1
             data.imgdisurl = res.url
           } else {
           }
