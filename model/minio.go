@@ -87,9 +87,9 @@ func UpLoadFileImg(img image.Image) (string, int) {
 	defer uploadfile.Close()
 
 	uuid := uuid.GetSnowFlakeID()
-	fileName := strconv.FormatInt(uuid, 10) + ".jpg"
+	fileName := strconv.FormatInt(uuid, 10) + ".webp"
 	fmt.Println(minioClient.ListBuckets(context.Background()))
-	uploadInfo, err := minioClient.PutObject(context.Background(), "blog", fileName, uploadfile, fileSize, minio.PutObjectOptions{ContentType: "image/jpeg"})
+	uploadInfo, err := minioClient.PutObject(context.Background(), "blog", fileName, uploadfile, fileSize, minio.PutObjectOptions{ContentType: "image/webp"})
 	if err != nil {
 		return "", errormsg.ERROR
 	}
