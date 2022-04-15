@@ -373,5 +373,162 @@ mysql：
 
     mvcc
     借助 undo log 通过回滚可以回到上一个版本状态
-mq：
-netty
+
+今日一坑
+    @builder和@Data
+    一起使用会使得无参构造失效
+
+java8新特性：
+Stream
+    
+ROCKETMQ刷盘和读取都使用到了林拷贝
+而rocketmq使用mmap实现的林拷贝
+
+webService能够让我们可以获取网上别人发布出来的服务。我们只要调用它，就可以获取相关的数据了
+
+Http协议需要Socket支持
+Socket其实就是对TCP/IP协议的一个封装
+
+SOAP就是Http+XML** 支持HTTP协议->WebService需要给不同语言都能够使用，因此它使用XML
+
+Java自带的WsImport来实现本地代理,WebService翻译成Java类
+
+自定义服务端webservice
+对服务类上加上注解。通过EndPoint(端点服务)就能够把我们webService服务类发布出去了
+
+CXF框架spring->不用我们自己Endpoint,且有拦截(肯定又是动态代理处理类实现了拦截)
+
+
+spring aop 使用的是Cglib
+
+cglib其实子类代理
+
+
+    如果加入容器的目标对象有实现接口，就使用JDK代理
+    如果目标对象没有实现接口，就使用Cglib代理。
+
+
+mysql  filesort
+如果sort buffer不够，则在临时表 temporary table 中存储排序结果。
+优化：
+一次扫描算法：空间换时间，增大max_length_for_sort_data 一次取出所有字段
+避免select * 
+避免扩充到使用临时区
+
+
+BeanFactory getBean 在获取 Bean 时把构造函数的入参信息传递进去
+
+
+oracle
+1.动态sql和静态sql的区别？编译和执行何时进行
+2.游标：用来存储多条查询数据的一种数据结构（'结果集'），
+ 它有一个 '指针'，从上往下移动（'fetch'），从而能够 '遍历每条记录'
+
+ 配合loop 对数据遍历，何时停止
+
+ 游标又分为隐式和显式
+rpad()函数
+
+aware
+想获得 Spring 框架提供的 BeanFactory、ApplicationContext、BeanClassLoader
+谁实现了这样的一个接口，就可以获取接口入参中的各类能力
+
+单例模式和原型模式的区别就在于是否存放到内存中
+
+MyBatis 就是实现了一个 MapperFactoryBean 类，在 getObject 方法中提供 SqlSession 对执行 CRUD 方法的操作
+
+
+非 Singleton 类型的 Bean 不需要执行销毁方法。-是因为会gc吗
+
+FactoryBean 
+
+事件的设计本身就是一种观察者模式的实现
+观察者模式的实现过程，主要包括了事件的定义、事件的监听和发布事件，发布完成后根据匹配策略，监听器就会收到属于自己的事件内容，并做相应的处理动作
+
+aop
+代理方法主要是使用到方法拦截器类处理方法的调用 MethodInterceptor#invoke，而不是直接使用 invoke 方法中的入参 Method method 进行 method.invoke(targetObj, args) 这块是整个使用时的差异。
+
+没有与spring整合的aop，这只是单个切面，没有细分为前还是后
+
+beanfactory->defaultlistbeanfactory里面有beandefintion
+
+
+Java和C++的区别
+Oracle JDK 和 OpenJDK 的对比
+
+1
+2
+4
+8
+4
+8
+2
+1
+
+强制转换类型
+逻辑与跟短路与的差别
+this().和super()
+static
+
+如何跳出当前的多重嵌套循环：用带有标号的break 语句
+
+多态：编程时并不确定，而是在程序运行期间才确定
+
+抽象类和接口的对比
+抽象类是对类的抽象，是一种模板设计，接口是行为的抽象，是一种行为的规范。
+
+在Java中定义一个不做事且没有参数的构造方法的作用：注意父子类情况
+构造方法与static的顺序
+构造方法默认与替换
+
+
+匿名内部类：
+    匿名内部类必须继承一个抽象类或者实现一个接口。
+    匿名内部类不能定义任何静态成员和静态方法。
+    当所在的方法的形参需要被匿名内部类使用时，必须声明为 final。
+    匿名内部类不能是抽象的，它必须要实现继承的类或者实现的接口的所有抽象方法。
+
+回调
+访问外部类私有
+
+
+hashset
+hashcode->equal
+
+值传递和引用传递
+
+字符串常量池
+
+包装类
+
+string的不可变和常量池
+
+String str="i"与 String str=new String(“i”)一样吗？
+是不一样的
+
+
+集合
+set(集）、list(列表）和map(映射)。
+放数据对象引用
+集合的底层数据结构？
+集合哪些是线程安全？
+
+fail-fast
+ConcurrentModificationException 
+改变modCount的值
+
+运行以上错误代码会报 ConcurrentModificationException 异常。这是因为当使用 foreach(for(Integer i : list)) 语句时，会自动生成一个iterator 来遍历该 list，但同时该 list 正在被 Iterator.remove() 修改。Java 一般不允许一个线程在遍历 Collection 时另一个线程修改它、
+
+RandomAccess 接口 按位置读取元素的平均时间复杂度为 O(1)，如ArrayList。
+
+transient 修饰 
+序列化 ArrayList 中的非 transient 元素
+
+set是无序的
+
+关于hashmap在jdk17和18的区别
+
+ey.hashCode()与key.hashCode()>>>16进行异或操作，高16bit补0，一个数和0异或不变，所以 hash 函数大概的作用就是：高16bit不变，低16bit和高16bit做了一个异或，目的是减少碰撞。
+
+
+Spring不能对一个prototype bean的整个生命周期负责，容器在初始化、配置、装饰或者是装配完一个prototype实例后，将它交给客户端，随后就对该prototype实例不闻不问了
