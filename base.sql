@@ -4,7 +4,7 @@
  Source Server         : nacos
  Source Server Type    : MySQL
  Source Server Version : 80027
- Source Host           : 47.119.167.128:3306
+ Source Host           : 8.134.9.37:3306
  Source Schema         : blog_db
 
  Target Server Type    : MySQL
@@ -45,7 +45,7 @@ SET FOREIGN_KEY_CHECKS = 1;
  Source Server         : nacos
  Source Server Type    : MySQL
  Source Server Version : 80027
- Source Host           : 47.119.167.128:3306
+ Source Host           : 8.134.9.37:3306
  Source Schema         : blog_db
 
  Target Server Type    : MySQL
@@ -76,7 +76,7 @@ SET FOREIGN_KEY_CHECKS = 1;
  Source Server         : nacos
  Source Server Type    : MySQL
  Source Server Version : 80027
- Source Host           : 47.119.167.128:3306
+ Source Host           : 8.134.9.37:3306
  Source Schema         : blog_db
 
  Target Server Type    : MySQL
@@ -110,7 +110,7 @@ SET FOREIGN_KEY_CHECKS = 1;
  Source Server         : nacos
  Source Server Type    : MySQL
  Source Server Version : 80027
- Source Host           : 47.119.167.128:3306
+ Source Host           : 8.134.9.37:3306
  Source Schema         : blog_db
 
  Target Server Type    : MySQL
@@ -152,7 +152,7 @@ SET FOREIGN_KEY_CHECKS = 1;
  Source Server         : nacos
  Source Server Type    : MySQL
  Source Server Version : 80027
- Source Host           : 47.119.167.128:3306
+ Source Host           : 8.134.9.37:3306
  Source Schema         : blog_db
 
  Target Server Type    : MySQL
@@ -183,7 +183,7 @@ SET FOREIGN_KEY_CHECKS = 1;
  Source Server         : nacos
  Source Server Type    : MySQL
  Source Server Version : 80027
- Source Host           : 47.119.167.128:3306
+ Source Host           : 8.134.9.37:3306
  Source Schema         : blog_db
 
  Target Server Type    : MySQL
@@ -225,7 +225,7 @@ SET FOREIGN_KEY_CHECKS = 1;
  Source Server         : nacos
  Source Server Type    : MySQL
  Source Server Version : 80027
- Source Host           : 47.119.167.128:3306
+ Source Host           : 8.134.9.37:3306
  Source Schema         : blog_db
 
  Target Server Type    : MySQL
@@ -262,7 +262,7 @@ SET FOREIGN_KEY_CHECKS = 1;
  Source Server         : nacos
  Source Server Type    : MySQL
  Source Server Version : 80027
- Source Host           : 47.119.167.128:3306
+ Source Host           : 8.134.9.37:3306
  Source Schema         : blog_db
 
  Target Server Type    : MySQL
@@ -294,7 +294,7 @@ SET FOREIGN_KEY_CHECKS = 1;
  Source Server         : nacos
  Source Server Type    : MySQL
  Source Server Version : 80027
- Source Host           : 47.119.167.128:3306
+ Source Host           : 8.134.9.37:3306
  Source Schema         : blog_db
 
  Target Server Type    : MySQL
@@ -326,7 +326,7 @@ SET FOREIGN_KEY_CHECKS = 1;
  Source Server         : nacos
  Source Server Type    : MySQL
  Source Server Version : 80027
- Source Host           : 47.119.167.128:3306
+ Source Host           : 8.134.9.37:3306
  Source Schema         : blog_db
 
  Target Server Type    : MySQL
@@ -368,7 +368,7 @@ SET FOREIGN_KEY_CHECKS = 1;
  Source Server         : nacos
  Source Server Type    : MySQL
  Source Server Version : 80027
- Source Host           : 47.119.167.128:3306
+ Source Host           : 8.134.9.37:3306
  Source Schema         : blog_db
 
  Target Server Type    : MySQL
