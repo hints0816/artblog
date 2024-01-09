@@ -6,7 +6,7 @@
 
 
 demo in using:
-http://www.arthins.com
+http://8.134.9.37
 (I'm sorry the website is temporarily unavailable)
 username: admin
 password: 123456

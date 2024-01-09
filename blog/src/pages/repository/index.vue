@@ -330,7 +330,7 @@ export default {
       cropperAvatarDialog: false,
       model: null,
       option: {
-        img: 'https://www.arthins.com:9999/blog/473562851655553024.png', // 原图文件
+        img: 'https://8.134.9.37:9999/blog/473562851655553024.png', // 原图文件
         size: 1,
         outputType: 'jpeg',
         info: true,

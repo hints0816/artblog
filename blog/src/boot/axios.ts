@@ -16,7 +16,7 @@ declare module '@vue/runtime-core' {
 // "export default () => {}" function below (which runs individually
 // for each client)
 const api = axios.create({
-  baseURL: 'http://www.arthins.com:3000',
+  baseURL: 'http://8.134.9.37:3000',
   // baseURL: 'http://localhost:3000',
   withCredentials: true,
 });

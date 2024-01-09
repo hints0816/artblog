@@ -34,7 +34,7 @@ func SendEmail(emailName string, uuid int64) {
 		"<p>Welcome To Register ArtBlog! You're so close to using your first ArtBlog!</p>" +
 		"<p class=\"cTMail-content\" style=\"font-size: 14px; color: rgb(51, 51, 51); line-height: 24px; margin: 6px 0px 0px; word-wrap: break-word; word-break: break-all;\">" +
 		"<a id=\"cTMail-btn\" href=\"" +
-		"http://www.arthins.com/#/claim?token=" + strconv.Itoa(int(uuid)) +
+		"http://8.134.9.37/#/claim?token=" + strconv.Itoa(int(uuid)) +
 		"\" title=\"\"" +
 		"style=\"font-size: 16px; line-height: 45px; display: block; background-color: rgb(20, 20, 20); color: rgb(255, 255, 255); text-align: center; text-decoration: none; margin-top: 20px; border-radius: 3px;\">" +
 		"Click to Confirm Your Email Address + Set Things Up" +
