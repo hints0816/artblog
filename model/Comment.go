@@ -147,6 +147,7 @@ func SetDigg(digg *Digg) int {
 	// var comment Comment
 	// db.Model(&comment).Where("id = ?", digg.CommentId).UpdateColumn("digg", gorm.Expr("digg + ?", 1))
 	if err != nil {
+		fmt.Println(err)
 		return errormsg.ERROR
 	}
 	return errormsg.SUCCSE
