@@ -5,7 +5,7 @@ import (
 	"strconv"
 
 	"github.com/garyburd/redigo/redis"
-	"github.com/sirupsen/logrus"
+	"fmt"
 	"gorm.io/gorm"
 )
 
@@ -160,7 +160,7 @@ func SetUnDigg(digg *Digg) int {
 	// var comment Comment
 	// db.Model(&comment).Where("id = ?", digg.CommentId).UpdateColumn("digg", gorm.Expr("digg - ?", 1))
 	if err != nil {
-		log.Println(err)
+		fmt.Println(err)
 		return errormsg.ERROR
 	}
 	return errormsg.SUCCSE
