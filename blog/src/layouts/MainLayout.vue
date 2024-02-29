@@ -513,6 +513,7 @@
     <q-page-container>
       <router-view />
     </q-page-container>
+    
     <q-page-sticky
       elevated
       reveal
@@ -520,7 +521,7 @@
       :scroll-offset="150"
       :offset="[18, 18]"
     >
-      <q-fab icon="unfold_more" color="cyan-9" direction="up">
+      <q-fab icon="unfold_more" color="cyan-9" direction="up" padding="sm">
         <!-- <q-fab-action icon="comment" color="cyan-9" @click="open('right')" /> -->
         <q-fab-action
           icon="home"
