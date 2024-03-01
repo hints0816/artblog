@@ -314,7 +314,7 @@
                 :arrows="imgDetail.Imglist.length > 1"
                 :navigation="imgDetail.Imglist.length > 1"
                 infinite
-                class="col-5 full-height"
+                class="col-5"
               >
                 <q-carousel-slide
                   v-for="(data, index) in imgDetail.Imglist"
