@@ -1,12 +1,9 @@
 <template>
   <div class="row justify-center">
-    
     <q-page padding class="col-xs-12 col-sm-10 col-md-8">
       <div style="position: fixed;margin-left: -5rem;top: 140px;z-index: 2;">
-        <div><q-btn style="margin-bottom: 1.667rem" round color="primary" icon="shopping_cart" /></div>
-        <div><q-btn style="margin-bottom: 1.667rem" round color="secondary" icon="navigation" /></div>
-        <div><q-btn style="margin-bottom: 1.667rem" round color="amber" glossy text-color="black" icon="layers_clear" /></div>
-        <div><q-btn style="margin-bottom: 1.667rem" round color="brown-5" icon="directions" /></div>
+        <div><q-btn style="margin-bottom: 1.667rem" round color="primary" icon="thumb_up_alt" /></div>
+        <div><q-btn style="margin-bottom: 1.667rem" round color="primary" icon="textsms" /></div>
       </div>
       <div v-if="onload" class="q-mb-lg">
         <h4 class="text-cyan-9">{{ post.title }}</h4>
