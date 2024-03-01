@@ -986,6 +986,7 @@ export default defineComponent({
       async loginOut(): Promise<any> {
         LocalStorage.remove('token');
         LocalStorage.set('logged_in', 'no');
+        Cookies.remove('token');
         let res = (await logout()) as any;
         if (res.status == 302) {
           window.location.href = '/';

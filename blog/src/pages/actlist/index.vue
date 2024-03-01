@@ -1,7 +1,7 @@
 <template>
   <div class="row justify-center">
-    <q-page padding class="col-xs-12 col-sm-10 col-md-8">
-      <div style="position: fixed;margin-left: -5rem;top: 140px;z-index: 2;">
+    <q-page padding class="col-xs-12" style="width:750px">
+      <div v-if="$q.screen.gt.sm" style="position: fixed;margin-left: -5rem;top: 140px;z-index: 2;">
         <div><q-btn style="margin-bottom: 1.667rem" round color="primary" icon="thumb_up_alt" /></div>
         <div><q-btn style="margin-bottom: 1.667rem" round color="primary" icon="textsms" /></div>
       </div>
@@ -55,6 +55,8 @@
       </div>
       <q-separator color="cyan-9" style="height: 1px;" />
       <Comment :idss="post.id"/>
+    </q-page>
+    <q-page v-if="$q.screen.gt.sm" padding style="width:250px;background: antiquewhite">
     </q-page>
   </div>
 </template>

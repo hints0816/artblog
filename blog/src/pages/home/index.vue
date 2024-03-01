@@ -1,6 +1,6 @@
 <template>
   <div class="row justify-center">
-    <q-page padding class="row col-xs-12 col-sm-10 col-md-8">
+    <q-page padding class="row col-xs-12"  style="width:750px">
       <q-infinite-scroll class="col-12" @load="onLoad" :offset="250">
         <q-list padding>
           <Item @reloadart="reloadArt" :postList="postList" />
@@ -11,6 +11,8 @@
           </div>
         </template>
       </q-infinite-scroll>
+    </q-page>
+    <q-page v-if="$q.screen.gt.sm" padding style="width:250px;background: antiquewhite">
     </q-page>
   </div>
 </template>

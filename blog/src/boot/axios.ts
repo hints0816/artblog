@@ -1,6 +1,6 @@
 import { boot } from 'quasar/wrappers';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { LocalStorage, Loading, QSpinnerGrid, Notify } from 'quasar';
+import { LocalStorage, Loading, QSpinnerGrid, Notify, Cookies } from 'quasar';
 import Router from '../router';
 
 declare module '@vue/runtime-core' {
@@ -27,7 +27,8 @@ api.interceptors.request.use((cinfig: AxiosRequestConfig) => {
     spinner: QSpinnerGrid,
     spinnerSize: 100,
   })
-  const token :string = LocalStorage.getItem('token');
+  // const token :string = LocalStorage.getItem('token');
+  const token :string = Cookies.get('token');
   cinfig.headers.Authorization = 'Bearer '+  token;
   return cinfig;
 });
