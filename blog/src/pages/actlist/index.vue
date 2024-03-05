@@ -78,7 +78,7 @@
   </div>
 </template>
 <script lang="ts">
-import { getCurrentInstance, reactive, onBeforeMount, toRefs, ref ,onMounted } from 'vue'
+import { getCurrentInstance, reactive, onBeforeMount, toRefs ,onMounted, nextTick } from 'vue'
 import Comment from '../../components/CommentList.vue';
 import imagesLoaded from 'imagesloaded';
 import { getArticle } from '../../api/test/index'
@@ -135,7 +135,7 @@ export default {
     };
     onMounted(async()=>{
        await method.commentss();
-       ctx.$nextTick(() => {
+       await nextTick(() => {
         const anchors =ctx.$refs.preview.$el.querySelectorAll('h1,h2,h3,h4,h5,h6');
         const titles = Array.from(anchors).filter((title) => !!((title as HTMLElement).innerText.trim()));
         if (!titles.length) {
@@ -143,8 +143,10 @@ export default {
           return;
         }
         const hTags = Array.from(new Set(titles.map((title) => (title as HTMLElement).tagName))).sort();
+        console.log(hTags);
         imagesLoaded('.container', function() {
           // 所有图片加载完成后的回调函数
+          console.log('所有图片加载完成!');
           data.titles = titles.map((el) => ({
             title: (el as HTMLElement).innerText,
             lineIndex: (el as HTMLElement).getAttribute('data-v-md-line'),
@@ -159,7 +161,7 @@ export default {
       ...method,
       
       onScroll (info) {
-        var ftop = Number(info.position.top)+12;
+        var ftop = Number(info.position.top)+10;
         data.titles.forEach((element) => {
           const title = ctx.$refs.title.$el.querySelector(`.line${String(element.lineIndex)}`);
           title.style.backgroundColor = '';
