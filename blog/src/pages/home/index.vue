@@ -12,7 +12,37 @@
         </template>
       </q-infinite-scroll>
     </q-page>
-    <q-page v-if="$q.screen.gt.sm" padding style="width:250px;background: antiquewhite">
+    <q-page v-if="$q.screen.gt.sm" padding style="width:250px;">
+      <q-card flat style="border-top: none;border-left: none;border-right: none;" class="my-card">
+         <q-item style="padding:8px 0;">
+          <q-item-section avatar>
+            <q-avatar size="60px">
+              <img src="https://cdn.quasar.dev/img/avatar2.jpg">
+            </q-avatar>
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>Title</q-item-label>
+            <q-item-label caption>Subhead</q-item-label>
+          </q-item-section>
+        </q-item>
+      </q-card>
+      <q-card flat style="border-top: none;border-left: none;border-right: none;" class="my-card">
+        <q-card-section style="padding:8px 0;">
+          <div class="text-h6">Our Changing Planet</div>
+        </q-card-section>
+
+        <q-card-section style="padding:8px 0;" class="q-pt-none">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+          tempor incididunt ut labore et dolore magna aliqua.
+        </q-card-section>
+
+        <q-separator inset />
+
+        <q-card-section style="padding:8px 0;">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+          tempor incididunt ut labore et dolore magna aliqua.
+        </q-card-section>
+      </q-card>
     </q-page>
   </div>
 </template>
