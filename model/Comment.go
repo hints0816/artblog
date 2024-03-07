@@ -90,33 +90,7 @@ func GetCommentList(user_id uint, id int, pageSize int, pageNum int) ([]Comment,
 	}
 	return commentList, count, floorCount, errormsg.SUCCSE
 }
-# Global logging configuration
-log4j.rootLogger= debug, console, 
- # SqlMap logging configuration...
 
-log4j.logger.java.sql.ResultSet=DEBUG
-log4j.logger.org.apache=INFO
-log4j.logger.java.sql.Connection=DEBUG
-log4j.logger.java.sql.Statement=DEBUG
-log4j.logger.java.sql.PreparedStatement=DEBUG
-
-log4j.logger.org.springframework=DEBUG
-log4j.logger.com.mchange=INFO
-log4j.logger.com.gree=DEBUG
-log4j.logger.org.jbpm=INFO
-
-# console output... 
-log4j.appender.console=org.apache.log4j.ConsoleAppender
-log4j.appender.console.layout=org.apache.log4j.PatternLayout
-log4j.appender.console.layout.ConversionPattern=[%p][%F:%L]:%m%n
-
-# File output
-log4j.appender.f=org.apache.log4j.DailyRollingFileAppender
-log4j.appender.f.Threshold=INFO
-log4j.appender.f.File=${catalina.base}/logs_cp/log4j.log
-log4j.appender.f.DatePattern=yyyy-MM-dd'.log' 
-log4j.appender.f.layout=org.apache.log4j.PatternLayout
-log4j.appender.f.layout.ConversionPattern=[%p][%d][%F\:%L]\:%m%n
 func GetCommentListAdmin(user_id int, pageSize int, pageNum int) ([]Comment, int64, int) {
 	var commentList []Comment
 	var count int64

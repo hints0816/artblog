@@ -48,6 +48,12 @@
         </q-tabs>
         <q-space></q-space>
         <div class="q-gutter-sm row items-center no-wrap">
+          <q-input dark dense standout v-model="text" input-class="text-left" class="q-ml-md" placeholder="Search">
+            <template v-slot:append>
+              <q-icon v-if="text === ''" name="search" />
+              <q-icon v-else name="clear" class="cursor-pointer" @click="text = ''" />
+            </template>
+          </q-input>
           <q-btn @click="openGithub" dense round flat icon="ion-logo-github" />
           <q-btn
             v-if="profile.name"

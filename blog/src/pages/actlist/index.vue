@@ -18,7 +18,7 @@
             style="margin-bottom: 1.667rem"
             round
             color="primary"
-            icon="textsms"
+            icon="star"
           />
         </div>
       </div>

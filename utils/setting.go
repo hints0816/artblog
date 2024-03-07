@@ -26,6 +26,8 @@ var (
 	ClientId     string
 	ClientSecret string
 	RedirectUri  string
+
+	WebMaster  string
 )
 
 func init() {
@@ -37,6 +39,7 @@ func init() {
 	LoadData(file)
 	LoadMinio(file)
 	LoadGithub(file)
+	LoadBase(file)
 }
 
 func LoadServer(file *ini.File) {
@@ -65,4 +68,8 @@ func LoadGithub(file *ini.File) {
 	ClientId = file.Section("github").Key("ClientId").String()
 	ClientSecret = file.Section("github").Key("ClientSecret").String()
 	RedirectUri = file.Section("github").Key("RedirectUri").String()
+}
+
+func LoadBase(file *ini.File) {
+	WebMaster = file.Section("base").Key("WebMaster").String()
 }

@@ -28,19 +28,24 @@
       </q-card>
       <q-card flat style="border-top: none;border-left: none;border-right: none;" class="my-card">
         <q-card-section style="padding:8px 0;">
-          <div class="text-h6">Our Changing Planet</div>
+          <div class="text-h6">标签</div>
         </q-card-section>
-
-        <q-card-section style="padding:8px 0;" class="q-pt-none">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-          tempor incididunt ut labore et dolore magna aliqua.
-        </q-card-section>
-
         <q-separator inset />
-
-        <q-card-section style="padding:8px 0;">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-          tempor incididunt ut labore et dolore magna aliqua.
+        <q-card-section style="padding:8px 0;" class="q-pt-none">
+          <q-list>
+            <q-item clickable v-ripple>
+              <q-item-section avatar>
+                <q-icon color="primary" name="bluetooth" />
+              </q-item-section>
+              <q-item-section>Icon as avatar</q-item-section>
+            </q-item>
+            <q-item clickable v-ripple>
+              <q-item-section avatar>
+                <q-icon color="primary" name="bluetooth" />
+              </q-item-section>
+              <q-item-section>Avatar-type icon</q-item-section>
+            </q-item>
+          </q-list>
         </q-card-section>
       </q-card>
     </q-page>

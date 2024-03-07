@@ -4,7 +4,7 @@ import (
 	"hello/middleware"
 	"hello/model"
 	"hello/utils/errormsg"
-
+	"hello/utils"
 	"net/http"
 	"strconv"
 
@@ -79,4 +79,16 @@ func EditEmoji(c *gin.Context) {
 		"status":  code,
 		"message": errormsg.GetErrMsg(code),
 	})
+}
+
+func GetWebmaster(c *gin.Context) {
+	webMaster := utils.WebMaster
+	id, _ := strconv.Atoi(webMaster)
+	data := model.GetProfileById(uint(id))
+	c.JSON(
+		http.StatusOK, gin.H{
+			"status": 200,
+			"data":   data,
+		},
+	)
 }

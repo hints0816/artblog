@@ -36,6 +36,7 @@ func InitRouter() {
 	{
 		auth.GET("admin/users", api.GetUsers)
 		auth.GET("blog/getme", api.GetMe)
+		auth.GET("blog/webmaster", api.GetWebmaster)
 		auth.POST("blog/article", api.AddArticle)
 		auth.GET("blog/comment/list/:id", api.GetCommentListFront)
 		auth.GET("blog/imgcomment/list/:id", api.GetImgCommentList)
