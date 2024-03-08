@@ -25,6 +25,10 @@ export const getProfileMe = async () => {
     return await api.get('/api/blog/getme');
 };
 
+export const getWebMaster = async () => {
+    return await api.get('/api/blog/webmaster');
+};
+
 export const listArticle = async (params: any) => {
     return await api.get('/api/blog/articlelist',{params:params});
 };

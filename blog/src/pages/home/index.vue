@@ -17,12 +17,12 @@
          <q-item style="padding:8px 0;">
           <q-item-section avatar>
             <q-avatar size="60px">
-              <img src="https://cdn.quasar.dev/img/avatar2.jpg">
+              <img :src="webMasterProfile.avatar"/>
             </q-avatar>
           </q-item-section>
           <q-item-section>
-            <q-item-label>Title</q-item-label>
-            <q-item-label caption>Subhead</q-item-label>
+            <q-item-label>{{ webMasterProfile.name }}</q-item-label>
+            <q-item-label caption>{{ webMasterProfile.desc }}</q-item-label>
           </q-item-section>
         </q-item>
       </q-card>
@@ -54,7 +54,7 @@
 <script lang="ts">
 import Item from '../../components/ItemCard.vue';
 import { reactive, onBeforeMount, toRefs } from 'vue';
-import { listArticle } from '../../api/test/index';
+import { listArticle, getWebMaster } from '../../api/test/index';
 import { date } from 'quasar';
 export default {
   name: 'List',
@@ -65,6 +65,12 @@ export default {
       total: 10,
       cid: 0,
       postList: [],
+      webMasterProfile: {
+        id: '',
+        name: '',
+        desc: '',
+        avatar: null,
+      }
     });
     // const { ctx } = getCurrentInstance() as any;
     const method = {
@@ -84,6 +90,11 @@ export default {
         });
         data.postList = datas.data;
         data.total = datas.total;
+
+        let res = (await getWebMaster()) as any;
+        data.webMasterProfile.avatar = res.data.avatar;
+        data.webMasterProfile.name = res.data.name;
+        data.webMasterProfile.desc = res.data.desc;
       },
       async onLoad(index, done): Promise<any> {
         if (data.total > data.pagesize) {

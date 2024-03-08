@@ -36,7 +36,7 @@ func InitRouter() {
 	{
 		auth.GET("admin/users", api.GetUsers)
 		auth.GET("blog/getme", api.GetMe)
-		auth.GET("blog/webmaster", api.GetWebmaster)
+		
 		auth.POST("blog/article", api.AddArticle)
 		auth.GET("blog/comment/list/:id", api.GetCommentListFront)
 		auth.GET("blog/imgcomment/list/:id", api.GetImgCommentList)
@@ -83,7 +83,7 @@ func InitRouter() {
 		router.GET("login/checktoken", api.CheckCode)
 		router.GET("blog/github", api.GithubCallback)
 		router.GET("blog/artlist", api.ListImage)
-
+		router.GET("blog/webmaster", api.GetWebmasterInfo)
 	}
 
 	r.Run(":3000")

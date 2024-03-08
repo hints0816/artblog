@@ -75,6 +75,9 @@ GET http://localhost:3000/api/blog/getme HTTP/1.1
 Authorization: Bearer {{loginAdmin.response.body.token}}
 
 ###
+GET http://localhost:3000/api/blog/webmaster HTTP/1.1
+
+###
 POST http://localhost:3000/api/user/add HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{loginAdmin.response.body.token}}

@@ -76,8 +76,10 @@ func ListArticle(edit bool, userId int, cid int, pageSize int, pageNum int) ([]A
 	var total int64
 
 	if cid != 0 {
+		// 检索出这个标签ID对应的所有文章ID
 		db.Model(&Cateart{}).Where("cid =?", cid).Pluck("id", &ids)
 	}
+	// preload预加载一对多的数据
 	tx := db.
 		Order("created_at DESC").
 		Preload("Profile").
