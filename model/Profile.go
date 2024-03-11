@@ -38,20 +38,20 @@ func GetProfileById(id uint) Profile {
 	return profile
 }
 
-func GetCategoryById(id uint) ([]string, error) {
-    var categoryNames []string
+func GetCategoryById(id uint) ([]Category, error) {
+    var categories []Category
 
 	subQuery := db.Model(&Article{}).Where("user_id = ?", id).Select("id")
 	err := db.Model(&Cateart{}).
-	Distinct("category.name").
+	Select("category.id, category.name").
 	Joins("INNER JOIN category ON cateart.cid = category.id").
 	Where("cateart.id IN (?)", subQuery).
-	Pluck("category.name", &categoryNames).Error
+	Find(&categories).Error
 
 	if err != nil {
         return nil, err
     }
-    return categoryNames, nil
+    return categories, nil
 }
 
 func CheckEmail(email string) int {

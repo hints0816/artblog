@@ -85,12 +85,12 @@ func GetWebmasterInfo(c *gin.Context) {
 	webMaster := utils.WebMaster
 	id, _ := strconv.Atoi(webMaster)
 	data := model.GetProfileById(uint(id))
-	data1,_ := model.GetCategoryById(uint(id))
+	cate,_ := model.GetCategoryById(uint(id))
 	c.JSON(
 		http.StatusOK, gin.H{
 			"status": 200,
 			"data":   data,
-			"data1":   data1,
+			"cate":   cate,
 		},
 	)
 }

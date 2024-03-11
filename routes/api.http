@@ -90,3 +90,8 @@ Authorization: Bearer {{loginAdmin.response.body.token}}
 
 ###
 GET http://localhost:3000/api/blog/artlist?pagenum=1&pagesize=10 HTTP/1.1
+
+###
+POST http://prod.scmaction.gree.com/frontservice/source/auth/verify-code-login HTTP/1.1
+
+{"mobile":"13423610240","mobilePrefix":"86","code":"123123","comp":"400","rememberMe":true}

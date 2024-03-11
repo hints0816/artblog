@@ -10,6 +10,10 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/home/index.vue'),
       },
       {
+        path: '/search',
+        component: () => import('pages/home/index.vue'),
+      },
+      {
         path: '/posts/:id',
         component: () => import('pages/actlist/index.vue'),
       },

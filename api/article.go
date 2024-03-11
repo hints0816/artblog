@@ -17,6 +17,7 @@ func ListArticle(c *gin.Context) {
 	pageNum, _ := strconv.Atoi(c.Query("pagenum"))
 	cid, _ := strconv.Atoi(c.Query("id"))
 	userId, _ := strconv.Atoi(c.Query("user_id"))
+	keyword := c.Query("keyword")
 
 	usernamekey, _ := c.Get("username")
 	userinfo, _ := usernamekey.(*middleware.MyClaims)
@@ -38,7 +39,7 @@ func ListArticle(c *gin.Context) {
 		pageNum = 1
 	}
 
-	data, code, total := model.ListArticle(edit, userId, cid, pageSize, pageNum)
+	data, code, total := model.ListArticle(edit, userId, cid, keyword, pageSize, pageNum)
 
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,

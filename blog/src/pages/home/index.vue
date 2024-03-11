@@ -32,18 +32,12 @@
         </q-card-section>
         <q-separator inset />
         <q-card-section style="padding:8px 0;" class="q-pt-none">
-          <q-list>
-            <q-item clickable v-ripple>
+          <q-list v-for="cate in cateList" :key="cate.index">
+            <q-item clickable v-ripple @click="reloadArt(cate.id)">
               <q-item-section avatar>
-                <q-icon color="primary" name="bluetooth" />
+                <q-icon color="primary" name="H" />
               </q-item-section>
-              <q-item-section>Icon as avatar</q-item-section>
-            </q-item>
-            <q-item clickable v-ripple>
-              <q-item-section avatar>
-                <q-icon color="primary" name="bluetooth" />
-              </q-item-section>
-              <q-item-section>Avatar-type icon</q-item-section>
+              <q-item-section>{{ cate.name }}</q-item-section>
             </q-item>
           </q-list>
         </q-card-section>
@@ -53,8 +47,9 @@
 </template>
 <script lang="ts">
 import Item from '../../components/ItemCard.vue';
-import { reactive, onBeforeMount, toRefs } from 'vue';
+import { reactive, onBeforeMount, toRefs, watch, ref } from 'vue';
 import { listArticle, getWebMaster } from '../../api/test/index';
+import { useRoute } from 'vue-router';
 import { date } from 'quasar';
 export default {
   name: 'List',
@@ -70,14 +65,19 @@ export default {
         name: '',
         desc: '',
         avatar: null,
-      }
+      },
+      cateList: []
     });
+
+    const route = useRoute() as any;
+    const queryValue = ref(route.query.q);
     // const { ctx } = getCurrentInstance() as any;
     const method = {
       async commentss(): Promise<any> {
         const paramss = {
           pagenum: 1,
           pagesize: data.pagesize,
+          keyword: queryValue.value
         };
         let datas = (await listArticle(paramss)) as any;
         datas.data.forEach((element) => {
@@ -95,6 +95,7 @@ export default {
         data.webMasterProfile.avatar = res.data.avatar;
         data.webMasterProfile.name = res.data.name;
         data.webMasterProfile.desc = res.data.desc;
+        data.cateList = res.cate;
       },
       async onLoad(index, done): Promise<any> {
         if (data.total > data.pagesize) {
@@ -140,10 +141,14 @@ export default {
         });
         data.postList = datas.data;
         data.total = datas.total;
-      },
+      }
     };
     onBeforeMount(async () => {
       await method.commentss();
+    });
+    watch(() => route.query.q, (newQuery, oldQuery) => {
+      queryValue.value = newQuery;
+      void method.commentss();
     });
     return {
       ...toRefs(data),

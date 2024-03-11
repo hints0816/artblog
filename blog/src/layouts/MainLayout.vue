@@ -48,10 +48,9 @@
         </q-tabs>
         <q-space></q-space>
         <div class="q-gutter-sm row items-center no-wrap">
-          <q-input dark dense standout v-model="text" input-class="text-left" class="q-ml-md" placeholder="Search">
+          <q-input dark dense standout v-model="searchText" input-class="text-left" class="q-ml-md" placeholder="Search">
             <template v-slot:append>
-              <q-icon v-if="text === ''" name="search" />
-              <q-icon v-else name="clear" class="cursor-pointer" @click="text = ''" />
+              <q-icon name="search" class="cursor-pointer" @click="search(searchText)" />
             </template>
           </q-input>
           <q-btn @click="openGithub" dense round flat icon="ion-logo-github" />
@@ -675,7 +674,7 @@ import {
 } from 'vue';
 import { getProfileMe, editEmoji, logout, postArt, uploadImage } from '../api/test/index';
 import { LocalStorage, Notify, Dark, Cookies } from 'quasar';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { dom } from 'quasar';
 
 export default defineComponent({
@@ -768,9 +767,11 @@ export default defineComponent({
       persistent: false,
       position: 'top',
       imgdisurl: '',
-      imgBase64: ''
+      imgBase64: '',
+      searchText: ''
     });
     const router = useRouter() as any;
+    const route = useRoute() as any;
     let leftDrawerOpen = ref(false);
     const cropper = ref(null);
     const method = {
@@ -1009,11 +1010,15 @@ export default defineComponent({
         data.talk.push(params);
         data.text = '';
       },
+      search(text: string): void {
+        router.push(`/search?q=${text}`);
+      },
     };
     onBeforeMount(async () => {
       await method.getProfileMe();
     });
     onMounted(() => {
+      data.searchText = route.query.q;
       emoji.forEach((element) => {
         data.faceList.push(element.char);
       });

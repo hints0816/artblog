@@ -70,7 +70,7 @@ func GetArtInfo(id int) (Article, int) {
 	return art, errormsg.SUCCSE
 }
 
-func ListArticle(edit bool, userId int, cid int, pageSize int, pageNum int) ([]Article, int, int64) {
+func ListArticle(edit bool, userId int, cid int, keyword string, pageSize int, pageNum int) ([]Article, int, int64) {
 	var artList []Article
 	var ids []string
 	var total int64
@@ -94,9 +94,12 @@ func ListArticle(edit bool, userId int, cid int, pageSize int, pageNum int) ([]A
 	if userId != 0 {
 		tx = tx.Where("user_id = ?", userId)
 	}
+	if keyword != "" {
+		tx = tx.Where("title like ? or content like ?", "%"+keyword+"%", "%"+keyword+"%")
+	}
+	
 	err = tx.Limit(pageSize).Offset((pageNum - 1) * pageSize).
 		Find(&artList).Error
-
 	tx2 := db.Model(&artList)
 	if !edit {
 		tx2 = tx2.Where("status =?", 1)
@@ -106,6 +109,9 @@ func ListArticle(edit bool, userId int, cid int, pageSize int, pageNum int) ([]A
 	}
 	if userId != 0 {
 		tx2 = tx2.Where("user_id = ?", userId)
+	}
+	if keyword != "" {
+		tx2 = tx2.Where("title like ? or content like ?", "%"+keyword+"%", "%"+keyword+"%")
 	}
 	tx2.Count(&total)
 
