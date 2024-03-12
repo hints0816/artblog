@@ -96,7 +96,7 @@ func UpLoadFileImgQiniu(img image.Image) (string, int) {
 	fileSize := int64(len(fSrc))
 
 	uuid := uuid.GetSnowFlakeID()
-	fileName := strconv.FormatInt(uuid, 10) + ".webp"
+	fileName := strconv.FormatInt(uuid, 10) + ".png"
 	ret := storage.PutRet{}
 	putExtra := storage.PutExtra{
 		Params: map[string]string{
