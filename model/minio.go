@@ -83,10 +83,11 @@ func UpLoadFileQiniu(file multipart.File, contentType string, fileSize int64) (s
 	}
 	
 	err := formUploader.Put(context.Background(), &ret, upToken, fileName, bytes.NewReader(fSrc), fileSize, &putExtra)
+	fmt.Println(err)
+	fmt.Println(ret)
 	if err != nil {
 		return "", errormsg.ERROR
 	}
-	fmt.Println(ret)
 	return "http://s9x7v2h9r.hn-bkt.clouddn.com/" + fileName, errormsg.SUCCSE
 }
 
