@@ -8,8 +8,13 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
-
+	"context"
+	"fmt"
+	"bytes"
+	"io/ioutil"
 	"github.com/gin-gonic/gin"
+	"github.com/qiniu/go-sdk/v7/auth"
+	"github.com/qiniu/go-sdk/v7/storage"
 )
 
 func ListArticle(c *gin.Context) {
@@ -160,12 +165,45 @@ func UploadArtImage(c *gin.Context) {
 	file, fileHeader, _ := c.Request.FormFile("file")
 
 	fileSize := fileHeader.Size
-	contentType := fileHeader.Header.Get("Content-Type")
-	url, code := model.UpLoadFile(file, contentType, fileSize)
+	fmt.Println(fileSize)
+
+	// contentType := fileHeader.Header.Get("Content-Type")
+	// url, code := model.UpLoadFile(file, contentType, fileSize)
+
+	accessKey := "FBP0c0nuKqjUOsp8AOtBZlwt0EAqvKsb-g8Ma6GT"
+	secretKey := "c7K2ZCozWVpHdtoHxRug1gprrlmC3pl2-zY-eeks"
+	putPolicy := storage.PutPolicy{
+		Scope: "hintsartblog",
+	}
+	key := "github-x.png"
+	mac := auth.New(accessKey, secretKey)
+	upToken := putPolicy.UploadToken(mac)
+	cfg := storage.Config{}
+	// 空间对应的机房
+	cfg.Region = &storage.ZoneHuadong
+	// 是否使用https域名
+	cfg.UseHTTPS = true
+	// 上传是否使用CDN上传加速
+	cfg.UseCdnDomains = false
+	// 构建表单上传的对象
+	formUploader := storage.NewFormUploader(&cfg)
+	ret := storage.PutRet{}
+	putExtra := storage.PutExtra{
+		Params: map[string]string{
+			"x:name": "github logo",
+		},
+	}
+	fileBytes, _ := ioutil.ReadAll(file)
+	dataLen := int64(len(fileBytes))
+	err := formUploader.Put(context.Background(), &ret, upToken, key, bytes.NewReader(fileBytes), dataLen, &putExtra)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"status":  code,
-		"url":     url,
-		"message": errormsg.GetErrMsg(code),
+		"status":  22,
+		"url":     "",
+		"message": errormsg.GetErrMsg(2),
 	})
 }
