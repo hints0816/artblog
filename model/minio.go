@@ -88,7 +88,7 @@ func UpLoadFileQiniu(file multipart.File, contentType string, fileSize int64) (s
 	if err != nil {
 		return "", errormsg.ERROR
 	}
-	return "http://s9x7v2h9r.hn-bkt.clouddn.com/" + fileName, errormsg.SUCCSE
+	return "http://cdn.ceccc.space/" + fileName, errormsg.SUCCSE
 }
 
 func CreateBucket(bucketName string) {
