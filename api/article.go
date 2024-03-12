@@ -180,7 +180,7 @@ func UploadArtImage(c *gin.Context) {
 	upToken := putPolicy.UploadToken(mac)
 	cfg := storage.Config{}
 	// 空间对应的机房
-	cfg.Region = &storage.ZoneHuadong
+	cfg.Region = &storage.ZoneHuanan
 	// 是否使用https域名
 	cfg.UseHTTPS = true
 	// 上传是否使用CDN上传加速
