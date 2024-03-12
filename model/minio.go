@@ -18,10 +18,19 @@ import (
 
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
+
+	"github.com/qiniu/go-sdk/v7/auth"
+	"github.com/qiniu/go-sdk/v7/storage"
 )
 
-var minioClient *minio.Client
-var minioErr error
+
+var (
+	minioClient *minio.Client
+	minioErr error
+
+	upToken string
+	formUploader *storage.FormUploader
+)
 
 func InitMinio() {
 	endpoint := utils.MinioServer
@@ -39,6 +48,46 @@ func InitMinio() {
 	}
 
 	log.Printf("%#v\n", minioClient) // minioClient is now set up
+}
+
+func InitQiniu() {
+	accessKey := utils.QiniuAccessKey
+	secretKey := utils.QiniuSecretKey
+	scope := utils.Scope
+
+	putPolicy := storage.PutPolicy{
+		Scope: scope,
+	}
+	mac := auth.New(accessKey, secretKey)
+	upToken = putPolicy.UploadToken(mac)
+	cfg := storage.Config{}
+	cfg.Region = &storage.ZoneHuanan
+	cfg.UseHTTPS = true
+	cfg.UseCdnDomains = false
+
+	formUploader = storage.NewFormUploader(&cfg)
+}
+
+func UpLoadFileQiniu(file multipart.File, contentType string, fileSize int64) (string, int) {
+	fSrc, _ := ioutil.ReadAll(file)
+	defer file.Close()
+
+	fileType := fileUtils.GetFileType(fSrc[:10])
+	uuid := uuid.GetSnowFlakeID()
+	fileName := strconv.FormatInt(uuid, 10) + "." + fileType
+	ret := storage.PutRet{}
+	putExtra := storage.PutExtra{
+		Params: map[string]string{
+			"x:name": "github logo",
+		},
+	}
+	
+	err := formUploader.Put(context.Background(), &ret, upToken, fileName, bytes.NewReader(fSrc), fileSize, &putExtra)
+	if err != nil {
+		return "", errormsg.ERROR
+	}
+	fmt.Println(ret)
+	return "http://s9x7v2h9r.hn-bkt.clouddn.com/" + fileName, errormsg.SUCCSE
 }
 
 func CreateBucket(bucketName string) {

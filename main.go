@@ -9,5 +9,6 @@ import (
 func main() {
 	model.InitDb()
 	model.InitMinio()
+	model.InitQiniu()
 	routes.InitRouter()
 }

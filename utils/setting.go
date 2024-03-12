@@ -18,11 +18,15 @@ var (
 	DbPassWord string
 	DbName     string
 
+	QiniuAccessKey   string
+	QiniuSecretKey   string
+	Scope      string
+
 	AccessKey   string
 	SecretKey   string
 	Bucket      string
 	MinioServer string
-
+	
 	ClientId     string
 	ClientSecret string
 	RedirectUri  string
@@ -38,6 +42,7 @@ func init() {
 	LoadServer(file)
 	LoadData(file)
 	LoadMinio(file)
+	LoadQiniu(file)
 	LoadGithub(file)
 	LoadBase(file)
 }
@@ -62,6 +67,12 @@ func LoadMinio(file *ini.File) {
 	SecretKey = file.Section("minio").Key("SecretKey").String()
 	Bucket = file.Section("minio").Key("Bucket").String()
 	MinioServer = file.Section("minio").Key("MinioServer").String()
+}
+
+func LoadQiniu(file *ini.File) {
+	QiniuAccessKey = file.Section("qiniu").Key("AccessKey").String()
+	QiniuSecretKey = file.Section("qiniu").Key("SecretKey").String()
+	Scope = file.Section("qiniu").Key("Scope").String()
 }
 
 func LoadGithub(file *ini.File) {
