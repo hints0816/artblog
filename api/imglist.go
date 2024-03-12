@@ -50,7 +50,7 @@ func PostImg(c *gin.Context) {
 	_ = c.ShouldBindJSON(&data)
 	data.UserID = userinfo.Id
 	image := img.ResizeImg(data.Imgurl)
-	url, _ := model.UpLoadFileImg(image)
+	url, _ := model.UpLoadFileImgQiniu(image)
 	data.Imgurl = url
 	code = model.PostArt(&data)
 	c.JSON(http.StatusOK, gin.H{

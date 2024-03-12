@@ -83,8 +83,28 @@ func UpLoadFileQiniu(file multipart.File, contentType string, fileSize int64) (s
 	}
 	
 	err := formUploader.Put(context.Background(), &ret, upToken, fileName, bytes.NewReader(fSrc), fileSize, &putExtra)
-	fmt.Println(err)
-	fmt.Println(ret)
+	if err != nil {
+		return "", errormsg.ERROR
+	}
+	return "http://cdn.ceccc.space/" + fileName, errormsg.SUCCSE
+}
+
+func UpLoadFileImgQiniu(img image.Image) (string, int) {
+	emptyBuff := bytes.NewBuffer(nil)
+	png.Encode(emptyBuff, img)
+	fSrc := emptyBuff.Bytes()
+	fileSize := int64(len(fSrc))
+
+	uuid := uuid.GetSnowFlakeID()
+	fileName := strconv.FormatInt(uuid, 10) + ".webp"
+	ret := storage.PutRet{}
+	putExtra := storage.PutExtra{
+		Params: map[string]string{
+			"x:name": "github logo",
+		},
+	}
+	
+	err := formUploader.Put(context.Background(), &ret, upToken, fileName, bytes.NewReader(fSrc), fileSize, &putExtra)
 	if err != nil {
 		return "", errormsg.ERROR
 	}
