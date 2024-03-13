@@ -43,7 +43,7 @@ func GetCategoryById(id uint) ([]Category, error) {
 
 	subQuery := db.Model(&Article{}).Where("user_id = ?", id).Select("id")
 	err := db.Model(&Cateart{}).
-	Select("category.id, category.name").
+	Select("category.id, category.name, category.color, category.text_color, category.icon").
 	Joins("INNER JOIN category ON cateart.cid = category.id").
 	Where("cateart.id IN (?)", subQuery).
 	Find(&categories).Error

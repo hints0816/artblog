@@ -32,10 +32,10 @@
         </q-card-section>
         <q-separator inset />
         <q-card-section style="padding:8px 0;" class="q-pt-none">
-          <q-list v-for="cate in cateList" :key="cate.index">
+          <q-list dense  v-for="cate in cateList" :key="cate.index">
             <q-item clickable v-ripple @click="reloadArt(cate.id)">
               <q-item-section avatar>
-                <q-icon color="primary" name="H" />
+                <q-icon color="primary" :name="cate.icon" />
               </q-item-section>
               <q-item-section>{{ cate.name }}</q-item-section>
             </q-item>
