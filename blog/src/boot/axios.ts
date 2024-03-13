@@ -16,8 +16,7 @@ declare module '@vue/runtime-core' {
 // "export default () => {}" function below (which runs individually
 // for each client)
 const api = axios.create({
-  baseURL: 'http://www.ceccc.space:3000',
-  // baseURL: 'http://localhost:3000',
+  baseURL: process.env.DEV ? 'http://localhost:3000' : 'http://www.ceccc.space:3000',
   withCredentials: true,
 });
 // 请求拦截import { config } from 'process';
@@ -39,7 +38,7 @@ api.interceptors.response.use(
     if (response.status === 200) {
       if (response.data.status === 500 && response.data.message === 'token授权已过期,请重新登录') {
         LocalStorage.set('logged_in','no')
-      } else if (response.config.url !== "/api/blog/getme" && response.data.status === 500 && response.data.message === 'Token不正确,请重新登录') {
+      } else if (response.config.url !== '/api/blog/getme' && response.data.status === 500 && response.data.message === 'Token不正确,请重新登录') {
         LocalStorage.set('logged_in','no')
         Notify.create({
           message: 'Please Login ArtBlog?',

@@ -42,6 +42,22 @@
           </q-list>
         </q-card-section>
       </q-card>
+      <!-- <q-card flat style="border-top: none;border-left: none;border-right: none;" class="my-card">
+        <q-card-section style="padding:8px 0;">
+          <div class="text-h6">热门文章</div>
+        </q-card-section>
+        <q-separator inset />
+        <q-card-section style="padding:8px 0;" class="q-pt-none">
+          <q-list v-for="cate in cateList" :key="cate.index">
+            <q-item clickable v-ripple @click="reloadArt(cate.id)">
+              <q-item-section avatar>
+                <q-icon color="primary" name="H" />
+              </q-item-section>
+              <q-item-section>{{ cate.name }}</q-item-section>
+            </q-item>
+          </q-list>
+        </q-card-section>
+      </q-card> -->
     </q-page>
   </div>
 </template>
