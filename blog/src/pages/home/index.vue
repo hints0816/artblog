@@ -58,6 +58,9 @@
           </q-list>
         </q-card-section>
       </q-card> -->
+      <q-card flat style="border-top: none;border-left: none;border-right: none;" class="my-card">
+        <img :src="webMasterProfile.wechat">
+      </q-card>
     </q-page>
   </div>
 </template>
@@ -80,6 +83,7 @@ export default {
         id: '',
         name: '',
         desc: '',
+        wechat: '',
         avatar: null,
       },
       cateList: []
@@ -111,6 +115,7 @@ export default {
         data.webMasterProfile.avatar = res.data.avatar;
         data.webMasterProfile.name = res.data.name;
         data.webMasterProfile.desc = res.data.desc;
+        data.webMasterProfile.wechat = res.data.wechat;
         data.cateList = res.cate;
       },
       async onLoad(index, done): Promise<any> {
