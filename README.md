@@ -6,8 +6,7 @@
 
 
 demo in using:
-http://8.134.9.37
-(I'm sorry the website is temporarily unavailable)
+[http://www.ceccc.space](http://www.ceccc.space/#/)
 username: admin
 password: 123456
 
