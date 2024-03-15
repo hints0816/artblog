@@ -38,6 +38,8 @@
               <code class="text-italic">
                 Updated by {{ $store.getters.username }} {{ post.CreatedAt }}
               </code>
+              <q-icon style="padding-left: 15px" name="visibility"/>
+                {{ post.viewCount }}
             </q-item-label>
           </q-item-section>
         </q-item>
@@ -119,6 +121,7 @@ export default {
         id: '',
         title: '',
         CreatedAt: '',
+        viewCount: '',
         content: '',
         profile: null,
       },
@@ -139,6 +142,7 @@ export default {
         let timeStamp = new Date(datas.data.CreatedAt);
         let formattedString = date.formatDate(timeStamp, 'YYYY-MM-DD HH:mm:ss');
         data.post.CreatedAt = formattedString;
+        data.post.viewCount = datas.data.view_count;
         data.post.profile = datas.data.Profile;
       },
       toRepositories(id: number): void {

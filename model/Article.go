@@ -20,6 +20,7 @@ type Article struct {
 	Status       int8       `gorm:"type:tinyint;default:0" json:"status"`
 	UserID       uint       `gorm:"type:bigint;not null" json:"user_id"`
 	Profile      Profile    `gorm:"foreignkey:UserID"`
+	ViewCount    int32      `gorm:"type:int;not null;default:0" json:"view_count"`
 }
 
 type Cateart struct {
@@ -68,6 +69,11 @@ func GetArtInfo(id int) (Article, int) {
 	var art Article
 	db.Preload("Cateart").Preload("Cateart.Category").Where("id =?", id).First(&art)
 	return art, errormsg.SUCCSE
+}
+
+func UpdateArtView(id int, count int) {
+	var art Article
+	db.Model(&art).Where("id = ?", id).UpdateColumn("view_count", gorm.Expr("view_count + ?", count))
 }
 
 func ListArticle(edit bool, userId int, cid int, keyword string, pageSize int, pageNum int) ([]Article, int, int64) {
