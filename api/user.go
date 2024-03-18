@@ -113,8 +113,8 @@ func GithubCallback(c *gin.Context) {
 		fmt.Println(tokenErr)
 	}
 	c.SetCookie("remember_token", githubToken, 604800, "/",
-		"http://arthins", false, true)
+		utils.Domain, false, true)
 	c.SetCookie("token", token, 604800, "/",
-		"http://arthins", false, true)
-	c.Redirect(302, "http://8.134.9.37")
+		utils.Domain, false, true)
+	c.Redirect(302, utils.Domain)
 }

@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"strconv"
 	"time"
+	"hello/utils"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
@@ -204,7 +205,7 @@ func Login(c *gin.Context) {
 // Login 后台登陆
 func LoginOut(c *gin.Context) {
 	c.SetCookie("token", "", -1, "/",
-		"http://arthins.com", false, true)
+		utils.Domain, false, true)
 	c.JSON(http.StatusOK, gin.H{
 		"status": 302,
 	})
