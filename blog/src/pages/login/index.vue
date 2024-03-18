@@ -123,7 +123,7 @@ export default {
         }
       },
       toGithub():void {
-        window.location.href='https://github.com/login/oauth/authorize?client_id=6c85823c1a121313be52&state=s76de&redirect_uri=http://8.134.9.37:3000/api/blog/github'
+        window.location.href='https://github.com/login/oauth/authorize?client_id=6c85823c1a121313be52&state=s76de&redirect_uri=http://www.ceccc.space:3000/api/blog/github'
       }
     };
     return {
