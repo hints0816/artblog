@@ -237,29 +237,18 @@
           <q-card style="padding-right: 24px;" flat>
             <q-tabs v-model="tab" inline-label class="q-my-md" align="left">
               <q-tab name="article" icon="feed" label="ArtList" />
-              <q-tab name="comment" icon="chat" label="Comment" />
+              <q-tab name="comment" v-if="edit" icon="chat" label="Comment" />
               <q-tab name="artImage" icon="collections" label="ArtImage" />
             </q-tabs>
             <q-tab-panels v-model="tab" animated>
               <q-tab-panel name="article">
                 <q-card-actions class="row q-col-gutter-x-xs justify-between">
-                  <q-input
-                    class="col-grow col-xs-12 col-sm-8"
-                    dense
-                    outlined
-                    v-model="text"
-                    label="Outlined"
-                  />
-                  <q-select
-                    dense
-                    outlined
-                    v-model="model"
-                    class="col-grow"
-                    :options="['Google', 'Facebook']"
-                    style="width: 130px"
-                    label="Outlined"
-                  />
-                  <q-btn flat to="/edit" icon="post_add" class="text-cyan-9 q-mx-xs">
+                  <q-input style="width:80%" dense outlined v-model="searchText" input-class="text-left" placeholder="Search">
+                    <template v-slot:append>
+                      <q-icon name="search" class="cursor-pointer" @click="listart();" />
+                    </template>
+                  </q-input>
+                  <q-btn v-if="edit" flat to="/edit" icon="post_add" class="text-cyan-9 q-mx-xs">
                   </q-btn>
                 </q-card-actions>
                 <q-card-section>
@@ -344,6 +333,7 @@ export default {
       total: 10,
       edit: false,
       postList: [],
+      searchText: ''
     });
     const route = useRoute() as any;
     const router = useRouter() as any;
@@ -354,6 +344,7 @@ export default {
           pagenum: 1,
           pagesize: data.pagesize,
           user_id: route.params.id,
+          keyword: data.searchText
         };
         let datas = (await listArticle(paramss)) as any;
         datas.data.forEach((element) => {

@@ -108,7 +108,7 @@ func UpLoadFileImgQiniu(img image.Image) (string, int) {
 	if err != nil {
 		return "", errormsg.ERROR
 	}
-	return "http://cdn.ceccc.space/" + fileName, errormsg.SUCCSE
+	return "http://cdn.ceccc.space/" + fileName + "?imageView2/2/w/400/format/jpeg", errormsg.SUCCSE
 }
 
 func CreateBucket(bucketName string) {

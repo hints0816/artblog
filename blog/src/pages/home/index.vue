@@ -23,6 +23,9 @@
           <q-item-section>
             <q-item-label>{{ webMasterProfile.name }}</q-item-label>
             <q-item-label caption>{{ webMasterProfile.desc }}</q-item-label>
+            <q-item-label>
+              <q-icon size="md" name="fab fa-instagram" />
+            </q-item-label>
           </q-item-section>
         </q-item>
       </q-card>
