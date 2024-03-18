@@ -6,13 +6,12 @@
 
 
 demo in using:
-http://8.134.9.37
-(I'm sorry the website is temporarily unavailable)
+[http://www.ceccc.space](http://www.ceccc.space/#/)
 username: admin
 password: 123456
 
 
-<img src="img/QQ截图20211213003453.png" alt="QQ截图20211213003453" style="zoom: 80%;" />
+<img src="img/Snipaste_2024-03-15_17-43-27.png" alt="QQ截图20211213003453" style="zoom: 80%;" />
 <img src="img/QQ截图20211213003520.png" alt="QQ截图20211213003520" style="zoom: 80%;" />
 <img src="img/QQ截图20211213003751.png" alt="QQ截图20211213003751" style="zoom: 80%;" />
 <img src="img/QQ截图20211213003836.png" alt="QQ截图20211213003836" style="zoom: 80%;" />
