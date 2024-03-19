@@ -79,6 +79,7 @@ func apiFilter(request *http.Request) bool {
 	apiList.PushBack(map[string]string{"method": "GET", "url": "/api/blog/comment/list"})
 	apiList.PushBack(map[string]string{"method": "GET", "url": "/api/blog/articlelist"})
 	apiList.PushBack(map[string]string{"method": "GET", "url": "/api/blog/artimg/"})
+	apiList.PushBack(map[string]string{"method": "GET", "url": "/api/blog/article/"})
 	for e := apiList.Front(); e != nil; e = e.Next() {
 		apimap := e.Value.(map[string]string)
 		if strings.HasPrefix(request.RequestURI, apimap["url"]) && strings.HasPrefix(request.Method, apimap["method"]) {

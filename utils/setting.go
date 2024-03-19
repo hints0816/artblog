@@ -19,6 +19,11 @@ var (
 	DbPassWord string
 	DbName     string
 
+	RedisHost     string
+	RedisPort     string
+	RedisUser     string
+	RedisPassWord string
+
 	QiniuAccessKey   string
 	QiniuSecretKey   string
 	Scope      string
@@ -62,6 +67,11 @@ func LoadData(file *ini.File) {
 	DbUser = file.Section("database").Key("DbUser").MustString("ginblog")
 	DbPassWord = file.Section("database").Key("DbPassWord").MustString("admin123")
 	DbName = file.Section("database").Key("DbName").MustString("ginblog")
+
+	RedisHost = file.Section("redis").Key("RedisHost").MustString("localhost")
+	RedisPort = file.Section("redis").Key("RedisPort").MustString("6379")
+	RedisUser = file.Section("redis").Key("RedisUser").String()
+	RedisPassWord = file.Section("redis").Key("RedisPassWord").String()
 }
 
 func LoadMinio(file *ini.File) {

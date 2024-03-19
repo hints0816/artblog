@@ -142,10 +142,16 @@ func DelArticle(c *gin.Context) {
 	})
 }
 
-// GetUsers 查询用户列表
 func GetArtInfo(c *gin.Context) {
+	usernamekey, _ := c.Get("username")
+	userinfo, _ := usernamekey.(*middleware.MyClaims)
+	
+	var userID uint;
+	if userinfo != nil {
+		userID = userinfo.Id
+	}
 	id, _ := strconv.Atoi(c.Param("id"))
-	data, code := model.GetArtInfo(id)
+	data, code := model.GetArtInfo(userID, id)
 	profile := model.GetProfileById(data.UserID)
 	model.SetViewCache(string(strconv.Itoa(id)))
 	data.Profile = profile
@@ -167,6 +173,32 @@ func UploadArtImage(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,
 		"url":     url,
+		"message": errormsg.GetErrMsg(code),
+	})
+}
+
+func SetArticleFavour(c *gin.Context) {
+	var favour model.Favour
+	usernamekey, _ := c.Get("username")
+	userinfo, _ := usernamekey.(*middleware.MyClaims)
+	_ = c.ShouldBindJSON(&favour)
+	favour.ID = userinfo.Id
+	code = model.SetActicleFavour(&favour)
+	c.JSON(http.StatusOK, gin.H{
+		"status":  code,
+		"message": errormsg.GetErrMsg(code),
+	})
+}
+
+func SetArticleUnFavour(c *gin.Context) {
+	var favour model.Favour
+	usernamekey, _ := c.Get("username")
+	userinfo, _ := usernamekey.(*middleware.MyClaims)
+	_ = c.ShouldBindJSON(&favour)
+	favour.ID = userinfo.Id
+	code = model.SetActicleUnFavour(&favour)
+	c.JSON(http.StatusOK, gin.H{
+		"status":  code,
 		"message": errormsg.GetErrMsg(code),
 	})
 }

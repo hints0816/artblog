@@ -38,6 +38,7 @@ api.interceptors.response.use(
     if (response.status === 200) {
       if (response.data.status === 500 && response.data.message === 'token授权已过期,请重新登录') {
         LocalStorage.set('logged_in','no')
+        Cookies.remove('token')
       } else if (response.config.url !== '/api/blog/getme' && response.data.status === 500 && response.data.message === 'Token不正确,请重新登录') {
         LocalStorage.set('logged_in','no')
         Notify.create({

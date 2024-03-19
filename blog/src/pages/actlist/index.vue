@@ -10,16 +10,16 @@
             style="margin-bottom: 1.667rem"
             round
             color="primary"
+            @click="favorite()"
             icon="thumb_up_alt"
-          />
-        </div>
-        <div>
-          <q-btn
-            style="margin-bottom: 1.667rem"
-            round
-            color="primary"
-            icon="star"
-          />
+          >
+            <q-badge
+              :color="post.FavourArr.length == 0 ? '#ccc' : 'orange'"
+              rounded
+              floating
+              >{{ post.favour }}</q-badge
+            >
+          </q-btn>
         </div>
       </div>
       <div v-if="onload" class="q-mb-lg">
@@ -106,7 +106,7 @@ import {
 } from 'vue';
 import Comment from '../../components/CommentList.vue';
 import imagesLoaded from 'imagesloaded';
-import { getArticle } from '../../api/test/index';
+import { getArticle, favour, unfavour } from '../../api/test/index';
 import { useRoute, useRouter } from 'vue-router';
 import { date } from 'quasar';
 export default {
@@ -124,10 +124,13 @@ export default {
         viewCount: '',
         content: '',
         profile: null,
+        favour: 0,
+        FavourArr: [],
       },
       titles: [],
       isActive: true,
       closetitle: null,
+
     });
     const previewRef = ref(null);
     const titleRef = ref(null);
@@ -144,6 +147,8 @@ export default {
         data.post.CreatedAt = formattedString;
         data.post.viewCount = datas.data.view_count;
         data.post.profile = datas.data.Profile;
+        data.post.favour = datas.data.favour;
+        data.post.FavourArr = datas.data.FavourArr;
       },
       toRepositories(id: number): void {
         router.push(`/repository/${id}`);
@@ -183,6 +188,24 @@ export default {
           top: (el as HTMLElement).offsetTop,
         }));
         console.log(data.titles);
+      },
+      async favorite(): Promise<any> {
+        const params = {
+          article_id: parseInt(data.post.id),
+        };
+        if (data.post.FavourArr.length == 0) {
+          let res = (await favour(params)) as any;
+          if (res.status == 200) {
+            data.post.FavourArr[0] = true;
+            data.post.favour++;    
+          }
+        } else {  
+          let res = (await unfavour(params)) as any;
+          if (res.status == 200) {
+            data.post.FavourArr = [];
+            data.post.favour--;
+          }
+        }
       },
     };
     onMounted(async () => {

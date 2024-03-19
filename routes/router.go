@@ -42,6 +42,9 @@ func InitRouter() {
 		auth.GET("blog/imgcomment/list/:id", api.GetImgCommentList)
 		auth.POST("blog/comment/digg", api.SetCommentDigg)
 		auth.POST("blog/comment/undigg", api.SetCommentUnDigg)
+		auth.POST("blog/acticle/favour", api.SetArticleFavour)
+		auth.POST("blog/acticle/unfavour", api.SetArticleUnFavour)
+		auth.GET("blog/article/:id", api.GetArtInfo)
 
 		auth.POST("blog/img/digg", api.SetFavorite)
 		auth.POST("blog/img/undigg", api.SetUnFavorite)
@@ -73,7 +76,6 @@ func InitRouter() {
 	{
 
 		router.GET("blog/profile/:id", api.GetProfile)
-		router.GET("blog/article/:id", api.GetArtInfo)
 		router.POST("login/users", api.Login)
 		router.POST("login/sendvalidator", api.SendvalidateCode)
 		// router.POST("login/checkvalidator", api.CheckvalidateCode)
