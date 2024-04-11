@@ -84,6 +84,7 @@ func UpLoadFileQiniu(file multipart.File, contentType string, fileSize int64) (s
 	
 	err := formUploader.Put(context.Background(), &ret, upToken, fileName, bytes.NewReader(fSrc), fileSize, &putExtra)
 	if err != nil {
+		fmt.Println(err)
 		return "", errormsg.ERROR
 	}
 	return "http://cdn.ceccc.space/" + fileName, errormsg.SUCCSE
@@ -106,6 +107,7 @@ func UpLoadFileImgQiniu(img image.Image) (string, int) {
 	
 	err := formUploader.Put(context.Background(), &ret, upToken, fileName, bytes.NewReader(fSrc), fileSize, &putExtra)
 	if err != nil {
+		fmt.Println(err)
 		return "", errormsg.ERROR
 	}
 	return "http://cdn.ceccc.space/" + fileName + "?imageView2/2/w/400/format/jpeg", errormsg.SUCCSE
